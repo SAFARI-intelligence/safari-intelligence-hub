@@ -120,7 +120,7 @@ function OperatorsPage() {
                     borderRadius: 12,
                     fontSize: 12,
                   }}
-                  formatter={(v: number) => [`KSh ${v.toLocaleString()}`, "Revenue"]}
+                  formatter={(v) => [`KSh ${Number(v).toLocaleString()}`, "Revenue"]}
                 />
                 <Area
                   type="monotone"

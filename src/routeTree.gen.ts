@@ -9,8 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WildlifeRouteImport } from './routes/wildlife'
+import { Route as SimbaRouteImport } from './routes/simba'
+import { Route as OperatorsRouteImport } from './routes/operators'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as ExpansionRouteImport } from './routes/expansion'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WildlifeRoute = WildlifeRouteImport.update({
+  id: '/wildlife',
+  path: '/wildlife',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimbaRoute = SimbaRouteImport.update({
+  id: '/simba',
+  path: '/simba',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OperatorsRoute = OperatorsRouteImport.update({
+  id: '/operators',
+  path: '/operators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpansionRoute = ExpansionRouteImport.update({
+  id: '/expansion',
+  path: '/expansion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +55,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/book': typeof BookRoute
+  '/expansion': typeof ExpansionRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/operators': typeof OperatorsRoute
+  '/simba': typeof SimbaRoute
+  '/wildlife': typeof WildlifeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/book': typeof BookRoute
+  '/expansion': typeof ExpansionRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/operators': typeof OperatorsRoute
+  '/simba': typeof SimbaRoute
+  '/wildlife': typeof WildlifeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/book': typeof BookRoute
+  '/expansion': typeof ExpansionRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/operators': typeof OperatorsRoute
+  '/simba': typeof SimbaRoute
+  '/wildlife': typeof WildlifeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/book'
+    | '/expansion'
+    | '/intelligence'
+    | '/operators'
+    | '/simba'
+    | '/wildlife'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/book'
+    | '/expansion'
+    | '/intelligence'
+    | '/operators'
+    | '/simba'
+    | '/wildlife'
+  id:
+    | '__root__'
+    | '/'
+    | '/book'
+    | '/expansion'
+    | '/intelligence'
+    | '/operators'
+    | '/simba'
+    | '/wildlife'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookRoute: typeof BookRoute
+  ExpansionRoute: typeof ExpansionRoute
+  IntelligenceRoute: typeof IntelligenceRoute
+  OperatorsRoute: typeof OperatorsRoute
+  SimbaRoute: typeof SimbaRoute
+  WildlifeRoute: typeof WildlifeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wildlife': {
+      id: '/wildlife'
+      path: '/wildlife'
+      fullPath: '/wildlife'
+      preLoaderRoute: typeof WildlifeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simba': {
+      id: '/simba'
+      path: '/simba'
+      fullPath: '/simba'
+      preLoaderRoute: typeof SimbaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/operators': {
+      id: '/operators'
+      path: '/operators'
+      fullPath: '/operators'
+      preLoaderRoute: typeof OperatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expansion': {
+      id: '/expansion'
+      path: '/expansion'
+      fullPath: '/expansion'
+      preLoaderRoute: typeof ExpansionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookRoute: BookRoute,
+  ExpansionRoute: ExpansionRoute,
+  IntelligenceRoute: IntelligenceRoute,
+  OperatorsRoute: OperatorsRoute,
+  SimbaRoute: SimbaRoute,
+  WildlifeRoute: WildlifeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
