@@ -14,16 +14,285 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      animal_stories: {
+        Row: {
+          created_at: string
+          fun_facts: string[]
+          id: string
+          image: string | null
+          name: string
+          short_story: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          fun_facts?: string[]
+          id?: string
+          image?: string | null
+          name: string
+          short_story: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          fun_facts?: string[]
+          id?: string
+          image?: string | null
+          name?: string
+          short_story?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          check_in: string
+          check_out: string
+          created_at: string
+          guests: number
+          hotel_id: string
+          hotel_name: string
+          id: string
+          status: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          check_in: string
+          check_out: string
+          created_at?: string
+          guests?: number
+          hotel_id: string
+          hotel_name: string
+          id?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          check_in?: string
+          check_out?: string
+          created_at?: string
+          guests?: number
+          hotel_id?: string
+          hotel_name?: string
+          id?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotels: {
+        Row: {
+          amenities: string[]
+          country: string
+          created_at: string
+          description: string | null
+          id: string
+          images: string[]
+          is_published: boolean
+          name: string
+          owner_id: string
+          park: string | null
+          price_max: number
+          price_min: number
+          rating: number
+          region: string | null
+          type: Database["public"]["Enums"]["hotel_type"]
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[]
+          country: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[]
+          is_published?: boolean
+          name: string
+          owner_id: string
+          park?: string | null
+          price_max?: number
+          price_min?: number
+          rating?: number
+          region?: string | null
+          type?: Database["public"]["Enums"]["hotel_type"]
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[]
+          country?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[]
+          is_published?: boolean
+          name?: string
+          owner_id?: string
+          park?: string | null
+          price_max?: number
+          price_min?: number
+          rating?: number
+          region?: string | null
+          type?: Database["public"]["Enums"]["hotel_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          name: string | null
+          preferences: Json
+          profile_image: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id: string
+          name?: string | null
+          preferences?: Json
+          profile_image?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string | null
+          preferences?: Json
+          profile_image?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          hotel_id: string
+          id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          hotel_id: string
+          id?: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          hotel_id?: string
+          id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_hotel_id_fkey"
+            columns: ["hotel_id"]
+            isOneToOne: false
+            referencedRelation: "hotels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          priority: Database["public"]["Enums"]["ticket_priority"]
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          priority?: Database["public"]["Enums"]["ticket_priority"]
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          priority?: Database["public"]["Enums"]["ticket_priority"]
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_roles: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"][]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "user" | "hotel" | "support"
+      booking_status: "pending" | "confirmed" | "cancelled"
+      hotel_type: "hotel" | "villa" | "lodge" | "camp"
+      ticket_priority: "low" | "normal" | "high" | "urgent"
+      ticket_status: "open" | "in_progress" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +419,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["user", "hotel", "support"],
+      booking_status: ["pending", "confirmed", "cancelled"],
+      hotel_type: ["hotel", "villa", "lodge", "camp"],
+      ticket_priority: ["low", "normal", "high", "urgent"],
+      ticket_status: ["open", "in_progress", "closed"],
+    },
   },
 } as const
