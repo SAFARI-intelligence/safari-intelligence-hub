@@ -10,21 +10,42 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WildlifeRouteImport } from './routes/wildlife'
+import { Route as SupportRouteImport } from './routes/support'
+import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as SimbaRouteImport } from './routes/simba'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorsRouteImport } from './routes/operators'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as ExpansionRouteImport } from './routes/expansion'
 import { Route as BookRouteImport } from './routes/book'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 
 const WildlifeRoute = WildlifeRouteImport.update({
   id: '/wildlife',
   path: '/wildlife',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoriesRoute = StoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SimbaRoute = SimbaRouteImport.update({
   id: '/simba',
   path: '/simba',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OperatorsRoute = OperatorsRouteImport.update({
@@ -37,6 +58,11 @@ const IntelligenceRoute = IntelligenceRouteImport.update({
   path: '/intelligence',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelsRoute = HotelsRouteImport.update({
+  id: '/hotels',
+  path: '/hotels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExpansionRoute = ExpansionRouteImport.update({
   id: '/expansion',
   path: '/expansion',
@@ -47,77 +73,128 @@ const BookRoute = BookRouteImport.update({
   path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
+  id: '/$hotelId',
+  path: '/$hotelId',
+  getParentRoute: () => HotelsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
+  '/partner': typeof PartnerRoute
   '/simba': typeof SimbaRoute
+  '/stories': typeof StoriesRoute
+  '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
+  '/partner': typeof PartnerRoute
   '/simba': typeof SimbaRoute
+  '/stories': typeof StoriesRoute
+  '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
+  '/partner': typeof PartnerRoute
   '/simba': typeof SimbaRoute
+  '/stories': typeof StoriesRoute
+  '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
+  '/hotels/$hotelId': typeof HotelsHotelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/book'
     | '/expansion'
+    | '/hotels'
     | '/intelligence'
     | '/operators'
+    | '/partner'
     | '/simba'
+    | '/stories'
+    | '/support'
     | '/wildlife'
+    | '/hotels/$hotelId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/book'
     | '/expansion'
+    | '/hotels'
     | '/intelligence'
     | '/operators'
+    | '/partner'
     | '/simba'
+    | '/stories'
+    | '/support'
     | '/wildlife'
+    | '/hotels/$hotelId'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/book'
     | '/expansion'
+    | '/hotels'
     | '/intelligence'
     | '/operators'
+    | '/partner'
     | '/simba'
+    | '/stories'
+    | '/support'
     | '/wildlife'
+    | '/hotels/$hotelId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   BookRoute: typeof BookRoute
   ExpansionRoute: typeof ExpansionRoute
+  HotelsRoute: typeof HotelsRouteWithChildren
   IntelligenceRoute: typeof IntelligenceRoute
   OperatorsRoute: typeof OperatorsRoute
+  PartnerRoute: typeof PartnerRoute
   SimbaRoute: typeof SimbaRoute
+  StoriesRoute: typeof StoriesRoute
+  SupportRoute: typeof SupportRoute
   WildlifeRoute: typeof WildlifeRoute
 }
 
@@ -130,11 +207,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WildlifeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stories': {
+      id: '/stories'
+      path: '/stories'
+      fullPath: '/stories'
+      preLoaderRoute: typeof StoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/simba': {
       id: '/simba'
       path: '/simba'
       fullPath: '/simba'
       preLoaderRoute: typeof SimbaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/operators': {
@@ -151,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntelligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotels': {
+      id: '/hotels'
+      path: '/hotels'
+      fullPath: '/hotels'
+      preLoaderRoute: typeof HotelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/expansion': {
       id: '/expansion'
       path: '/expansion'
@@ -165,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -172,16 +284,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotels/$hotelId': {
+      id: '/hotels/$hotelId'
+      path: '/$hotelId'
+      fullPath: '/hotels/$hotelId'
+      preLoaderRoute: typeof HotelsHotelIdRouteImport
+      parentRoute: typeof HotelsRoute
+    }
   }
 }
 
+interface HotelsRouteChildren {
+  HotelsHotelIdRoute: typeof HotelsHotelIdRoute
+}
+
+const HotelsRouteChildren: HotelsRouteChildren = {
+  HotelsHotelIdRoute: HotelsHotelIdRoute,
+}
+
+const HotelsRouteWithChildren =
+  HotelsRoute._addFileChildren(HotelsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   BookRoute: BookRoute,
   ExpansionRoute: ExpansionRoute,
+  HotelsRoute: HotelsRouteWithChildren,
   IntelligenceRoute: IntelligenceRoute,
   OperatorsRoute: OperatorsRoute,
+  PartnerRoute: PartnerRoute,
   SimbaRoute: SimbaRoute,
+  StoriesRoute: StoriesRoute,
+  SupportRoute: SupportRoute,
   WildlifeRoute: WildlifeRoute,
 }
 export const routeTree = rootRouteImport
