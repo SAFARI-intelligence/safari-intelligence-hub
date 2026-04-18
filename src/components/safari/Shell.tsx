@@ -1,15 +1,16 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Sparkles, Globe } from "lucide-react";
+import { Menu, X, Sparkles, Globe, LogIn, LogOut, Shield, Building2 } from "lucide-react";
 import { MaasaiDivider } from "./MaasaiDivider";
+import { useAuth } from "@/lib/auth";
 
 const navLinks = [
   { to: "/", label: "Explorer", sw: "Tazama" },
-  { to: "/wildlife", label: "Wildlife Feed", sw: "Wanyama" },
+  { to: "/hotels", label: "Hotels", sw: "Hoteli" },
+  { to: "/stories", label: "Big Five", sw: "Wanyama" },
+  { to: "/wildlife", label: "Wildlife Feed", sw: "Tracker" },
   { to: "/book", label: "Book", sw: "Hifadhi" },
   { to: "/simba", label: "Simba Points", sw: "Simba" },
-  { to: "/operators", label: "Operators", sw: "Waongoza" },
-  { to: "/intelligence", label: "Intelligence", sw: "Akili" },
   { to: "/expansion", label: "Expansion", sw: "Ukuzaji" },
 ] as const;
 
@@ -17,6 +18,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "SW">("EN");
   const location = useLocation();
+  const { user, primaryRole, signOut } = useAuth();
+  const terminalLink =
+    primaryRole === "support"
+      ? { to: "/support", label: "Support", icon: Shield }
+      : primaryRole === "hotel"
+      ? { to: "/partner", label: "Partner", icon: Building2 }
+      : null;
 
   return (
     <div className="min-h-screen flex flex-col">
