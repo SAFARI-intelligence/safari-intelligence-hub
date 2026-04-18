@@ -70,10 +70,33 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <Globe className="h-3.5 w-3.5" />
               {lang}
             </button>
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white text-xs font-bold shadow-[var(--shadow-glow-gold)]">
-              <Sparkles className="h-3.5 w-3.5" />
-              6,420 Simba
-            </div>
+            {terminalLink && (
+              <Link
+                to={terminalLink.to}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--forest)]/40 text-[var(--forest)] hover:bg-[var(--forest)]/10"
+              >
+                <terminalLink.icon className="h-3.5 w-3.5" />
+                {terminalLink.label}
+              </Link>
+            )}
+            {user ? (
+              <button
+                onClick={() => signOut()}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5"
+                title="Sign out"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Sign out
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white text-xs font-bold shadow-[var(--shadow-glow-gold)]"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                Sign in
+              </Link>
+            )}
             <button
               onClick={() => setOpen(!open)}
               className="xl:hidden grid h-9 w-9 place-items-center rounded-lg border border-border/60"
@@ -105,6 +128,35 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   </li>
                 );
               })}
+              {terminalLink && (
+                <li>
+                  <Link
+                    to={terminalLink.to}
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-sm bg-[var(--forest)]/15 text-[var(--forest)] font-semibold"
+                  >
+                    {terminalLink.label} terminal
+                  </Link>
+                </li>
+              )}
+              <li>
+                {user ? (
+                  <button
+                    onClick={() => { signOut(); setOpen(false); }}
+                    className="w-full text-left block px-3 py-2 rounded-lg text-sm hover:bg-foreground/5"
+                  >
+                    Sign out
+                  </button>
+                ) : (
+                  <Link
+                    to="/auth"
+                    onClick={() => setOpen(false)}
+                    className="block px-3 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white"
+                  >
+                    Sign in
+                  </Link>
+                )}
+              </li>
             </ul>
             <div className="mt-3 flex items-center justify-between px-2">
               <button
