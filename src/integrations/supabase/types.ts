@@ -151,6 +151,54 @@ export type Database = {
         }
         Relationships: []
       }
+      itineraries: {
+        Row: {
+          budget_tier: string | null
+          created_at: string
+          currency: string
+          days: Json
+          destinations: string[]
+          duration_days: number
+          group_size: number
+          id: string
+          interests: string[]
+          title: string
+          total_cost: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_tier?: string | null
+          created_at?: string
+          currency?: string
+          days?: Json
+          destinations?: string[]
+          duration_days?: number
+          group_size?: number
+          id?: string
+          interests?: string[]
+          title: string
+          total_cost?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_tier?: string | null
+          created_at?: string
+          currency?: string
+          days?: Json
+          destinations?: string[]
+          duration_days?: number
+          group_size?: number
+          id?: string
+          interests?: string[]
+          title?: string
+          total_cost?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

@@ -13,6 +13,8 @@ import { Route as WildlifeRouteImport } from './routes/wildlife'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as SimbaRouteImport } from './routes/simba'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorsRouteImport } from './routes/operators'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
@@ -41,6 +43,16 @@ const StoriesRoute = StoriesRouteImport.update({
 const SimbaRoute = SimbaRouteImport.update({
   id: '/simba',
   path: '/simba',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -98,6 +110,8 @@ export interface FileRoutesByFullPath {
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
+  '/plan': typeof PlanRoute
+  '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRoute
   '/support': typeof SupportRoute
@@ -113,6 +127,8 @@ export interface FileRoutesByTo {
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
+  '/plan': typeof PlanRoute
+  '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRoute
   '/support': typeof SupportRoute
@@ -129,6 +145,8 @@ export interface FileRoutesById {
   '/intelligence': typeof IntelligenceRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
+  '/plan': typeof PlanRoute
+  '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRoute
   '/support': typeof SupportRoute
@@ -146,6 +164,8 @@ export interface FileRouteTypes {
     | '/intelligence'
     | '/operators'
     | '/partner'
+    | '/plan'
+    | '/profile'
     | '/simba'
     | '/stories'
     | '/support'
@@ -161,6 +181,8 @@ export interface FileRouteTypes {
     | '/intelligence'
     | '/operators'
     | '/partner'
+    | '/plan'
+    | '/profile'
     | '/simba'
     | '/stories'
     | '/support'
@@ -176,6 +198,8 @@ export interface FileRouteTypes {
     | '/intelligence'
     | '/operators'
     | '/partner'
+    | '/plan'
+    | '/profile'
     | '/simba'
     | '/stories'
     | '/support'
@@ -192,6 +216,8 @@ export interface RootRouteChildren {
   IntelligenceRoute: typeof IntelligenceRoute
   OperatorsRoute: typeof OperatorsRoute
   PartnerRoute: typeof PartnerRoute
+  PlanRoute: typeof PlanRoute
+  ProfileRoute: typeof ProfileRoute
   SimbaRoute: typeof SimbaRoute
   StoriesRoute: typeof StoriesRoute
   SupportRoute: typeof SupportRoute
@@ -226,6 +252,20 @@ declare module '@tanstack/react-router' {
       path: '/simba'
       fullPath: '/simba'
       preLoaderRoute: typeof SimbaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -314,6 +354,8 @@ const rootRouteChildren: RootRouteChildren = {
   IntelligenceRoute: IntelligenceRoute,
   OperatorsRoute: OperatorsRoute,
   PartnerRoute: PartnerRoute,
+  PlanRoute: PlanRoute,
+  ProfileRoute: ProfileRoute,
   SimbaRoute: SimbaRoute,
   StoriesRoute: StoriesRoute,
   SupportRoute: SupportRoute,
@@ -322,3 +364,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
