@@ -1,9 +1,38 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Activity, MapPin, Sparkles, Cloud, ArrowRight } from "lucide-react";
 import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { parks, images } from "@/lib/safari-data";
+
+function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
+  const [n, setN] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        const dur = 1200;
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setN(Math.round(eased * to));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        io.disconnect();
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [to]);
+  return <span ref={ref}>{n.toLocaleString()}{suffix}</span>;
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,7 +66,7 @@ function Index() {
     <Shell>
       <div className="mx-auto max-w-7xl space-y-10">
         {/* HERO */}
-        <section className="relative overflow-hidden rounded-3xl">
+        <section className="relative overflow-hidden rounded-3xl grain">
           <div className="absolute inset-0">
             <img
               src={images.lion}
@@ -70,16 +99,16 @@ function Index() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  to="/book"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[var(--gold)] text-[var(--gold-foreground)] font-semibold shadow-[var(--shadow-glow-gold)] hover:scale-[1.02] transition"
+                  to="/plan"
+                  className="shimmer inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white font-semibold shadow-[var(--shadow-glow-gold)] hover:scale-[1.02] transition"
                 >
-                  Book a safari <ArrowRight className="h-4 w-4" />
+                  <Sparkles className="h-4 w-4" /> Plan with AI
                 </Link>
                 <Link
                   to="/wildlife"
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/25 text-white font-medium hover:bg-white/20 transition"
                 >
-                  See live feed
+                  See live feed <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </motion.div>
@@ -94,18 +123,18 @@ function Index() {
             { label: "AI confidence", value: avgConfidence, suffix: "%", icon: Sparkles, color: "var(--forest)" },
             { label: "Operators online", value: 162, icon: Cloud, color: "var(--charcoal)" },
           ].map((s) => (
-            <div key={s.label} className="glass rounded-2xl p-4 sm:p-5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">
-                  {s.label}
-                </span>
-                <s.icon className="h-4 w-4" style={{ color: s.color }} />
+              <div key={s.label} className="glass rounded-2xl p-4 sm:p-5">
+                <div className="flex items-center justify-between">
+                  <span className="font-label text-xs text-muted-foreground">
+                    {s.label}
+                  </span>
+                  <s.icon className="h-4 w-4" style={{ color: s.color }} />
+                </div>
+                <div className="mt-2 font-display text-3xl sm:text-4xl font-bold">
+                  <CountUp to={s.value} />
+                  <span className="text-lg text-muted-foreground">{s.suffix ?? ""}</span>
+                </div>
               </div>
-              <div className="mt-2 font-display text-3xl sm:text-4xl font-bold">
-                {s.value.toLocaleString()}
-                <span className="text-lg text-muted-foreground">{s.suffix ?? ""}</span>
-              </div>
-            </div>
           ))}
         </section>
 
