@@ -31,14 +31,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "SAFARI" },
+      { name: "description", content: "AI-powered tourism platform for East Africa, offering wildlife intelligence, booking, and loyalty features." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "SAFARI" },
+      { property: "og:description", content: "AI-powered tourism platform for East Africa, offering wildlife intelligence, booking, and loyalty features." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "SAFARI" },
+      { name: "twitter:description", content: "AI-powered tourism platform for East Africa, offering wildlife intelligence, booking, and loyalty features." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c8b7fa5b-54f3-40f8-92df-fef73ab96260/id-preview-4e55d5bc--651b1417-76e6-444b-8630-ee67d2f019bf.lovable.app-1777375365101.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c8b7fa5b-54f3-40f8-92df-fef73ab96260/id-preview-4e55d5bc--651b1417-76e6-444b-8630-ee67d2f019bf.lovable.app-1777375365101.png" },
     ],
     links: [
       {
