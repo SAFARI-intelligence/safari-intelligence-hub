@@ -45,6 +45,15 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "icon",
+        type: "image/jpeg",
+        href: "/safari-lion-logo.jpg",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/safari-lion-logo.jpg",
+      },
     ],
   }),
   shellComponent: RootShell,

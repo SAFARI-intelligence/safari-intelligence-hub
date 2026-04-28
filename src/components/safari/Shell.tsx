@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { MaasaiDivider } from "./MaasaiDivider";
 import { useAuth } from "@/lib/auth";
+import lionLogo from "@/assets/safari-lion-logo.jpg";
 
 const navLinks = [
   { to: "/", label: "Explorer", sw: "Tazama" },
@@ -55,8 +56,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           }`}
         >
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[var(--gold)] to-[var(--maasai)] shadow-[var(--shadow-glow-gold)]">
-              <span className="text-lg">🦁</span>
+            <div className="h-9 w-9 overflow-hidden rounded-xl bg-[#0D0D0D] shadow-[var(--shadow-glow-gold)] ring-1 ring-[var(--gold)]/30">
+              <img src={lionLogo} alt="Safari OS lion logo" className="h-full w-full object-cover" />
             </div>
             <div className="leading-none">
               <div className="font-display text-lg font-bold tracking-tight">Safari OS</div>
