@@ -146,23 +146,104 @@
   --shadow-glow-gold: 0 0 40px -10px oklch(0.68 0.13 75 / 0.55);
 }
 
+/* Cool glossy premium dark — obsidian + cobalt with warm gold accents */
 .dark {
-  --background: oklch(0.16 0.02 60);
-  --foreground: oklch(0.96 0.015 85);
-  --card: oklch(0.22 0.025 60 / 0.7);
-  --card-foreground: oklch(0.96 0.015 85);
-  --popover: oklch(0.2 0.025 60);
-  --popover-foreground: oklch(0.96 0.015 85);
-  --primary: oklch(0.74 0.13 75);
-  --primary-foreground: oklch(0.18 0.02 60);
-  --secondary: oklch(0.26 0.03 60);
-  --secondary-foreground: oklch(0.96 0.015 85);
-  --muted: oklch(0.26 0.03 60);
-  --muted-foreground: oklch(0.7 0.02 70);
-  --accent: oklch(0.28 0.05 70);
-  --accent-foreground: oklch(0.96 0.015 85);
-  --border: oklch(1 0 0 / 0.1);
-  --input: oklch(1 0 0 / 0.15);
+  --background: oklch(0.14 0.018 260);
+  --foreground: oklch(0.97 0.008 90);
+
+  --card: oklch(0.20 0.022 255 / 0.55);
+  --card-foreground: oklch(0.97 0.008 90);
+  --popover: oklch(0.18 0.022 258);
+  --popover-foreground: oklch(0.97 0.008 90);
+
+  --gold: oklch(0.82 0.14 80);
+  --gold-foreground: oklch(0.14 0.018 260);
+  --primary: oklch(0.82 0.14 80);
+  --primary-foreground: oklch(0.14 0.018 260);
+
+  --maasai: oklch(0.62 0.22 22);
+  --maasai-foreground: oklch(0.98 0.01 90);
+  --destructive: oklch(0.62 0.22 22);
+  --destructive-foreground: oklch(0.98 0.01 90);
+
+  --forest: oklch(0.68 0.16 158);
+  --forest-foreground: oklch(0.14 0.018 260);
+
+  --savanna: oklch(0.24 0.03 255);
+  --charcoal: oklch(0.08 0.015 260);
+
+  --secondary: oklch(0.24 0.028 258);
+  --secondary-foreground: oklch(0.97 0.008 90);
+  --muted: oklch(0.22 0.025 258);
+  --muted-foreground: oklch(0.72 0.02 250);
+  --accent: oklch(0.28 0.05 255);
+  --accent-foreground: oklch(0.97 0.008 90);
+
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.12);
+  --ring: oklch(0.82 0.14 80);
+
+  --sidebar: oklch(0.16 0.02 260);
+  --sidebar-foreground: oklch(0.95 0.01 90);
+  --sidebar-primary: oklch(0.82 0.14 80);
+  --sidebar-primary-foreground: oklch(0.14 0.018 260);
+  --sidebar-accent: oklch(0.22 0.028 258);
+  --sidebar-accent-foreground: oklch(0.97 0.008 90);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-ring: oklch(0.82 0.14 80);
+
+  /* Glossy premium gradients */
+  --gradient-savanna: radial-gradient(
+      ellipse 80% 60% at 20% 0%,
+      oklch(0.28 0.08 260 / 0.9) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 90% 100%,
+      oklch(0.32 0.10 30 / 0.55) 0%,
+      transparent 55%
+    ),
+    linear-gradient(
+      160deg,
+      oklch(0.10 0.018 260) 0%,
+      oklch(0.14 0.022 255) 50%,
+      oklch(0.09 0.02 270) 100%
+    );
+  --gradient-gold: linear-gradient(135deg, oklch(0.88 0.14 85), oklch(0.66 0.15 55));
+  --gradient-sunset: linear-gradient(
+    135deg,
+    oklch(0.82 0.14 80) 0%,
+    oklch(0.62 0.20 40) 55%,
+    oklch(0.52 0.22 18) 100%
+  );
+
+  --shadow-glass: 0 10px 40px -10px oklch(0 0 0 / 0.6),
+    0 1px 0 0 oklch(1 0 0 / 0.06) inset,
+    0 0 0 1px oklch(1 0 0 / 0.04) inset;
+  --shadow-elevated: 0 30px 80px -25px oklch(0 0 0 / 0.75),
+    0 0 0 1px oklch(1 0 0 / 0.05) inset;
+  --shadow-glow-gold: 0 0 60px -10px oklch(0.82 0.14 80 / 0.45);
+}
+
+.dark .glass {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--card) 90%, transparent),
+    color-mix(in oklab, var(--background) 70%, transparent)
+  );
+  border: 1px solid oklch(1 0 0 / 0.08);
+  box-shadow: var(--shadow-glass);
+}
+
+.dark .glass-strong {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--card) 95%, transparent),
+    color-mix(in oklab, var(--background) 85%, transparent)
+  );
+  border: 1px solid oklch(1 0 0 / 0.10);
+  box-shadow: var(--shadow-elevated),
+    0 1px 0 0 oklch(1 0 0 / 0.08) inset;
 }
 
 @layer base {
