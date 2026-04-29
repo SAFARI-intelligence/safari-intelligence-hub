@@ -58,6 +58,10 @@ function PlanPage() {
     setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
 
   const generate = async () => {
+    if (!user) {
+      toast.error("Sign in to generate an itinerary");
+      return;
+    }
     setLoading(true);
     setItinerary(null);
     try {
