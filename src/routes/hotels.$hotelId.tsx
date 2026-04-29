@@ -90,11 +90,6 @@ function HotelDetail() {
     if (!hotel || !checkIn || !checkOut) return;
     setBooking(true);
     setErr(null);
-    const nights = Math.max(
-      1,
-      Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000)
-    );
-    const total = nights * Number(hotel.price_min) * guests;
     const { data, error } = await supabase
       .from("bookings")
       .insert({
@@ -104,7 +99,7 @@ function HotelDetail() {
         check_in: checkIn,
         check_out: checkOut,
         guests,
-        total_price: total,
+        total_price: 0, // server trigger recomputes the authoritative total
         status: "pending",
       })
       .select("id")
