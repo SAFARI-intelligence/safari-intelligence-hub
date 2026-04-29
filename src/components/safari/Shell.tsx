@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import {
   Menu, X, Globe, LogIn, LogOut, Shield, Building2,
   Home, Sparkles, Compass, BedDouble, User as UserIcon,
+  Sun, Moon,
 } from "lucide-react";
 import { MaasaiDivider } from "./MaasaiDivider";
 import { useAuth } from "@/lib/auth";
+import { useTheme } from "@/hooks/use-theme";
 import lionLogo from "@/assets/safari-lion-logo.jpg";
 
 const navLinks = [
@@ -33,6 +35,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { user, primaryRole, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -88,6 +91,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </ul>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5 transition"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+              title={theme === "dark" ? "Light mode" : "Dark mode"}
+            >
+              {theme === "dark" ? (
+                <Sun className="h-3.5 w-3.5 text-[var(--gold)]" />
+              ) : (
+                <Moon className="h-3.5 w-3.5" />
+              )}
+            </button>
             <button
               onClick={() => setLang(lang === "EN" ? "SW" : "EN")}
               className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5 transition"
