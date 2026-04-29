@@ -23,6 +23,7 @@ import { Route as ExpansionRouteImport } from './routes/expansion'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoriesSlugRouteImport } from './routes/stories.$slug'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
 
 const WildlifeRoute = WildlifeRouteImport.update({
@@ -95,6 +96,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoriesSlugRoute = StoriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => StoriesRoute,
+} as any)
 const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   id: '/$hotelId',
   path: '/$hotelId',
@@ -113,10 +119,11 @@ export interface FileRoutesByFullPath {
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
-  '/stories': typeof StoriesRoute
+  '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/stories/$slug': typeof StoriesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -130,10 +137,11 @@ export interface FileRoutesByTo {
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
-  '/stories': typeof StoriesRoute
+  '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/stories/$slug': typeof StoriesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -148,10 +156,11 @@ export interface FileRoutesById {
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
-  '/stories': typeof StoriesRoute
+  '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/stories/$slug': typeof StoriesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/stories/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/stories/$slug'
   id:
     | '__root__'
     | '/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/stories/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -219,7 +231,7 @@ export interface RootRouteChildren {
   PlanRoute: typeof PlanRoute
   ProfileRoute: typeof ProfileRoute
   SimbaRoute: typeof SimbaRoute
-  StoriesRoute: typeof StoriesRoute
+  StoriesRoute: typeof StoriesRouteWithChildren
   SupportRoute: typeof SupportRoute
   WildlifeRoute: typeof WildlifeRoute
 }
@@ -324,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stories/$slug': {
+      id: '/stories/$slug'
+      path: '/$slug'
+      fullPath: '/stories/$slug'
+      preLoaderRoute: typeof StoriesSlugRouteImport
+      parentRoute: typeof StoriesRoute
+    }
     '/hotels/$hotelId': {
       id: '/hotels/$hotelId'
       path: '/$hotelId'
@@ -345,6 +364,17 @@ const HotelsRouteChildren: HotelsRouteChildren = {
 const HotelsRouteWithChildren =
   HotelsRoute._addFileChildren(HotelsRouteChildren)
 
+interface StoriesRouteChildren {
+  StoriesSlugRoute: typeof StoriesSlugRoute
+}
+
+const StoriesRouteChildren: StoriesRouteChildren = {
+  StoriesSlugRoute: StoriesSlugRoute,
+}
+
+const StoriesRouteWithChildren =
+  StoriesRoute._addFileChildren(StoriesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
@@ -357,7 +387,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanRoute: PlanRoute,
   ProfileRoute: ProfileRoute,
   SimbaRoute: SimbaRoute,
-  StoriesRoute: StoriesRoute,
+  StoriesRoute: StoriesRouteWithChildren,
   SupportRoute: SupportRoute,
   WildlifeRoute: WildlifeRoute,
 }

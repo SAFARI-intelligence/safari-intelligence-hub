@@ -16,30 +16,57 @@ export type Database = {
     Tables: {
       animal_stories: {
         Row: {
+          behavior_insights: string[]
           created_at: string
+          cultural_relevance: string | null
           fun_facts: string[]
+          gallery: string[]
+          hero_image: string | null
+          hero_narrative: string | null
           id: string
           image: string | null
+          key_facts: Json
           name: string
+          parks: string[]
           short_story: string
+          slug: string
+          swahili_name: string | null
           title: string
         }
         Insert: {
+          behavior_insights?: string[]
           created_at?: string
+          cultural_relevance?: string | null
           fun_facts?: string[]
+          gallery?: string[]
+          hero_image?: string | null
+          hero_narrative?: string | null
           id?: string
           image?: string | null
+          key_facts?: Json
           name: string
+          parks?: string[]
           short_story: string
+          slug: string
+          swahili_name?: string | null
           title: string
         }
         Update: {
+          behavior_insights?: string[]
           created_at?: string
+          cultural_relevance?: string | null
           fun_facts?: string[]
+          gallery?: string[]
+          hero_image?: string | null
+          hero_narrative?: string | null
           id?: string
           image?: string | null
+          key_facts?: Json
           name?: string
+          parks?: string[]
           short_story?: string
+          slug?: string
+          swahili_name?: string | null
           title?: string
         }
         Relationships: []
