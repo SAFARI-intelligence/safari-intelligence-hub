@@ -16,6 +16,7 @@ const navLinks = [
   { to: "/hotels", label: "Hotels", sw: "Hoteli" },
   { to: "/stories", label: "Big Five", sw: "Wanyama" },
   { to: "/wildlife", label: "Wildlife", sw: "Tracker" },
+  { to: "/map", label: "Map", sw: "Ramani" },
   { to: "/book", label: "Book", sw: "Hifadhi" },
   { to: "/simba", label: "Simba", sw: "Simba" },
   { to: "/expansion", label: "Expansion", sw: "Ukuzaji" },
