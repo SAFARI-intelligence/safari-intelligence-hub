@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { images } from "@/lib/safari-data";
+import { SafariMap } from "@/components/safari/SafariMap";
 
 export const Route = createFileRoute("/stories/$slug")({
   head: ({ params }) => ({
