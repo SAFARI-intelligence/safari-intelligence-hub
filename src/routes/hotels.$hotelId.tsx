@@ -39,6 +39,8 @@ type Hotel = {
   description: string | null;
   amenities: string[];
   images: string[];
+  latitude: number | null;
+  longitude: number | null;
 };
 
 type Review = {
