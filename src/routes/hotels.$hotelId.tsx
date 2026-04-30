@@ -186,6 +186,27 @@ function HotelDetail() {
               )}
             </div>
 
+            {hotel.latitude != null && hotel.longitude != null && (
+              <div className="glass rounded-2xl p-6">
+                <h2 className="font-display text-xl font-bold mb-3">Location · Mahali</h2>
+                <SafariMap
+                  center={[Number(hotel.latitude), Number(hotel.longitude)]}
+                  zoom={11}
+                  markers={[{
+                    id: hotel.id,
+                    lat: Number(hotel.latitude),
+                    lng: Number(hotel.longitude),
+                    type: "hotel",
+                    label: hotel.name,
+                  }]}
+                  className="h-[320px] w-full rounded-xl overflow-hidden"
+                />
+                <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                  <MapPin className="h-3 w-3" /> {hotel.park || hotel.region}, {hotel.country}
+                </p>
+              </div>
+            )}
+
             <div className="glass rounded-2xl p-6">
               <h2 className="font-display text-xl font-bold">Reviews ({reviews.length})</h2>
               <div className="mt-4 space-y-3">
