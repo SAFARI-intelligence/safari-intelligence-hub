@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      animal_locations: {
+        Row: {
+          id: string
+          latitude: number
+          longitude: number
+          recorded_at: string
+          story_id: string
+        }
+        Insert: {
+          id?: string
+          latitude: number
+          longitude: number
+          recorded_at?: string
+          story_id: string
+        }
+        Update: {
+          id?: string
+          latitude?: number
+          longitude?: number
+          recorded_at?: string
+          story_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "animal_locations_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "animal_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       animal_stories: {
         Row: {
           behavior_insights: string[]
@@ -68,6 +100,30 @@ export type Database = {
           slug?: string
           swahili_name?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      animal_zones: {
+        Row: {
+          color: string
+          created_at: string
+          geojson: Json
+          id: string
+          name: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          geojson: Json
+          id?: string
+          name: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          geojson?: Json
+          id?: string
+          name?: string
         }
         Relationships: []
       }
@@ -130,6 +186,8 @@ export type Database = {
           id: string
           images: string[]
           is_published: boolean
+          latitude: number | null
+          longitude: number | null
           name: string
           owner_id: string
           park: string | null
@@ -148,6 +206,8 @@ export type Database = {
           id?: string
           images?: string[]
           is_published?: boolean
+          latitude?: number | null
+          longitude?: number | null
           name: string
           owner_id: string
           park?: string | null
@@ -166,6 +226,8 @@ export type Database = {
           id?: string
           images?: string[]
           is_published?: boolean
+          latitude?: number | null
+          longitude?: number | null
           name?: string
           owner_id?: string
           park?: string | null

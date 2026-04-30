@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { images } from "@/lib/safari-data";
+import { SafariMap } from "@/components/safari/SafariMap";
 
 export const Route = createFileRoute("/stories/$slug")({
   head: ({ params }) => ({
@@ -116,6 +117,7 @@ function AnimalStoryPage() {
   const { slug } = Route.useParams();
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [trackPath, setTrackPath] = useState<Array<[number, number]>>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -135,16 +137,29 @@ function AnimalStoryPage() {
         return;
       }
       setAnimal(a as Animal);
-      if (a.parks?.length) {
-        const { data: h } = await supabase
-          .from("hotels")
-          .select("id, name, park, region, price_min, rating, images, type")
-          .in("park", a.parks)
-          .eq("is_published", true)
-          .order("rating", { ascending: false })
-          .limit(6);
-        if (!cancelled) setHotels((h as Hotel[]) || []);
-      }
+      const [hotelsRes, locsRes] = await Promise.all([
+        a.parks?.length
+          ? supabase
+              .from("hotels")
+              .select("id, name, park, region, price_min, rating, images, type")
+              .in("park", a.parks)
+              .eq("is_published", true)
+              .order("rating", { ascending: false })
+              .limit(6)
+          : Promise.resolve({ data: [] as Hotel[] }),
+        supabase
+          .from("animal_locations")
+          .select("latitude,longitude,recorded_at")
+          .eq("story_id", a.id)
+          .order("recorded_at", { ascending: false })
+          .limit(20),
+      ]);
+      if (cancelled) return;
+      setHotels((hotelsRes.data as Hotel[]) || []);
+      const path: Array<[number, number]> = ((locsRes.data as Array<{ latitude: number; longitude: number }>) || [])
+        .map((p) => [Number(p.latitude), Number(p.longitude)] as [number, number])
+        .reverse();
+      setTrackPath(path);
       setLoading(false);
     })();
     return () => {
@@ -252,6 +267,31 @@ function AnimalStoryPage() {
                 </li>
               ))}
             </ol>
+          </section>
+        )}
+
+        {/* LIVE TRACKER */}
+        {trackPath.length > 0 && (
+          <section>
+            <SectionLabel>Live Tracker · Ramani</SectionLabel>
+            <div className="glass rounded-3xl p-4 mt-3">
+              <SafariMap
+                center={trackPath[trackPath.length - 1]}
+                zoom={9}
+                markers={[{
+                  id: animal.id,
+                  lat: trackPath[trackPath.length - 1][0],
+                  lng: trackPath[trackPath.length - 1][1],
+                  type: "animal",
+                  label: `${animal.name} — last sighting`,
+                }]}
+                routeLine={trackPath.length > 1 ? trackPath : undefined}
+                className="h-[360px] w-full rounded-2xl overflow-hidden"
+              />
+              <p className="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
+                <AlertTriangle className="h-3 w-3" /> Tracking points are delayed for animal safety. View the full live map at <Link to="/map" className="underline ml-1">/map</Link>.
+              </p>
+            </div>
           </section>
         )}
 
