@@ -137,16 +137,29 @@ function AnimalStoryPage() {
         return;
       }
       setAnimal(a as Animal);
-      if (a.parks?.length) {
-        const { data: h } = await supabase
-          .from("hotels")
-          .select("id, name, park, region, price_min, rating, images, type")
-          .in("park", a.parks)
-          .eq("is_published", true)
-          .order("rating", { ascending: false })
-          .limit(6);
-        if (!cancelled) setHotels((h as Hotel[]) || []);
-      }
+      const [hotelsRes, locsRes] = await Promise.all([
+        a.parks?.length
+          ? supabase
+              .from("hotels")
+              .select("id, name, park, region, price_min, rating, images, type")
+              .in("park", a.parks)
+              .eq("is_published", true)
+              .order("rating", { ascending: false })
+              .limit(6)
+          : Promise.resolve({ data: [] as Hotel[] }),
+        supabase
+          .from("animal_locations")
+          .select("latitude,longitude,recorded_at")
+          .eq("story_id", a.id)
+          .order("recorded_at", { ascending: false })
+          .limit(20),
+      ]);
+      if (cancelled) return;
+      setHotels((hotelsRes.data as Hotel[]) || []);
+      const path: Array<[number, number]> = ((locsRes.data as Array<{ latitude: number; longitude: number }>) || [])
+        .map((p) => [Number(p.latitude), Number(p.longitude)] as [number, number])
+        .reverse();
+      setTrackPath(path);
       setLoading(false);
     })();
     return () => {
