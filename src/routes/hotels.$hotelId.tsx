@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { Shell } from "@/components/safari/Shell";
 import { Star, MapPin, Loader2, Calendar, Check } from "lucide-react";
 import { images } from "@/lib/safari-data";
+import { SafariMap } from "@/components/safari/SafariMap";
 
 export const Route = createFileRoute("/hotels/$hotelId")({
   head: () => ({
