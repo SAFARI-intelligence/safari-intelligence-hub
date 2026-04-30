@@ -17,6 +17,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorsRouteImport } from './routes/operators'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as ExpansionRouteImport } from './routes/expansion'
@@ -64,6 +65,11 @@ const PartnerRoute = PartnerRouteImport.update({
 const OperatorsRoute = OperatorsRouteImport.update({
   id: '/operators',
   path: '/operators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntelligenceRoute = IntelligenceRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
+  '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
+  '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/intelligence': typeof IntelligenceRoute
+  '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/expansion'
     | '/hotels'
     | '/intelligence'
+    | '/map'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/expansion'
     | '/hotels'
     | '/intelligence'
+    | '/map'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/expansion'
     | '/hotels'
     | '/intelligence'
+    | '/map'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   ExpansionRoute: typeof ExpansionRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   IntelligenceRoute: typeof IntelligenceRoute
+  MapRoute: typeof MapRoute
   OperatorsRoute: typeof OperatorsRoute
   PartnerRoute: typeof PartnerRoute
   PlanRoute: typeof PlanRoute
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       path: '/operators'
       fullPath: '/operators'
       preLoaderRoute: typeof OperatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence': {
@@ -382,6 +402,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExpansionRoute: ExpansionRoute,
   HotelsRoute: HotelsRouteWithChildren,
   IntelligenceRoute: IntelligenceRoute,
+  MapRoute: MapRoute,
   OperatorsRoute: OperatorsRoute,
   PartnerRoute: PartnerRoute,
   PlanRoute: PlanRoute,
@@ -394,3 +415,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
