@@ -270,6 +270,31 @@ function AnimalStoryPage() {
           </section>
         )}
 
+        {/* LIVE TRACKER */}
+        {trackPath.length > 0 && (
+          <section>
+            <SectionLabel>Live Tracker · Ramani</SectionLabel>
+            <div className="glass rounded-3xl p-4 mt-3">
+              <SafariMap
+                center={trackPath[trackPath.length - 1]}
+                zoom={9}
+                markers={[{
+                  id: animal.id,
+                  lat: trackPath[trackPath.length - 1][0],
+                  lng: trackPath[trackPath.length - 1][1],
+                  type: "animal",
+                  label: `${animal.name} — last sighting`,
+                }]}
+                routeLine={trackPath.length > 1 ? trackPath : undefined}
+                className="h-[360px] w-full rounded-2xl overflow-hidden"
+              />
+              <p className="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
+                <AlertTriangle className="h-3 w-3" /> Tracking points are delayed for animal safety. View the full live map at <Link to="/map" className="underline ml-1">/map</Link>.
+              </p>
+            </div>
+          </section>
+        )}
+
         {/* CULTURAL RELEVANCE */}
         {animal.cultural_relevance && (
           <section
