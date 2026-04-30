@@ -117,6 +117,7 @@ function AnimalStoryPage() {
   const { slug } = Route.useParams();
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [trackPath, setTrackPath] = useState<Array<[number, number]>>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
