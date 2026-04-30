@@ -4,13 +4,6 @@ export type Theme = "light" | "dark";
 
 const STORAGE_KEY = "safari-theme";
 
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  return "light";
-}
-
 function applyTheme(theme: Theme) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
@@ -20,14 +13,28 @@ function applyTheme(theme: Theme) {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme());
+  // Always start with "light" to match SSR output and avoid hydration mismatch.
+  const [theme, setThemeState] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
+
+  // After mount, read the stored preference and apply it.
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === "light" || stored === "dark") {
+        setThemeState(stored);
+      }
+    } catch {}
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     applyTheme(theme);
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);
     } catch {}
-  }, [theme]);
+  }, [theme, mounted]);
 
   const setTheme = useCallback((t: Theme) => setThemeState(t), []);
   const toggleTheme = useCallback(
@@ -35,5 +42,5 @@ export function useTheme() {
     [],
   );
 
-  return { theme, setTheme, toggleTheme };
+  return { theme, setTheme, toggleTheme, mounted };
 }
