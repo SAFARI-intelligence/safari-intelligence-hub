@@ -16,7 +16,7 @@ import { listings, leads, revenueByMonth, images } from "@/lib/safari-data";
 export const Route = createFileRoute("/operators")({
   head: () => ({
     meta: [
-      { title: "Operator Command Center — Safari OS" },
+      { title: "Operator Command Center — SAFARI" },
       {
         name: "description",
         content:

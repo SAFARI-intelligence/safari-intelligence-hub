@@ -19,12 +19,12 @@ import { SafariMap } from "@/components/safari/SafariMap";
 export const Route = createFileRoute("/stories/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${capitalize(params.slug)} — The Big Five · Safari OS` },
+      { title: `${capitalize(params.slug)} — The Big Five · SAFARI` },
       {
         name: "description",
         content: `Cinematic story of the ${params.slug}: behavior, key facts, cultural meaning, and the Kenyan parks and lodges where you can see them.`,
       },
-      { property: "og:title", content: `${capitalize(params.slug)} — Safari OS` },
+      { property: "og:title", content: `${capitalize(params.slug)} — SAFARI` },
       {
         property: "og:description",
         content: `The story of the ${params.slug} and where to stay nearby.`,

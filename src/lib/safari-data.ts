@@ -1,4 +1,4 @@
-// Mocked in-memory data layer for Safari OS.
+// Mocked in-memory data layer for SAFARI.
 // Easily swappable for live API hooks later.
 
 import lionImg from "@/assets/lion-hero.jpg";

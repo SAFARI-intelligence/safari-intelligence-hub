@@ -10,7 +10,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile · Safari OS" },
+      { title: "My Profile · SAFARI" },
       { name: "description", content: "Your bookings, itineraries, reviews, and support tickets." },
     ],
   }),

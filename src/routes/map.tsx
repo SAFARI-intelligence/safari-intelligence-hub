@@ -8,7 +8,7 @@ import { Loader2, MapPin, BedDouble, PawPrint } from "lucide-react";
 export const Route = createFileRoute("/map")({
   head: () => ({
     meta: [
-      { title: "Live Map · Safari OS" },
+      { title: "Live Map · SAFARI" },
       {
         name: "description",
         content:

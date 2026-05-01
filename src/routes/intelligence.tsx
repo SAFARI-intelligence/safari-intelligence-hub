@@ -9,7 +9,7 @@ import { sightings, images } from "@/lib/safari-data";
 export const Route = createFileRoute("/intelligence")({
   head: () => ({
     meta: [
-      { title: "Wildlife Intelligence Seed — Safari OS" },
+      { title: "Wildlife Intelligence Seed — SAFARI" },
       {
         name: "description",
         content:

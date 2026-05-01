@@ -11,12 +11,12 @@ import { images } from "@/lib/safari-data";
 export const Route = createFileRoute("/plan")({
   head: () => ({
     meta: [
-      { title: "AI Travel Planner · Safari OS" },
+      { title: "AI Travel Planner · SAFARI" },
       {
         name: "description",
-        content: "Craft a bespoke East African safari itinerary in seconds with Safari OS AI — day-by-day, priced in KSh, rooted in Kenyan soul.",
+        content: "Craft a bespoke East African safari itinerary in seconds with SAFARI AI — day-by-day, priced in KSh, rooted in Kenyan soul.",
       },
-      { property: "og:title", content: "AI Travel Planner · Safari OS" },
+      { property: "og:title", content: "AI Travel Planner · SAFARI" },
       { property: "og:description", content: "Bespoke safari itineraries. Intelligent. Kenyan." },
       { property: "og:image", content: images.savanna },
     ],
@@ -268,7 +268,7 @@ function PlanPage() {
                   <div className="text-5xl mb-3">🦁</div>
                   <h3 className="font-display text-2xl font-bold">Your itinerary appears here</h3>
                   <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
-                    Select your destinations, duration, budget, and interests — then hit generate to see Safari OS AI at work.
+                    Select your destinations, duration, budget, and interests — then hit generate to see SAFARI AI at work.
                   </p>
                 </motion.div>
               )}
