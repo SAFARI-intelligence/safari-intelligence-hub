@@ -9,8 +9,8 @@ import { Loader2, User as UserIcon, Building2, Sparkles } from "lucide-react";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in · Safari OS" },
-      { name: "description", content: "Join Safari OS as a traveler, hotel partner, or support team member." },
+      { title: "Sign in · SAFARI" },
+      { name: "description", content: "Join SAFARI as a traveler, hotel partner, or support team member." },
     ],
   }),
   component: AuthPage,
@@ -74,7 +74,7 @@ function AuthPage() {
               🦁
             </div>
             <h1 className="mt-3 font-display text-2xl font-bold">
-              {mode === "signin" ? "Karibu tena" : "Karibu Safari OS"}
+              {mode === "signin" ? "Karibu tena" : "Karibu SAFARI"}
             </h1>
             <p className="text-xs text-muted-foreground mt-1">
               {mode === "signin" ? "Welcome back — sign in to continue" : "Create your account · Twende!"}
@@ -216,7 +216,7 @@ function AuthPage() {
           </button>
 
           <p className="text-[11px] text-center text-muted-foreground mt-4">
-            By continuing you agree to Safari OS terms. <Link to="/" className="underline">Back to explorer</Link>
+            By continuing you agree to SAFARI terms. <Link to="/" className="underline">Back to explorer</Link>
           </p>
         </div>
       </div>

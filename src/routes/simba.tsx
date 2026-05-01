@@ -9,7 +9,7 @@ import { tiers, adoptions, badges, leaderboard, images } from "@/lib/safari-data
 export const Route = createFileRoute("/simba")({
   head: () => ({
     meta: [
-      { title: "Simba Points — Safari OS Loyalty" },
+      { title: "Simba Points — SAFARI Loyalty" },
       {
         name: "description",
         content:

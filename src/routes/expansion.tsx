@@ -8,13 +8,13 @@ import { expansionCountries, roadmap, images } from "@/lib/safari-data";
 export const Route = createFileRoute("/expansion")({
   head: () => ({
     meta: [
-      { title: "Global Expansion Map — Safari OS" },
+      { title: "Global Expansion Map — SAFARI" },
       {
         name: "description",
         content:
-          "Safari OS roadmap across Kenya, Tanzania, Uganda, and Rwanda. Pan-East African platform.",
+          "SAFARI roadmap across Kenya, Tanzania, Uganda, and Rwanda. Pan-East African platform.",
       },
-      { property: "og:title", content: "Safari OS — Pan-EAC Expansion" },
+      { property: "og:title", content: "SAFARI — Pan-EAC Expansion" },
       {
         property: "og:description",
         content: "Live in Kenya & Tanzania. Uganda Q2. Rwanda Q3.",

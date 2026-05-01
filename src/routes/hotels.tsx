@@ -9,9 +9,9 @@ import { images } from "@/lib/safari-data";
 export const Route = createFileRoute("/hotels")({
   head: () => ({
     meta: [
-      { title: "Hotels & Villas · Safari OS" },
+      { title: "Hotels & Villas · SAFARI" },
       { name: "description", content: "Browse premium safari lodges, tented camps and villas across East Africa." },
-      { property: "og:title", content: "Safari OS — Hotels & Villas" },
+      { property: "og:title", content: "SAFARI — Hotels & Villas" },
       { property: "og:description", content: "Hand-picked stays inside Maasai Mara, Serengeti, Bwindi & more." },
     ],
   }),

@@ -9,13 +9,13 @@ import { sightings, images } from "@/lib/safari-data";
 export const Route = createFileRoute("/wildlife")({
   head: () => ({
     meta: [
-      { title: "Wildlife Story Feed — Safari OS" },
+      { title: "Wildlife Story Feed — SAFARI" },
       {
         name: "description",
         content:
           "AI-generated wildlife narratives across East Africa. Real sightings, real-time. B2B-ready API.",
       },
-      { property: "og:title", content: "Wildlife Story Feed — Safari OS" },
+      { property: "og:title", content: "Wildlife Story Feed — SAFARI" },
       {
         property: "og:description",
         content: "AI-generated narratives of wildlife movements, B2B API ready.",

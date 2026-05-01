@@ -9,7 +9,7 @@ import { Building2, Plus, Loader2, Trash2, Pencil, X, BedDouble, Star } from "lu
 export const Route = createFileRoute("/partner")({
   head: () => ({
     meta: [
-      { title: "Partner Dashboard · Safari OS" },
+      { title: "Partner Dashboard · SAFARI" },
       { name: "description", content: "Hotel partner dashboard — manage your listings, bookings, and reviews." },
     ],
   }),

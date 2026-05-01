@@ -10,7 +10,7 @@ import { SafariMap } from "@/components/safari/SafariMap";
 export const Route = createFileRoute("/hotels/$hotelId")({
   head: () => ({
     meta: [
-      { title: "Hotel · Safari OS" },
+      { title: "Hotel · SAFARI" },
       { name: "description", content: "View hotel details, amenities, and book your safari stay." },
     ],
   }),
@@ -170,7 +170,7 @@ function HotelDetail() {
             <div className="glass rounded-2xl p-6">
               <h2 className="font-display text-xl font-bold">About this stay</h2>
               <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                {hotel.description || "A premium East African stay curated by Safari OS."}
+                {hotel.description || "A premium East African stay curated by SAFARI."}
               </p>
               {hotel.amenities.length > 0 && (
                 <>

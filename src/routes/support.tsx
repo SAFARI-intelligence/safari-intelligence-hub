@@ -8,7 +8,7 @@ import { Shield, Users, Building2, BookOpen, Loader2, MessageSquare, Trash2 } fr
 export const Route = createFileRoute("/support")({
   head: () => ({
     meta: [
-      { title: "Support Console · Safari OS" },
+      { title: "Support Console · SAFARI" },
       { name: "description", content: "Internal admin console — manage users, hotels, tickets, and reviews." },
     ],
   }),

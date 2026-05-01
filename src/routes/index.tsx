@@ -37,13 +37,13 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Safari OS — AI Wildlife Intelligence for East Africa" },
+      { title: "SAFARI — AI Wildlife Intelligence for East Africa" },
       {
         name: "description",
         content:
           "The premium AI-powered tourism platform for East Africa. Real-time wildlife intelligence across Kenya, Tanzania, Uganda & Rwanda.",
       },
-      { property: "og:title", content: "Safari OS — Wildlife Intelligence" },
+      { property: "og:title", content: "SAFARI — Wildlife Intelligence" },
       {
         property: "og:description",
         content: "Karibu. Real-time AI wildlife tracking across East Africa.",
@@ -93,7 +93,7 @@ function Index() {
                 </span>
               </h1>
               <p className="mt-5 text-base sm:text-lg text-white/85 max-w-xl">
-                Karibu Safari OS — the operating system for East African tourism. AI tracks{" "}
+                Karibu SAFARI — the operating system for East African tourism. AI tracks{" "}
                 <strong className="text-[var(--gold)]">{totalSightings} active sightings</strong>{" "}
                 across {parks.length} parks right now. Twende!
               </p>

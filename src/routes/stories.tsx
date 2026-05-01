@@ -10,13 +10,13 @@ import { images } from "@/lib/safari-data";
 export const Route = createFileRoute("/stories")({
   head: () => ({
     meta: [
-      { title: "The Big Five — Wanyama wa Tano Wakubwa · Safari OS" },
+      { title: "The Big Five — Wanyama wa Tano Wakubwa · SAFARI" },
       {
         name: "description",
         content:
           "Lion, Elephant, Leopard, Rhino, Buffalo — cinematic stories of Kenya's Big Five, with the parks and lodges to see them.",
       },
-      { property: "og:title", content: "The Big Five — Safari OS" },
+      { property: "og:title", content: "The Big Five — SAFARI" },
       {
         property: "og:description",
         content: "Cinematic stories of Kenya's Big Five and where to stay nearby.",

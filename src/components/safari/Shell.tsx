@@ -61,10 +61,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
         >
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="h-9 w-9 overflow-hidden rounded-xl bg-[#0D0D0D] shadow-[var(--shadow-glow-gold)] ring-1 ring-[var(--gold)]/30">
-              <img src={lionLogo} alt="Safari OS lion logo" className="h-full w-full object-cover" />
+              <img src={lionLogo} alt="SAFARI lion logo" className="h-full w-full object-cover" />
             </div>
             <div className="leading-none">
-              <div className="font-display text-lg font-bold tracking-tight">Safari OS</div>
+              <div className="font-display text-lg font-bold tracking-tight">SAFARI</div>
               <div className="font-label text-[10px] text-muted-foreground">
                 Karibu · East Africa
               </div>
@@ -200,7 +200,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <MaasaiDivider className="mb-6" />
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <p>
-              <span className="font-display text-foreground">Safari OS</span> · Built in
+              <span className="font-display text-foreground">SAFARI</span> · Built in
               Nairobi · Powered by Wildlife Intelligence™
             </p>
             <p className="italic">"Haraka haraka haina baraka" — Hurry, hurry has no blessing.</p>

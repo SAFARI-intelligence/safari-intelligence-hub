@@ -9,12 +9,12 @@ import { packages, swahiliProverbs, images } from "@/lib/safari-data";
 export const Route = createFileRoute("/book")({
   head: () => ({
     meta: [
-      { title: "Booking Engine — Safari OS" },
+      { title: "Booking Engine — SAFARI" },
       {
         name: "description",
         content: "Book premium East African safaris in KSh. Maasai Mara, Serengeti, Bwindi & more.",
       },
-      { property: "og:title", content: "Book your East African safari — Safari OS" },
+      { property: "og:title", content: "Book your East African safari — SAFARI" },
       { property: "og:description", content: "Premium safari packages, KSh-primary pricing." },
       { property: "og:image", content: images.zebra },
     ],
