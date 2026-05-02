@@ -1,73 +1,76 @@
-## Status check against the uploaded plan
+## SAFARI Icon System
 
-| Plan section | Status | Notes |
-|---|---|---|
-| **3. MVP Stability & Security** | ✅ Done last turn | auth on AI endpoint, role-escalation trigger, profiles email no longer public, server-side booking total trigger, RLS on all tables, Google OAuth + email/password, RBAC (user/hotel/support) |
-| **2. Hotel onboarding strategy** | Operational (outreach/email) — not buildable in code | The hotel partner UI (`/partner`) already exists for self-onboarding |
-| **5. Execution timeline** | Operational — not buildable | |
-| **1. Big Five content engine** | ⚠️ Partial — 5 rows seeded but schema is shallow (no hero narrative, no key facts table, no park linkage) | Build this turn |
-| **4. Integration flow (Animal → Location → Hotels → Book)** | ❌ Missing — stories don't link to parks/hotels | Build this turn |
+A single, unified icon layer the whole app imports from. Built on Lucide (already used everywhere) with a thin wrapper that enforces stroke width, sizing tiers, color states, and hover motion — plus 3 custom brand icons (Safari Jeep, Acacia Tree, Tent) so we own the look.
 
-So the security task is **fixed**. I'll proceed with the two remaining buildable items: the Big Five content engine + the integration flow.
+### What gets built
 
----
+1. **`src/components/icons/SafariIcon.tsx`** — wrapper component
+   - Props: `name`, `size` ("sm" 16 / "md" 20 / "nav" 24 / "feature" 32), `tone` ("default" | "active" | "muted" | "disabled" | "premium"), `interactive` (adds hover scale 1.05 + 150ms color shift), `className`
+   - Forces `strokeWidth={1.75}`, round caps/joins
+   - Tone mapping uses CSS tokens (no hardcoded hex):
+     - default → `text-muted-foreground`
+     - active → `text-[var(--gold)]`
+     - muted → `text-foreground/60`
+     - disabled → `text-foreground/30`
+     - premium → duotone effect via gold fill at 15% + gold stroke (used only for AI/premium icons)
 
-## What I'll build
+2. **`src/components/icons/registry.ts`** — single source of truth
+   - Maps semantic names → Lucide components or custom SVGs
+   - Categories per spec: nav, travel, booking, social, ai, utility
+   - Names: `home, explore, trips, bookings, profile, map, pin, compass, jeep, tent, mountain, calendar, ticket, wallet, payment, receipt, chat, notifications, like, share, ai, recommendations, insights, search, filter, settings, menu, back`
 
-### 1. Big Five content engine (premium, cinematic)
+3. **`src/components/icons/custom/`** — 3 hand-crafted SVG components
+   - `Jeep.tsx` — silhouette safari vehicle, 24px grid, 1.75 stroke
+   - `Acacia.tsx` — flat-top acacia tree
+   - `Tent.tsx` — luxury safari tent
+   - All use `currentColor`, `stroke-linecap="round"`, `stroke-linejoin="round"` for visual parity with Lucide
 
-Upgrade `animal_stories` from a 5-field card into a full content schema:
+4. **`src/components/icons/index.ts`** — barrel export: `SafariIcon`, `iconRegistry`, type `IconName`
 
-- `hero_narrative` (cinematic 200–300 word story)
-- `key_facts` jsonb — `{ speed, weight, lifespan, habitat, diet, conservation_status }`
-- `behavior_insights` text[] (3–5 insights: hunting, social, territory)
-- `cultural_relevance` text (Kenyan/African meaning, Swahili name, proverbs)
-- `parks` text[] (Maasai Mara, Amboseli, Tsavo, Samburu, etc.) — used to join with `hotels.park`
-- `hero_image`, `gallery` text[]
-- `slug` text unique (URL-friendly: `lion`, `elephant`, …)
+5. **Refactor key surfaces to use SafariIcon:**
+   - `src/components/safari/Shell.tsx` — desktop nav, mobile tab bar (uses active tone on selected)
+   - Direct Lucide imports remain valid elsewhere (no breaking change), but Shell becomes the showcase
 
-Migration adds the columns + backfills the 5 existing rows with editorial-quality content for Lion (Simba), Elephant (Tembo), Leopard (Chui), Rhino (Kifaru), Buffalo (Nyati).
+6. **`src/routes/icons.tsx`** — internal usage-guideline page at `/icons`
+   - Live grid of all icons grouped by category
+   - Size scale demo (16/20/24/32)
+   - State demo (default/active/hover/disabled/premium)
+   - Spacing rules card ("8px between icon and text")
+   - Light + dark mode shown via existing theme toggle (no new code needed — design tokens already adapt)
 
-### 2. Routes & UI
+### Design token usage
 
-- **`/stories` (refresh)** — cinematic grid: full-bleed hero image cards, Swahili name overlay, narrative tease. Hover lift + glow.
-- **`/stories/$slug` (NEW)** — premium animal page:
-  1. Cinematic hero (full-bleed image, Playfair Display title, Swahili subtitle)
-  2. Hero narrative (drop-cap, generous serif type)
-  3. Key facts strip (animated count-up cards: speed / weight / lifespan / status)
-  4. Behavior insights (numbered list, Maasai-pattern divider)
-  5. Cultural relevance section (cream surface, ochre accent)
-  6. **"Where to see" → "Stay nearby"** — queries `hotels` where `park = ANY(animal.parks)` and lists 3–6 hotel cards with **Book** CTA → `/hotels/$hotelId`
-- **`/wildlife` & `/`** — add "Featured Big Five" rail linking into `/stories/$slug`.
+No new colors. Reuses existing tokens which already match the brief:
+- `--gold` (Lion Gold) ≈ Savannah Gold accent
+- `--muted-foreground` for default neutral
+- `--maasai` reserved for destructive only (not icon default)
 
-### 3. Integration flow
+The `tone="premium"` duotone wraps the icon in a `relative` span with a soft gold radial behind at 15% opacity.
 
-`Story page → reads animal.parks → fetches hotels by park → click hotel → existing /hotels/$hotelId booking flow → existing booking trigger validates price`.
+### Interaction
 
-This realises the plan's core funnel: **Lion → Maasai Mara → Hotel → Book Experience**.
-
----
-
-## Technical details
-
-- **Migration**: ALTER TABLE `animal_stories` ADD columns + UPDATE seed rows. RLS already correct (public SELECT, support write).
-- **TanStack route**: `src/routes/stories.$slug.tsx` with loader fetching by slug + parallel fetch of hotels matching `parks`.
-- **404 / error**: `notFoundComponent` + `errorComponent` per route convention.
-- **SEO**: each animal page sets unique `<title>`, `og:title`, `og:description`, `og:image` (hero image), `twitter:image`. Index `/stories` keeps current meta.
-- **Performance**: image `loading="lazy"`, single round-trip per page (animal + hotels in `Promise.all`).
-- **Design tokens only**: gold/maasai/forest/cream from `styles.css` — no hex literals.
-- **No new dependencies**.
-
----
-
-## Files
-
-```text
-supabase/migrations/<new>.sql                  # extend animal_stories + seed Big Five copy
-src/routes/stories.tsx                         # cinematic grid refresh
-src/routes/stories.$slug.tsx                   # NEW premium animal page
-src/routes/wildlife.tsx                        # add Big Five rail (small edit)
-src/routes/index.tsx                           # add Big Five rail (small edit)
+`interactive` prop adds:
+```
+transition-all duration-150 ease-out hover:scale-105 hover:text-[var(--gold)]
 ```
 
-Out of scope: rebuilding the hotel onboarding pipeline (already shipped in `/partner`), running an outreach campaign, voice narration / video (plan calls these "optional").
+### Files
+
+```text
+src/components/icons/
+  SafariIcon.tsx        new
+  registry.ts           new
+  index.ts              new
+  custom/
+    Jeep.tsx            new
+    Acacia.tsx          new
+    Tent.tsx            new
+src/components/safari/Shell.tsx   edit (swap nav icons)
+src/routes/icons.tsx              new (showcase + guidelines)
+```
+
+### Out of scope (ask if you want these)
+
+- Replacing every `lucide-react` import across all 17 routes (can be done incrementally; wrapper is opt-in)
+- Figma export / SVG sprite file generation
+- Standalone downloadable SVG library zip
