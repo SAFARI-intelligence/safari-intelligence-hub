@@ -19,6 +19,7 @@ import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorsRouteImport } from './routes/operators'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as IconsRouteImport } from './routes/icons'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as ExpansionRouteImport } from './routes/expansion'
 import { Route as BookRouteImport } from './routes/book'
@@ -77,6 +78,11 @@ const IntelligenceRoute = IntelligenceRouteImport.update({
   path: '/intelligence',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IconsRoute = IconsRouteImport.update({
+  id: '/icons',
+  path: '/icons',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HotelsRoute = HotelsRouteImport.update({
   id: '/hotels',
   path: '/hotels',
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/book': typeof BookRoute
   '/expansion': typeof ExpansionRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
   '/operators': typeof OperatorsRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/book'
     | '/expansion'
     | '/hotels'
+    | '/icons'
     | '/intelligence'
     | '/map'
     | '/operators'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/book'
     | '/expansion'
     | '/hotels'
+    | '/icons'
     | '/intelligence'
     | '/map'
     | '/operators'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/book'
     | '/expansion'
     | '/hotels'
+    | '/icons'
     | '/intelligence'
     | '/map'
     | '/operators'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   BookRoute: typeof BookRoute
   ExpansionRoute: typeof ExpansionRoute
   HotelsRoute: typeof HotelsRouteWithChildren
+  IconsRoute: typeof IconsRoute
   IntelligenceRoute: typeof IntelligenceRoute
   MapRoute: typeof MapRoute
   OperatorsRoute: typeof OperatorsRoute
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntelligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/icons': {
+      id: '/icons'
+      path: '/icons'
+      fullPath: '/icons'
+      preLoaderRoute: typeof IconsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hotels': {
       id: '/hotels'
       path: '/hotels'
@@ -401,6 +421,7 @@ const rootRouteChildren: RootRouteChildren = {
   BookRoute: BookRoute,
   ExpansionRoute: ExpansionRoute,
   HotelsRoute: HotelsRouteWithChildren,
+  IconsRoute: IconsRoute,
   IntelligenceRoute: IntelligenceRoute,
   MapRoute: MapRoute,
   OperatorsRoute: OperatorsRoute,
