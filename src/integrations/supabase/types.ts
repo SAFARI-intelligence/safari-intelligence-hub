@@ -177,6 +177,63 @@ export type Database = {
           },
         ]
       }
+      experiences: {
+        Row: {
+          country: string
+          created_at: string
+          description: string | null
+          duration_days: number | null
+          duration_nights: number | null
+          features: string[]
+          id: string
+          image: string | null
+          is_published: boolean
+          price_amount: number
+          price_currency: string
+          slug: string
+          tax_amount: number
+          tax_currency: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          country?: string
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          duration_nights?: number | null
+          features?: string[]
+          id?: string
+          image?: string | null
+          is_published?: boolean
+          price_amount?: number
+          price_currency?: string
+          slug: string
+          tax_amount?: number
+          tax_currency?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          duration_nights?: number | null
+          features?: string[]
+          id?: string
+          image?: string | null
+          is_published?: boolean
+          price_amount?: number
+          price_currency?: string
+          slug?: string
+          tax_amount?: number
+          tax_currency?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hotels: {
         Row: {
           amenities: string[]
