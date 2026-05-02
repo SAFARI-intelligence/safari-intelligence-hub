@@ -2,9 +2,10 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Menu, X, Globe, LogIn, LogOut, Shield, Building2,
-  Home, Sparkles, Compass, BedDouble, User as UserIcon,
+  User as UserIcon,
   Sun, Moon,
 } from "lucide-react";
+import { SafariIcon, type IconName } from "@/components/icons";
 import { MaasaiDivider } from "./MaasaiDivider";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/hooks/use-theme";
@@ -22,12 +23,12 @@ const navLinks = [
   { to: "/expansion", label: "Expansion", sw: "Ukuzaji" },
 ] as const;
 
-const mobileTabs = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/plan", label: "Plan", icon: Sparkles },
-  { to: "/wildlife", label: "Wild", icon: Compass },
-  { to: "/hotels", label: "Stay", icon: BedDouble },
-  { to: "/profile", label: "Me", icon: UserIcon },
+const mobileTabs: ReadonlyArray<{ to: string; label: string; icon: IconName }> = [
+  { to: "/", label: "Home", icon: "home" },
+  { to: "/plan", label: "Plan", icon: "ai" },
+  { to: "/wildlife", label: "Wild", icon: "explore" },
+  { to: "/hotels", label: "Stay", icon: "tent" },
+  { to: "/profile", label: "Me", icon: "profile" },
 ] as const;
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -221,8 +222,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
                   active ? "bg-[var(--gold)]/15 scale-105" : "text-muted-foreground"
                 }`}
               >
-                <t.icon
-                  className={`h-[18px] w-[18px] ${active ? "text-[var(--gold)]" : ""}`}
+                <SafariIcon
+                  name={t.icon}
+                  size={20}
+                  tone={active ? "active" : "muted"}
                 />
                 <span className={`text-[10px] font-medium ${active ? "text-foreground" : ""}`}>
                   {t.label}
