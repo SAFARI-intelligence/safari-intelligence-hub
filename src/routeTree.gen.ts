@@ -17,6 +17,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorsRouteImport } from './routes/operators'
+import { Route as OperatorRouteImport } from './routes/operator'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as IconsRouteImport } from './routes/icons'
@@ -66,6 +67,11 @@ const PartnerRoute = PartnerRouteImport.update({
 const OperatorsRoute = OperatorsRouteImport.update({
   id: '/operators',
   path: '/operators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OperatorRoute = OperatorRouteImport.update({
+  id: '/operator',
+  path: '/operator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MapRoute = MapRouteImport.update({
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
+  '/operator': typeof OperatorRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
+  '/operator': typeof OperatorRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
+  '/operator': typeof OperatorRoute
   '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/icons'
     | '/intelligence'
     | '/map'
+    | '/operator'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/icons'
     | '/intelligence'
     | '/map'
+    | '/operator'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '/icons'
     | '/intelligence'
     | '/map'
+    | '/operator'
     | '/operators'
     | '/partner'
     | '/plan'
@@ -252,6 +264,7 @@ export interface RootRouteChildren {
   IconsRoute: typeof IconsRoute
   IntelligenceRoute: typeof IntelligenceRoute
   MapRoute: typeof MapRoute
+  OperatorRoute: typeof OperatorRoute
   OperatorsRoute: typeof OperatorsRoute
   PartnerRoute: typeof PartnerRoute
   PlanRoute: typeof PlanRoute
@@ -318,6 +331,13 @@ declare module '@tanstack/react-router' {
       path: '/operators'
       fullPath: '/operators'
       preLoaderRoute: typeof OperatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/operator': {
+      id: '/operator'
+      path: '/operator'
+      fullPath: '/operator'
+      preLoaderRoute: typeof OperatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/map': {
@@ -424,6 +444,7 @@ const rootRouteChildren: RootRouteChildren = {
   IconsRoute: IconsRoute,
   IntelligenceRoute: IntelligenceRoute,
   MapRoute: MapRoute,
+  OperatorRoute: OperatorRoute,
   OperatorsRoute: OperatorsRoute,
   PartnerRoute: PartnerRoute,
   PlanRoute: PlanRoute,
