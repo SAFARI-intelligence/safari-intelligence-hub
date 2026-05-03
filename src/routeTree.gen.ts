@@ -16,7 +16,6 @@ import { Route as SimbaRouteImport } from './routes/simba'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as PartnerRouteImport } from './routes/partner'
-import { Route as OperatorsRouteImport } from './routes/operators'
 import { Route as OperatorRouteImport } from './routes/operator'
 import { Route as MapRouteImport } from './routes/map'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
@@ -26,8 +25,17 @@ import { Route as ExpansionRouteImport } from './routes/expansion'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OperatorIndexRouteImport } from './routes/operator.index'
 import { Route as StoriesSlugRouteImport } from './routes/stories.$slug'
+import { Route as OperatorWildlifeRouteImport } from './routes/operator.wildlife'
+import { Route as OperatorSettingsRouteImport } from './routes/operator.settings'
+import { Route as OperatorPayoutsRouteImport } from './routes/operator.payouts'
+import { Route as OperatorListingsRouteImport } from './routes/operator.listings'
+import { Route as OperatorBookingsRouteImport } from './routes/operator.bookings'
+import { Route as OperatorAnalyticsRouteImport } from './routes/operator.analytics'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
+import { Route as OperatorListingsNewRouteImport } from './routes/operator.listings.new'
+import { Route as OperatorListingsIdEditRouteImport } from './routes/operator.listings.$id.edit'
 
 const WildlifeRoute = WildlifeRouteImport.update({
   id: '/wildlife',
@@ -62,11 +70,6 @@ const PlanRoute = PlanRouteImport.update({
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OperatorsRoute = OperatorsRouteImport.update({
-  id: '/operators',
-  path: '/operators',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OperatorRoute = OperatorRouteImport.update({
@@ -114,15 +117,60 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OperatorIndexRoute = OperatorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OperatorRoute,
+} as any)
 const StoriesSlugRoute = StoriesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => StoriesRoute,
 } as any)
+const OperatorWildlifeRoute = OperatorWildlifeRouteImport.update({
+  id: '/wildlife',
+  path: '/wildlife',
+  getParentRoute: () => OperatorRoute,
+} as any)
+const OperatorSettingsRoute = OperatorSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => OperatorRoute,
+} as any)
+const OperatorPayoutsRoute = OperatorPayoutsRouteImport.update({
+  id: '/payouts',
+  path: '/payouts',
+  getParentRoute: () => OperatorRoute,
+} as any)
+const OperatorListingsRoute = OperatorListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => OperatorRoute,
+} as any)
+const OperatorBookingsRoute = OperatorBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => OperatorRoute,
+} as any)
+const OperatorAnalyticsRoute = OperatorAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => OperatorRoute,
+} as any)
 const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   id: '/$hotelId',
   path: '/$hotelId',
   getParentRoute: () => HotelsRoute,
+} as any)
+const OperatorListingsNewRoute = OperatorListingsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => OperatorListingsRoute,
+} as any)
+const OperatorListingsIdEditRoute = OperatorListingsIdEditRouteImport.update({
+  id: '/$id/edit',
+  path: '/$id/edit',
+  getParentRoute: () => OperatorListingsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -134,8 +182,7 @@ export interface FileRoutesByFullPath {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
-  '/operator': typeof OperatorRoute
-  '/operators': typeof OperatorsRoute
+  '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
@@ -144,7 +191,16 @@ export interface FileRoutesByFullPath {
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/operator/analytics': typeof OperatorAnalyticsRoute
+  '/operator/bookings': typeof OperatorBookingsRoute
+  '/operator/listings': typeof OperatorListingsRouteWithChildren
+  '/operator/payouts': typeof OperatorPayoutsRoute
+  '/operator/settings': typeof OperatorSettingsRoute
+  '/operator/wildlife': typeof OperatorWildlifeRoute
   '/stories/$slug': typeof StoriesSlugRoute
+  '/operator/': typeof OperatorIndexRoute
+  '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -155,8 +211,6 @@ export interface FileRoutesByTo {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
-  '/operator': typeof OperatorRoute
-  '/operators': typeof OperatorsRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
@@ -165,7 +219,16 @@ export interface FileRoutesByTo {
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/operator/analytics': typeof OperatorAnalyticsRoute
+  '/operator/bookings': typeof OperatorBookingsRoute
+  '/operator/listings': typeof OperatorListingsRouteWithChildren
+  '/operator/payouts': typeof OperatorPayoutsRoute
+  '/operator/settings': typeof OperatorSettingsRoute
+  '/operator/wildlife': typeof OperatorWildlifeRoute
   '/stories/$slug': typeof StoriesSlugRoute
+  '/operator': typeof OperatorIndexRoute
+  '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -177,8 +240,7 @@ export interface FileRoutesById {
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
   '/map': typeof MapRoute
-  '/operator': typeof OperatorRoute
-  '/operators': typeof OperatorsRoute
+  '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
@@ -187,7 +249,16 @@ export interface FileRoutesById {
   '/support': typeof SupportRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
+  '/operator/analytics': typeof OperatorAnalyticsRoute
+  '/operator/bookings': typeof OperatorBookingsRoute
+  '/operator/listings': typeof OperatorListingsRouteWithChildren
+  '/operator/payouts': typeof OperatorPayoutsRoute
+  '/operator/settings': typeof OperatorSettingsRoute
+  '/operator/wildlife': typeof OperatorWildlifeRoute
   '/stories/$slug': typeof StoriesSlugRoute
+  '/operator/': typeof OperatorIndexRoute
+  '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,7 +272,6 @@ export interface FileRouteTypes {
     | '/intelligence'
     | '/map'
     | '/operator'
-    | '/operators'
     | '/partner'
     | '/plan'
     | '/profile'
@@ -210,7 +280,16 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/operator/analytics'
+    | '/operator/bookings'
+    | '/operator/listings'
+    | '/operator/payouts'
+    | '/operator/settings'
+    | '/operator/wildlife'
     | '/stories/$slug'
+    | '/operator/'
+    | '/operator/listings/new'
+    | '/operator/listings/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,8 +300,6 @@ export interface FileRouteTypes {
     | '/icons'
     | '/intelligence'
     | '/map'
-    | '/operator'
-    | '/operators'
     | '/partner'
     | '/plan'
     | '/profile'
@@ -231,7 +308,16 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/operator/analytics'
+    | '/operator/bookings'
+    | '/operator/listings'
+    | '/operator/payouts'
+    | '/operator/settings'
+    | '/operator/wildlife'
     | '/stories/$slug'
+    | '/operator'
+    | '/operator/listings/new'
+    | '/operator/listings/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -243,7 +329,6 @@ export interface FileRouteTypes {
     | '/intelligence'
     | '/map'
     | '/operator'
-    | '/operators'
     | '/partner'
     | '/plan'
     | '/profile'
@@ -252,7 +337,16 @@ export interface FileRouteTypes {
     | '/support'
     | '/wildlife'
     | '/hotels/$hotelId'
+    | '/operator/analytics'
+    | '/operator/bookings'
+    | '/operator/listings'
+    | '/operator/payouts'
+    | '/operator/settings'
+    | '/operator/wildlife'
     | '/stories/$slug'
+    | '/operator/'
+    | '/operator/listings/new'
+    | '/operator/listings/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -264,8 +358,7 @@ export interface RootRouteChildren {
   IconsRoute: typeof IconsRoute
   IntelligenceRoute: typeof IntelligenceRoute
   MapRoute: typeof MapRoute
-  OperatorRoute: typeof OperatorRoute
-  OperatorsRoute: typeof OperatorsRoute
+  OperatorRoute: typeof OperatorRouteWithChildren
   PartnerRoute: typeof PartnerRoute
   PlanRoute: typeof PlanRoute
   ProfileRoute: typeof ProfileRoute
@@ -324,13 +417,6 @@ declare module '@tanstack/react-router' {
       path: '/partner'
       fullPath: '/partner'
       preLoaderRoute: typeof PartnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/operators': {
-      id: '/operators'
-      path: '/operators'
-      fullPath: '/operators'
-      preLoaderRoute: typeof OperatorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/operator': {
@@ -396,6 +482,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/operator/': {
+      id: '/operator/'
+      path: '/'
+      fullPath: '/operator/'
+      preLoaderRoute: typeof OperatorIndexRouteImport
+      parentRoute: typeof OperatorRoute
+    }
     '/stories/$slug': {
       id: '/stories/$slug'
       path: '/$slug'
@@ -403,12 +496,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoriesSlugRouteImport
       parentRoute: typeof StoriesRoute
     }
+    '/operator/wildlife': {
+      id: '/operator/wildlife'
+      path: '/wildlife'
+      fullPath: '/operator/wildlife'
+      preLoaderRoute: typeof OperatorWildlifeRouteImport
+      parentRoute: typeof OperatorRoute
+    }
+    '/operator/settings': {
+      id: '/operator/settings'
+      path: '/settings'
+      fullPath: '/operator/settings'
+      preLoaderRoute: typeof OperatorSettingsRouteImport
+      parentRoute: typeof OperatorRoute
+    }
+    '/operator/payouts': {
+      id: '/operator/payouts'
+      path: '/payouts'
+      fullPath: '/operator/payouts'
+      preLoaderRoute: typeof OperatorPayoutsRouteImport
+      parentRoute: typeof OperatorRoute
+    }
+    '/operator/listings': {
+      id: '/operator/listings'
+      path: '/listings'
+      fullPath: '/operator/listings'
+      preLoaderRoute: typeof OperatorListingsRouteImport
+      parentRoute: typeof OperatorRoute
+    }
+    '/operator/bookings': {
+      id: '/operator/bookings'
+      path: '/bookings'
+      fullPath: '/operator/bookings'
+      preLoaderRoute: typeof OperatorBookingsRouteImport
+      parentRoute: typeof OperatorRoute
+    }
+    '/operator/analytics': {
+      id: '/operator/analytics'
+      path: '/analytics'
+      fullPath: '/operator/analytics'
+      preLoaderRoute: typeof OperatorAnalyticsRouteImport
+      parentRoute: typeof OperatorRoute
+    }
     '/hotels/$hotelId': {
       id: '/hotels/$hotelId'
       path: '/$hotelId'
       fullPath: '/hotels/$hotelId'
       preLoaderRoute: typeof HotelsHotelIdRouteImport
       parentRoute: typeof HotelsRoute
+    }
+    '/operator/listings/new': {
+      id: '/operator/listings/new'
+      path: '/new'
+      fullPath: '/operator/listings/new'
+      preLoaderRoute: typeof OperatorListingsNewRouteImport
+      parentRoute: typeof OperatorListingsRoute
+    }
+    '/operator/listings/$id/edit': {
+      id: '/operator/listings/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/operator/listings/$id/edit'
+      preLoaderRoute: typeof OperatorListingsIdEditRouteImport
+      parentRoute: typeof OperatorListingsRoute
     }
   }
 }
@@ -423,6 +572,43 @@ const HotelsRouteChildren: HotelsRouteChildren = {
 
 const HotelsRouteWithChildren =
   HotelsRoute._addFileChildren(HotelsRouteChildren)
+
+interface OperatorListingsRouteChildren {
+  OperatorListingsNewRoute: typeof OperatorListingsNewRoute
+  OperatorListingsIdEditRoute: typeof OperatorListingsIdEditRoute
+}
+
+const OperatorListingsRouteChildren: OperatorListingsRouteChildren = {
+  OperatorListingsNewRoute: OperatorListingsNewRoute,
+  OperatorListingsIdEditRoute: OperatorListingsIdEditRoute,
+}
+
+const OperatorListingsRouteWithChildren =
+  OperatorListingsRoute._addFileChildren(OperatorListingsRouteChildren)
+
+interface OperatorRouteChildren {
+  OperatorAnalyticsRoute: typeof OperatorAnalyticsRoute
+  OperatorBookingsRoute: typeof OperatorBookingsRoute
+  OperatorListingsRoute: typeof OperatorListingsRouteWithChildren
+  OperatorPayoutsRoute: typeof OperatorPayoutsRoute
+  OperatorSettingsRoute: typeof OperatorSettingsRoute
+  OperatorWildlifeRoute: typeof OperatorWildlifeRoute
+  OperatorIndexRoute: typeof OperatorIndexRoute
+}
+
+const OperatorRouteChildren: OperatorRouteChildren = {
+  OperatorAnalyticsRoute: OperatorAnalyticsRoute,
+  OperatorBookingsRoute: OperatorBookingsRoute,
+  OperatorListingsRoute: OperatorListingsRouteWithChildren,
+  OperatorPayoutsRoute: OperatorPayoutsRoute,
+  OperatorSettingsRoute: OperatorSettingsRoute,
+  OperatorWildlifeRoute: OperatorWildlifeRoute,
+  OperatorIndexRoute: OperatorIndexRoute,
+}
+
+const OperatorRouteWithChildren = OperatorRoute._addFileChildren(
+  OperatorRouteChildren,
+)
 
 interface StoriesRouteChildren {
   StoriesSlugRoute: typeof StoriesSlugRoute
@@ -444,8 +630,7 @@ const rootRouteChildren: RootRouteChildren = {
   IconsRoute: IconsRoute,
   IntelligenceRoute: IntelligenceRoute,
   MapRoute: MapRoute,
-  OperatorRoute: OperatorRoute,
-  OperatorsRoute: OperatorsRoute,
+  OperatorRoute: OperatorRouteWithChildren,
   PartnerRoute: PartnerRoute,
   PlanRoute: PlanRoute,
   ProfileRoute: ProfileRoute,

@@ -134,7 +134,7 @@ function DashboardPage() {
                 <Tooltip
                   cursor={{ fill: "rgba(245,240,232,0.5)" }}
                   contentStyle={{ background: "#fff", border: "0.5px solid #ece7dc", borderRadius: 6, fontSize: 11 }}
-                  formatter={(v: number) => [formatKsh(v), "Revenue"]}
+                  formatter={(v) => [formatKsh(Number(v)), "Revenue"]}
                 />
                 <Bar dataKey="value" radius={[3, 3, 0, 0]}>
                   {revenueChart.map((d, i) => (

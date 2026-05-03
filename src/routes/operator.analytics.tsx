@@ -69,7 +69,7 @@ function AnalyticsPage() {
                 <XAxis dataKey="month" tick={{ fontSize: 10, fill: "#8a7f6e" }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: "#8a7f6e" }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ fontSize: 11, border: "0.5px solid #ece7dc", borderRadius: 6 }}
-                  formatter={(v: number, _n, p) => [`${v} demand index`, (p.payload as { peak?: string }).peak ?? "Standard"]} />
+                  formatter={(v, _n, p) => [`${v} demand index`, ((p as { payload?: { peak?: string } }).payload?.peak) ?? "Standard"]} />
                 <Bar dataKey="demand" radius={[3, 3, 0, 0]}>
                   {seasonalForecast.map((s, i) => (
                     <Cell key={i} fill={s.peak ? "#2D5A27" : "rgba(45,90,39,0.35)"} />
