@@ -345,6 +345,247 @@ export type Database = {
         }
         Relationships: []
       }
+      pay_bookings: {
+        Row: {
+          created_at: string
+          currency: string
+          guests: number
+          id: string
+          status: Database["public"]["Enums"]["pay_booking_status"]
+          total_amount: number
+          trip_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          guests?: number
+          id?: string
+          status?: Database["public"]["Enums"]["pay_booking_status"]
+          total_amount: number
+          trip_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          guests?: number
+          id?: string
+          status?: Database["public"]["Enums"]["pay_booking_status"]
+          total_amount?: number
+          trip_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pay_bookings_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "pay_trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pay_escrows: {
+        Row: {
+          amount: number
+          booking_id: string
+          created_at: string
+          currency: string
+          id: string
+          released_at: string | null
+          status: Database["public"]["Enums"]["pay_escrow_status"]
+        }
+        Insert: {
+          amount: number
+          booking_id: string
+          created_at?: string
+          currency?: string
+          id?: string
+          released_at?: string | null
+          status?: Database["public"]["Enums"]["pay_escrow_status"]
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          released_at?: string | null
+          status?: Database["public"]["Enums"]["pay_escrow_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pay_escrows_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "pay_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pay_fx_rates: {
+        Row: {
+          base: string
+          fetched_at: string
+          id: string
+          quote: string
+          rate: number
+        }
+        Insert: {
+          base: string
+          fetched_at?: string
+          id?: string
+          quote: string
+          rate: number
+        }
+        Update: {
+          base?: string
+          fetched_at?: string
+          id?: string
+          quote?: string
+          rate?: number
+        }
+        Relationships: []
+      }
+      pay_transactions: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          metadata: Json
+          provider: Database["public"]["Enums"]["pay_provider"]
+          provider_ref: string
+          status: Database["public"]["Enums"]["pay_tx_status"]
+          type: Database["public"]["Enums"]["pay_tx_type"]
+          user_id: string
+          wallet_id: string
+        }
+        Insert: {
+          amount: number
+          booking_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json
+          provider: Database["public"]["Enums"]["pay_provider"]
+          provider_ref: string
+          status?: Database["public"]["Enums"]["pay_tx_status"]
+          type: Database["public"]["Enums"]["pay_tx_type"]
+          user_id: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          metadata?: Json
+          provider?: Database["public"]["Enums"]["pay_provider"]
+          provider_ref?: string
+          status?: Database["public"]["Enums"]["pay_tx_status"]
+          type?: Database["public"]["Enums"]["pay_tx_type"]
+          user_id?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pay_transactions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "pay_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pay_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "pay_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pay_trips: {
+        Row: {
+          base_price: number
+          created_at: string
+          currency: string
+          description: string | null
+          end_date: string
+          id: string
+          image: string | null
+          operator_id: string
+          start_date: string
+          status: Database["public"]["Enums"]["pay_trip_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          base_price: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          end_date: string
+          id?: string
+          image?: string | null
+          operator_id: string
+          start_date: string
+          status?: Database["public"]["Enums"]["pay_trip_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          image?: string | null
+          operator_id?: string
+          start_date?: string
+          status?: Database["public"]["Enums"]["pay_trip_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pay_wallets: {
+        Row: {
+          created_at: string
+          currency: string
+          flex_balance: number
+          id: string
+          trip_balance: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          flex_balance?: number
+          id?: string
+          trip_balance?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          flex_balance?: number
+          id?: string
+          trip_balance?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -505,6 +746,18 @@ export type Database = {
       app_role: "user" | "hotel" | "support"
       booking_status: "pending" | "confirmed" | "cancelled"
       hotel_type: "hotel" | "villa" | "lodge" | "camp"
+      pay_booking_status: "pending" | "confirmed" | "cancelled" | "completed"
+      pay_escrow_status: "held" | "released" | "refunded"
+      pay_provider: "stripe" | "mpesa" | "mock" | "wallet"
+      pay_trip_status: "active" | "completed" | "cancelled"
+      pay_tx_status: "pending" | "success" | "failed"
+      pay_tx_type:
+        | "payment"
+        | "refund"
+        | "payout"
+        | "add_on"
+        | "topup"
+        | "transfer"
       ticket_priority: "low" | "normal" | "high" | "urgent"
       ticket_status: "open" | "in_progress" | "closed"
     }
@@ -637,6 +890,19 @@ export const Constants = {
       app_role: ["user", "hotel", "support"],
       booking_status: ["pending", "confirmed", "cancelled"],
       hotel_type: ["hotel", "villa", "lodge", "camp"],
+      pay_booking_status: ["pending", "confirmed", "cancelled", "completed"],
+      pay_escrow_status: ["held", "released", "refunded"],
+      pay_provider: ["stripe", "mpesa", "mock", "wallet"],
+      pay_trip_status: ["active", "completed", "cancelled"],
+      pay_tx_status: ["pending", "success", "failed"],
+      pay_tx_type: [
+        "payment",
+        "refund",
+        "payout",
+        "add_on",
+        "topup",
+        "transfer",
+      ],
       ticket_priority: ["low", "normal", "high", "urgent"],
       ticket_status: ["open", "in_progress", "closed"],
     },
