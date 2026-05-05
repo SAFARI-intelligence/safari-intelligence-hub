@@ -15,6 +15,7 @@ import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as SimbaRouteImport } from './routes/simba'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PlanRouteImport } from './routes/plan'
+import { Route as PayRouteImport } from './routes/pay'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorRouteImport } from './routes/operator'
 import { Route as MapRouteImport } from './routes/map'
@@ -25,8 +26,12 @@ import { Route as ExpansionRouteImport } from './routes/expansion'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PayIndexRouteImport } from './routes/pay.index'
 import { Route as OperatorIndexRouteImport } from './routes/operator.index'
 import { Route as StoriesSlugRouteImport } from './routes/stories.$slug'
+import { Route as PayWalletRouteImport } from './routes/pay.wallet'
+import { Route as PayTripsRouteImport } from './routes/pay.trips'
+import { Route as PayBookingsRouteImport } from './routes/pay.bookings'
 import { Route as OperatorWildlifeRouteImport } from './routes/operator.wildlife'
 import { Route as OperatorSettingsRouteImport } from './routes/operator.settings'
 import { Route as OperatorPayoutsRouteImport } from './routes/operator.payouts'
@@ -34,6 +39,7 @@ import { Route as OperatorListingsRouteImport } from './routes/operator.listings
 import { Route as OperatorBookingsRouteImport } from './routes/operator.bookings'
 import { Route as OperatorAnalyticsRouteImport } from './routes/operator.analytics'
 import { Route as HotelsHotelIdRouteImport } from './routes/hotels.$hotelId'
+import { Route as PayCheckoutTripIdRouteImport } from './routes/pay.checkout.$tripId'
 import { Route as OperatorListingsNewRouteImport } from './routes/operator.listings.new'
 import { Route as OperatorListingsIdEditRouteImport } from './routes/operator.listings.$id.edit'
 
@@ -65,6 +71,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PlanRoute = PlanRouteImport.update({
   id: '/plan',
   path: '/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayRoute = PayRouteImport.update({
+  id: '/pay',
+  path: '/pay',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -117,6 +128,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PayIndexRoute = PayIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PayRoute,
+} as any)
 const OperatorIndexRoute = OperatorIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -126,6 +142,21 @@ const StoriesSlugRoute = StoriesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => StoriesRoute,
+} as any)
+const PayWalletRoute = PayWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => PayRoute,
+} as any)
+const PayTripsRoute = PayTripsRouteImport.update({
+  id: '/trips',
+  path: '/trips',
+  getParentRoute: () => PayRoute,
+} as any)
+const PayBookingsRoute = PayBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => PayRoute,
 } as any)
 const OperatorWildlifeRoute = OperatorWildlifeRouteImport.update({
   id: '/wildlife',
@@ -162,6 +193,11 @@ const HotelsHotelIdRoute = HotelsHotelIdRouteImport.update({
   path: '/$hotelId',
   getParentRoute: () => HotelsRoute,
 } as any)
+const PayCheckoutTripIdRoute = PayCheckoutTripIdRouteImport.update({
+  id: '/checkout/$tripId',
+  path: '/checkout/$tripId',
+  getParentRoute: () => PayRoute,
+} as any)
 const OperatorListingsNewRoute = OperatorListingsNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -184,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/map': typeof MapRoute
   '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
+  '/pay': typeof PayRouteWithChildren
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
@@ -197,9 +234,14 @@ export interface FileRoutesByFullPath {
   '/operator/payouts': typeof OperatorPayoutsRoute
   '/operator/settings': typeof OperatorSettingsRoute
   '/operator/wildlife': typeof OperatorWildlifeRoute
+  '/pay/bookings': typeof PayBookingsRoute
+  '/pay/trips': typeof PayTripsRoute
+  '/pay/wallet': typeof PayWalletRoute
   '/stories/$slug': typeof StoriesSlugRoute
   '/operator/': typeof OperatorIndexRoute
+  '/pay/': typeof PayIndexRoute
   '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/pay/checkout/$tripId': typeof PayCheckoutTripIdRoute
   '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -225,9 +267,14 @@ export interface FileRoutesByTo {
   '/operator/payouts': typeof OperatorPayoutsRoute
   '/operator/settings': typeof OperatorSettingsRoute
   '/operator/wildlife': typeof OperatorWildlifeRoute
+  '/pay/bookings': typeof PayBookingsRoute
+  '/pay/trips': typeof PayTripsRoute
+  '/pay/wallet': typeof PayWalletRoute
   '/stories/$slug': typeof StoriesSlugRoute
   '/operator': typeof OperatorIndexRoute
+  '/pay': typeof PayIndexRoute
   '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/pay/checkout/$tripId': typeof PayCheckoutTripIdRoute
   '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRoutesById {
@@ -242,6 +289,7 @@ export interface FileRoutesById {
   '/map': typeof MapRoute
   '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
+  '/pay': typeof PayRouteWithChildren
   '/plan': typeof PlanRoute
   '/profile': typeof ProfileRoute
   '/simba': typeof SimbaRoute
@@ -255,9 +303,14 @@ export interface FileRoutesById {
   '/operator/payouts': typeof OperatorPayoutsRoute
   '/operator/settings': typeof OperatorSettingsRoute
   '/operator/wildlife': typeof OperatorWildlifeRoute
+  '/pay/bookings': typeof PayBookingsRoute
+  '/pay/trips': typeof PayTripsRoute
+  '/pay/wallet': typeof PayWalletRoute
   '/stories/$slug': typeof StoriesSlugRoute
   '/operator/': typeof OperatorIndexRoute
+  '/pay/': typeof PayIndexRoute
   '/operator/listings/new': typeof OperatorListingsNewRoute
+  '/pay/checkout/$tripId': typeof PayCheckoutTripIdRoute
   '/operator/listings/$id/edit': typeof OperatorListingsIdEditRoute
 }
 export interface FileRouteTypes {
@@ -273,6 +326,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/operator'
     | '/partner'
+    | '/pay'
     | '/plan'
     | '/profile'
     | '/simba'
@@ -286,9 +340,14 @@ export interface FileRouteTypes {
     | '/operator/payouts'
     | '/operator/settings'
     | '/operator/wildlife'
+    | '/pay/bookings'
+    | '/pay/trips'
+    | '/pay/wallet'
     | '/stories/$slug'
     | '/operator/'
+    | '/pay/'
     | '/operator/listings/new'
+    | '/pay/checkout/$tripId'
     | '/operator/listings/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -314,9 +373,14 @@ export interface FileRouteTypes {
     | '/operator/payouts'
     | '/operator/settings'
     | '/operator/wildlife'
+    | '/pay/bookings'
+    | '/pay/trips'
+    | '/pay/wallet'
     | '/stories/$slug'
     | '/operator'
+    | '/pay'
     | '/operator/listings/new'
+    | '/pay/checkout/$tripId'
     | '/operator/listings/$id/edit'
   id:
     | '__root__'
@@ -330,6 +394,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/operator'
     | '/partner'
+    | '/pay'
     | '/plan'
     | '/profile'
     | '/simba'
@@ -343,9 +408,14 @@ export interface FileRouteTypes {
     | '/operator/payouts'
     | '/operator/settings'
     | '/operator/wildlife'
+    | '/pay/bookings'
+    | '/pay/trips'
+    | '/pay/wallet'
     | '/stories/$slug'
     | '/operator/'
+    | '/pay/'
     | '/operator/listings/new'
+    | '/pay/checkout/$tripId'
     | '/operator/listings/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -360,6 +430,7 @@ export interface RootRouteChildren {
   MapRoute: typeof MapRoute
   OperatorRoute: typeof OperatorRouteWithChildren
   PartnerRoute: typeof PartnerRoute
+  PayRoute: typeof PayRouteWithChildren
   PlanRoute: typeof PlanRoute
   ProfileRoute: typeof ProfileRoute
   SimbaRoute: typeof SimbaRoute
@@ -410,6 +481,13 @@ declare module '@tanstack/react-router' {
       path: '/plan'
       fullPath: '/plan'
       preLoaderRoute: typeof PlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pay': {
+      id: '/pay'
+      path: '/pay'
+      fullPath: '/pay'
+      preLoaderRoute: typeof PayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -482,6 +560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pay/': {
+      id: '/pay/'
+      path: '/'
+      fullPath: '/pay/'
+      preLoaderRoute: typeof PayIndexRouteImport
+      parentRoute: typeof PayRoute
+    }
     '/operator/': {
       id: '/operator/'
       path: '/'
@@ -495,6 +580,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/stories/$slug'
       preLoaderRoute: typeof StoriesSlugRouteImport
       parentRoute: typeof StoriesRoute
+    }
+    '/pay/wallet': {
+      id: '/pay/wallet'
+      path: '/wallet'
+      fullPath: '/pay/wallet'
+      preLoaderRoute: typeof PayWalletRouteImport
+      parentRoute: typeof PayRoute
+    }
+    '/pay/trips': {
+      id: '/pay/trips'
+      path: '/trips'
+      fullPath: '/pay/trips'
+      preLoaderRoute: typeof PayTripsRouteImport
+      parentRoute: typeof PayRoute
+    }
+    '/pay/bookings': {
+      id: '/pay/bookings'
+      path: '/bookings'
+      fullPath: '/pay/bookings'
+      preLoaderRoute: typeof PayBookingsRouteImport
+      parentRoute: typeof PayRoute
     }
     '/operator/wildlife': {
       id: '/operator/wildlife'
@@ -544,6 +650,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/$hotelId'
       preLoaderRoute: typeof HotelsHotelIdRouteImport
       parentRoute: typeof HotelsRoute
+    }
+    '/pay/checkout/$tripId': {
+      id: '/pay/checkout/$tripId'
+      path: '/checkout/$tripId'
+      fullPath: '/pay/checkout/$tripId'
+      preLoaderRoute: typeof PayCheckoutTripIdRouteImport
+      parentRoute: typeof PayRoute
     }
     '/operator/listings/new': {
       id: '/operator/listings/new'
@@ -610,6 +723,24 @@ const OperatorRouteWithChildren = OperatorRoute._addFileChildren(
   OperatorRouteChildren,
 )
 
+interface PayRouteChildren {
+  PayBookingsRoute: typeof PayBookingsRoute
+  PayTripsRoute: typeof PayTripsRoute
+  PayWalletRoute: typeof PayWalletRoute
+  PayIndexRoute: typeof PayIndexRoute
+  PayCheckoutTripIdRoute: typeof PayCheckoutTripIdRoute
+}
+
+const PayRouteChildren: PayRouteChildren = {
+  PayBookingsRoute: PayBookingsRoute,
+  PayTripsRoute: PayTripsRoute,
+  PayWalletRoute: PayWalletRoute,
+  PayIndexRoute: PayIndexRoute,
+  PayCheckoutTripIdRoute: PayCheckoutTripIdRoute,
+}
+
+const PayRouteWithChildren = PayRoute._addFileChildren(PayRouteChildren)
+
 interface StoriesRouteChildren {
   StoriesSlugRoute: typeof StoriesSlugRoute
 }
@@ -632,6 +763,7 @@ const rootRouteChildren: RootRouteChildren = {
   MapRoute: MapRoute,
   OperatorRoute: OperatorRouteWithChildren,
   PartnerRoute: PartnerRoute,
+  PayRoute: PayRouteWithChildren,
   PlanRoute: PlanRoute,
   ProfileRoute: ProfileRoute,
   SimbaRoute: SimbaRoute,
