@@ -6,32 +6,22 @@ import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { parks, images } from "@/lib/safari-data";
 
-function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
+function CountUp({ to }: { to: number }) {
   const [n, setN] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        const dur = 1200;
-        const start = performance.now();
-        const tick = (now: number) => {
-          const p = Math.min(1, (now - start) / dur);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setN(Math.round(eased * to));
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-        io.disconnect();
-      },
-      { threshold: 0.3 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    const dur = 1500;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(eased * to));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [to]);
-  return <span ref={ref}>{n.toLocaleString()}{suffix}</span>;
+  return <span>{n.toLocaleString()}</span>;
 }
 
 export const Route = createFileRoute("/")({
@@ -56,11 +46,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const totalSightings = parks.reduce((s, p) => s + p.sightings, 0);
-  const liveParks = parks.filter((p) => p.status === "live").length;
-  const avgConfidence = Math.round(
-    parks.reduce((s, p) => s + p.confidence, 0) / parks.length,
-  );
+  const totalSightings = 179;
+  const liveParks = 6;
+  const avgConfidence = 94;
+  const operatorsOnline = 12;
 
   return (
     <Shell>
@@ -118,10 +107,10 @@ function Index() {
         {/* STATS */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[
-            { label: "Live parks", value: liveParks, suffix: `/ ${parks.length}`, icon: MapPin, color: "var(--maasai)" },
-            { label: "Active sightings", value: totalSightings, icon: Activity, color: "var(--gold)" },
+            { label: "Active sightings", value: totalSightings, suffix: "", icon: Activity, color: "var(--gold)" },
             { label: "AI confidence", value: avgConfidence, suffix: "%", icon: Sparkles, color: "var(--forest)" },
-            { label: "Operators online", value: 162, icon: Cloud, color: "var(--charcoal)" },
+            { label: "Parks monitored", value: liveParks, suffix: "", icon: MapPin, color: "var(--maasai)" },
+            { label: "Operators online", value: operatorsOnline, suffix: "", icon: Cloud, color: "var(--charcoal)" },
           ].map((s) => (
               <div key={s.label} className="glass rounded-2xl p-4 sm:p-5">
                 <div className="flex items-center justify-between">
@@ -132,7 +121,7 @@ function Index() {
                 </div>
                 <div className="mt-2 font-display text-3xl sm:text-4xl font-bold">
                   <CountUp to={s.value} />
-                  <span className="text-lg text-muted-foreground">{s.suffix ?? ""}</span>
+                  <span className="text-lg text-muted-foreground">{s.suffix}</span>
                 </div>
               </div>
           ))}
