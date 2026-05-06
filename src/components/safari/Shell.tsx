@@ -2,8 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Menu, X, Globe, LogIn, LogOut, Shield, Building2,
-  User as UserIcon,
-  Sun, Moon,
+  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked,
 } from "lucide-react";
 import { SafariIcon, type IconName } from "@/components/icons";
 import { MaasaiDivider } from "./MaasaiDivider";
@@ -14,36 +13,50 @@ import lionLogo from "@/assets/safari-lion-logo.jpg";
 const navLinks = [
   { to: "/", label: "Explorer", sw: "Tazama" },
   { to: "/plan", label: "Plan AI", sw: "Panga" },
-  { to: "/hotels", label: "Hotels", sw: "Hoteli" },
-  { to: "/stories", label: "Big Five", sw: "Wanyama" },
-  { to: "/wildlife", label: "Wildlife", sw: "Tracker" },
-  { to: "/map", label: "Map", sw: "Ramani" },
+  { to: "/wildlife", label: "Wildlife", sw: "Wanyama" },
   { to: "/book", label: "Book", sw: "Hifadhi" },
-  { to: "/simba", label: "Simba", sw: "Simba" },
-  { to: "/expansion", label: "Expansion", sw: "Ukuzaji" },
+] as const;
+
+const drawerLinks = [
+  { to: "/hotels", label: "Hotels" },
+  { to: "/stories", label: "Stories" },
+  { to: "/wildlife", label: "Big Five Tracker" },
+  { to: "/map", label: "Interactive Map" },
+  { to: "/expansion", label: "About SAFARI" },
+  { to: "/support", label: "Contact" },
+] as const;
+
+const footerLinks = [
+  { to: "/hotels", label: "Hotels" },
+  { to: "/stories", label: "Stories" },
+  { to: "/wildlife", label: "Big Five" },
+  { to: "/map", label: "Map" },
 ] as const;
 
 const mobileTabs: ReadonlyArray<{ to: string; label: string; icon: IconName }> = [
   { to: "/", label: "Home", icon: "home" },
   { to: "/plan", label: "Plan", icon: "ai" },
   { to: "/wildlife", label: "Wild", icon: "explore" },
-  { to: "/hotels", label: "Stay", icon: "tent" },
+  { to: "/book", label: "Stay", icon: "tent" },
   { to: "/profile", label: "Me", icon: "profile" },
 ] as const;
 
+const NAV_BG = "#1A3C2E";
+const NAV_ACCENT = "#C9922A";
+
 export function Shell({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [acctOpen, setAcctOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "SW">("EN");
-  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { user, primaryRole, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
+  // close menus on route change
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    setDrawerOpen(false);
+    setAcctOpen(false);
+  }, [location.pathname]);
 
   const terminalLink =
     primaryRole === "support"
@@ -54,36 +67,40 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-5">
+      <header className="sticky top-0 z-50">
         <nav
-          className={`mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-4 py-3 sm:px-6 transition-all ${
-            scrolled ? "glass-strong" : "glass"
-          }`}
+          className="flex items-center justify-between px-4 sm:px-8 py-3 text-white shadow-md"
+          style={{ background: NAV_BG }}
         >
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="h-9 w-9 overflow-hidden rounded-xl bg-[#0D0D0D] shadow-[var(--shadow-glow-gold)] ring-1 ring-[var(--gold)]/30">
-              <img src={lionLogo} alt="SAFARI lion logo" className="h-full w-full object-cover" />
+            <div className="h-9 w-9 overflow-hidden rounded-xl bg-[#0D0D0D] ring-1 ring-white/20">
+              <img src={lionLogo} alt="SAFARI" className="h-full w-full object-cover" />
             </div>
             <div className="leading-none">
               <div className="font-display text-lg font-bold tracking-tight">SAFARI</div>
-              <div className="font-label text-[10px] text-muted-foreground">
-                Karibu · East Africa
-              </div>
+              <div className="font-label text-[10px] text-white/60">Karibu · East Africa</div>
             </div>
           </Link>
 
-          <ul className="hidden xl:flex items-center gap-0.5">
+          <ul className="hidden lg:flex items-center gap-1">
             {navLinks.map((l) => {
               const active = location.pathname === l.to;
               return (
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+                    className="px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                    style={
                       active
-                        ? "bg-[var(--gold)]/15 text-foreground font-semibold"
-                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-                    }`}
+                        ? { background: NAV_ACCENT, color: "#0D0D0D" }
+                        : { color: "rgba(255,255,255,0.85)" }
+                    }
+                    onMouseEnter={(e) => {
+                      if (!active) e.currentTarget.style.color = NAV_ACCENT;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.85)";
+                    }}
                   >
                     {lang === "EN" ? l.label : l.sw}
                   </Link>
@@ -95,106 +112,148 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5 transition"
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-              title={theme === "dark" ? "Light mode" : "Dark mode"}
+              className="hidden sm:grid h-9 w-9 place-items-center rounded-lg border border-white/15 hover:border-white/40 transition"
+              aria-label="Toggle theme"
             >
-              {theme === "dark" ? (
-                <Sun className="h-3.5 w-3.5 text-[var(--gold)]" />
-              ) : (
-                <Moon className="h-3.5 w-3.5" />
-              )}
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
             <button
               onClick={() => setLang(lang === "EN" ? "SW" : "EN")}
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5 transition"
+              className="hidden sm:flex items-center gap-1.5 px-2.5 h-9 rounded-lg border border-white/15 text-xs font-medium hover:border-white/40 transition"
             >
-              <Globe className="h-3.5 w-3.5" />
-              {lang}
+              <Globe className="h-3.5 w-3.5" /> {lang}
             </button>
             {terminalLink && (
               <Link
                 to={terminalLink.to}
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--forest)]/40 text-[var(--forest)] hover:bg-[var(--forest)]/10"
+                className="hidden md:flex items-center gap-1.5 px-3 h-9 rounded-lg text-xs font-semibold border border-white/20 hover:border-white/50"
               >
                 <terminalLink.icon className="h-3.5 w-3.5" />
                 {terminalLink.label}
               </Link>
             )}
+
             {user ? (
-              <>
-                <Link
-                  to="/profile"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5"
+              <div className="relative">
+                <button
+                  onClick={() => setAcctOpen((v) => !v)}
+                  className="hidden sm:flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-semibold"
+                  style={{ background: NAV_ACCENT, color: "#0D0D0D" }}
                 >
                   <UserIcon className="h-3.5 w-3.5" />
-                  Profile
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-border/60 hover:bg-foreground/5"
-                  title="Sign out"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
+                  My Account
+                  <ChevronDown className="h-3.5 w-3.5" />
                 </button>
-              </>
+                {acctOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setAcctOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-52 rounded-xl bg-background text-foreground border border-border/60 shadow-xl z-50 overflow-hidden">
+                      <Link
+                        to="/wallet"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
+                      >
+                        <Wallet className="h-4 w-4 text-[var(--gold)]" /> Wallet
+                      </Link>
+                      <Link
+                        to="/pay/bookings"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
+                      >
+                        <BookMarked className="h-4 w-4 text-[var(--maasai)]" /> My Bookings
+                      </Link>
+                      <Link
+                        to="/profile"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
+                      >
+                        <UserIcon className="h-4 w-4" /> Profile
+                      </Link>
+                      <div className="h-px bg-border/60" />
+                      <button
+                        onClick={() => { setAcctOpen(false); signOut(); }}
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5 text-left"
+                      >
+                        <LogOut className="h-4 w-4" /> Sign Out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             ) : (
               <Link
                 to="/auth"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white text-xs font-bold shadow-[var(--shadow-glow-gold)]"
+                className="hidden sm:flex items-center gap-1.5 px-4 h-9 rounded-lg text-sm font-bold"
+                style={{ background: NAV_ACCENT, color: "#0D0D0D" }}
               >
-                <LogIn className="h-3.5 w-3.5" />
-                Sign in
+                <LogIn className="h-3.5 w-3.5" /> Sign In
               </Link>
             )}
+
             <button
-              onClick={() => setOpen(!open)}
-              className="xl:hidden md:grid hidden h-9 w-9 place-items-center rounded-lg border border-border/60"
-              aria-label="Menu"
+              onClick={() => setDrawerOpen(true)}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 hover:border-white/40 transition"
+              aria-label="Open menu"
             >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <Menu className="h-4 w-4" />
             </button>
           </div>
         </nav>
+      </header>
 
-        {open && (
-          <div className="xl:hidden md:block hidden glass-strong mx-auto mt-2 max-w-7xl rounded-2xl p-3">
-            <ul className="grid grid-cols-2 gap-1.5">
-              {navLinks.map((l) => {
-                const active = location.pathname === l.to;
-                return (
+      {/* Right-side drawer */}
+      {drawerOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm animate-fade-in"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <aside
+            className="fixed top-0 right-0 bottom-0 z-[70] w-72 max-w-[85vw] bg-background border-l border-border/60 shadow-2xl animate-slide-in-right"
+          >
+            <div
+              className="flex items-center justify-between px-5 py-4 text-white"
+              style={{ background: NAV_BG }}
+            >
+              <span className="font-display text-lg font-bold">Menu</span>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="grid h-9 w-9 place-items-center rounded-lg hover:bg-white/10"
+                aria-label="Close menu"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <nav className="p-3">
+              <ul className="space-y-1">
+                {drawerLinks.map((l) => (
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      onClick={() => setOpen(false)}
-                      className={`block px-3 py-2 rounded-lg text-sm ${
-                        active
-                          ? "bg-[var(--gold)]/15 font-semibold"
-                          : "hover:bg-foreground/5"
-                      }`}
+                      className="block px-4 py-3 rounded-lg text-sm font-medium hover:bg-foreground/5"
                     >
-                      {lang === "EN" ? l.label : l.sw}
+                      {l.label}
                     </Link>
                   </li>
-                );
-              })}
-              {terminalLink && (
-                <li>
+                ))}
+              </ul>
+              <div className="mt-4 pt-4 border-t border-border/60 space-y-1 lg:hidden">
+                {navLinks.map((l) => (
                   <Link
-                    to={terminalLink.to}
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 rounded-lg text-sm bg-[var(--forest)]/15 text-[var(--forest)] font-semibold"
+                    key={l.to}
+                    to={l.to}
+                    className="block px-4 py-2.5 rounded-lg text-sm hover:bg-foreground/5"
                   >
-                    {terminalLink.label} terminal
+                    {l.label}
                   </Link>
-                </li>
-              )}
-            </ul>
-          </div>
-        )}
-      </header>
+                ))}
+              </div>
+            </nav>
+          </aside>
+        </>
+      )}
 
-      <main className="flex-1 px-3 py-6 sm:px-6 sm:py-10">{children}</main>
+      <main className="flex-1 px-3 py-6 sm:px-6 sm:py-10 pb-24 md:pb-10">{children}</main>
 
       <footer className="px-3 pb-6 sm:px-6">
         <div className="mx-auto max-w-7xl">
@@ -204,8 +263,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <span className="font-display text-foreground">SAFARI</span> · Built in
               Nairobi · Powered by Wildlife Intelligence™
             </p>
-            <p className="italic">"Haraka haraka haina baraka" — Hurry, hurry has no blessing.</p>
+            <ul className="flex flex-wrap items-center gap-4">
+              {footerLinks.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className="hover:text-foreground transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
+          <p className="mt-3 text-center text-[11px] italic text-muted-foreground">
+            "Haraka haraka haina baraka" — Hurry, hurry has no blessing.
+          </p>
         </div>
       </footer>
 
@@ -219,14 +289,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 key={t.to}
                 to={t.to}
                 className={`flex-1 flex flex-col items-center gap-0.5 py-1.5 rounded-xl transition-all ${
-                  active ? "bg-[var(--gold)]/15 scale-105" : "text-muted-foreground"
+                  active ? "scale-105" : "text-muted-foreground"
                 }`}
+                style={active ? { background: `${NAV_ACCENT}26` } : undefined}
               >
-                <SafariIcon
-                  name={t.icon}
-                  size={20}
-                  tone={active ? "active" : "muted"}
-                />
+                <SafariIcon name={t.icon} size={20} tone={active ? "active" : "muted"} />
                 <span className={`text-[10px] font-medium ${active ? "text-foreground" : ""}`}>
                   {t.label}
                 </span>

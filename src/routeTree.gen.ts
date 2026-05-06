@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WildlifeRouteImport } from './routes/wildlife'
+import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as SupportRouteImport } from './routes/support'
 import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as SimbaRouteImport } from './routes/simba'
@@ -46,6 +47,11 @@ import { Route as OperatorListingsIdEditRouteImport } from './routes/operator.li
 const WildlifeRoute = WildlifeRouteImport.update({
   id: '/wildlife',
   path: '/wildlife',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SupportRoute = SupportRouteImport.update({
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
+  '/wallet': typeof WalletRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/operator/analytics': typeof OperatorAnalyticsRoute
@@ -259,6 +266,7 @@ export interface FileRoutesByTo {
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
+  '/wallet': typeof WalletRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/operator/analytics': typeof OperatorAnalyticsRoute
@@ -295,6 +303,7 @@ export interface FileRoutesById {
   '/simba': typeof SimbaRoute
   '/stories': typeof StoriesRouteWithChildren
   '/support': typeof SupportRoute
+  '/wallet': typeof WalletRoute
   '/wildlife': typeof WildlifeRoute
   '/hotels/$hotelId': typeof HotelsHotelIdRoute
   '/operator/analytics': typeof OperatorAnalyticsRoute
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/simba'
     | '/stories'
     | '/support'
+    | '/wallet'
     | '/wildlife'
     | '/hotels/$hotelId'
     | '/operator/analytics'
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/simba'
     | '/stories'
     | '/support'
+    | '/wallet'
     | '/wildlife'
     | '/hotels/$hotelId'
     | '/operator/analytics'
@@ -400,6 +411,7 @@ export interface FileRouteTypes {
     | '/simba'
     | '/stories'
     | '/support'
+    | '/wallet'
     | '/wildlife'
     | '/hotels/$hotelId'
     | '/operator/analytics'
@@ -436,6 +448,7 @@ export interface RootRouteChildren {
   SimbaRoute: typeof SimbaRoute
   StoriesRoute: typeof StoriesRouteWithChildren
   SupportRoute: typeof SupportRoute
+  WalletRoute: typeof WalletRoute
   WildlifeRoute: typeof WildlifeRoute
 }
 
@@ -446,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/wildlife'
       fullPath: '/wildlife'
       preLoaderRoute: typeof WildlifeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/support': {
@@ -769,6 +789,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimbaRoute: SimbaRoute,
   StoriesRoute: StoriesRouteWithChildren,
   SupportRoute: SupportRoute,
+  WalletRoute: WalletRoute,
   WildlifeRoute: WildlifeRoute,
 }
 export const routeTree = rootRouteImport
