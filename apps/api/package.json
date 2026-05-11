@@ -1,0 +1,57 @@
+{
+  "name": "@safari/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/main.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:seed": "prisma db seed",
+    "postgis:extensions": "psql \"$DATABASE_URL\" -f prisma/extensions.sql",
+    "postgis:apply": "psql \"$DATABASE_URL\" -f prisma/postgis.sql"
+  },
+  "dependencies": {
+    "@nestjs/cache-manager": "^3.0.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/throttler": "^6.4.0",
+    "@prisma/client": "^6.7.0",
+    "@safari/config": "file:../../packages/config",
+    "@safari/contracts": "file:../../packages/contracts",
+    "@safari/utils": "file:../../packages/utils",
+    "bullmq": "^5.48.1",
+    "bcryptjs": "^2.4.3",
+    "cache-manager": "^6.4.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.4.1",
+    "openai": "^4.104.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "posthog-node": "^4.19.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "stripe": "^17.7.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.11.0",
+    "@types/passport-jwt": "^4.0.1",
+    "prisma": "^6.7.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.3"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

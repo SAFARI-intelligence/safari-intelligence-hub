@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "SAFARI",
+    "slug": "safari",
+    "scheme": "safari",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "experiments": {
+      "typedRoutes": true
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "${RNMAPBOX_MAPS_DOWNLOAD_TOKEN}"
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "http://localhost:4000",
+      "mapboxPublicToken": "${EXPO_PUBLIC_MAPBOX_PUBLIC_TOKEN}"
+    }
+  }
+}

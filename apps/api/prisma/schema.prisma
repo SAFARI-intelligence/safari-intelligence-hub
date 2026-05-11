@@ -1,0 +1,276 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  TOURIST
+  ADMIN
+  PARTNER
+}
+
+enum SubscriptionTier {
+  FREE
+  SAFARI_PLUS
+  PARTNER
+}
+
+enum StorySource {
+  AI
+  EDITORIAL
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  STRIPE
+  FLUTTERWAVE
+}
+
+enum ConversationRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model User {
+  id                   String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  email                String             @unique
+  passwordHash         String
+  role                 UserRole           @default(TOURIST)
+  subscriptionTier     SubscriptionTier   @default(FREE)
+  preferences          String[]           @default([])
+  refreshTokenHash     String?
+  homeLocationId       String?            @db.Uuid
+  stripeCustomerId     String?            @unique
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  homeLocation         Location?          @relation("UserHomeLocation", fields: [homeLocationId], references: [id])
+  bookings             Booking[]
+  subscriptions        Subscription[]
+  conversations        ChatConversation[]
+  analyticsEvents      AnalyticsEvent[]
+  hotelPromotions      HotelPromotion[]
+
+  @@index([subscriptionTier])
+  @@index([role])
+}
+
+model Location {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  label          String
+  zoneName       String
+  latitude       Decimal      @db.Decimal(10, 7)
+  longitude      Decimal      @db.Decimal(10, 7)
+  geoPoint       Unsupported("geometry(Point,4326)")?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  animals        Animal[]
+  hotels         Hotel[]
+  parks          Park[]
+  experiences    Experience[]
+  users          User[]       @relation("UserHomeLocation")
+
+  @@index([zoneName])
+  @@index([latitude, longitude])
+}
+
+model Animal {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  species     String
+  description String
+  metadata    Json?
+  heroImage   String
+  locationId  String      @db.Uuid
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  location    Location    @relation(fields: [locationId], references: [id])
+  stories     Story[]
+
+  @@index([species])
+}
+
+model Story {
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  animalId     String      @db.Uuid
+  title        String
+  textContent  String
+  audioUrl     String?
+  source       StorySource @default(AI)
+  languageCode String      @default("en")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  animal       Animal      @relation(fields: [animalId], references: [id])
+
+  @@index([animalId, createdAt])
+}
+
+model Hotel {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  description    String
+  locationId     String           @db.Uuid
+  zoneName       String
+  currency       String           @default("USD")
+  priceFrom      Decimal          @db.Decimal(10, 2)
+  rating         Float            @default(0)
+  images         String[]         @default([])
+  featured       Boolean          @default(false)
+  promotedUntil  DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  location       Location         @relation(fields: [locationId], references: [id])
+  bookings       Booking[]
+  promotions     HotelPromotion[]
+
+  @@index([zoneName])
+  @@index([featured, promotedUntil])
+}
+
+model Park {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  countryCode String
+  entryFee    Decimal     @db.Decimal(10, 2)
+  locationId  String      @db.Uuid
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  location    Location    @relation(fields: [locationId], references: [id])
+
+  @@index([countryCode])
+}
+
+model Experience {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String
+  zoneName    String
+  price       Decimal     @db.Decimal(10, 2)
+  locationId  String      @db.Uuid
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  location    Location    @relation(fields: [locationId], references: [id])
+
+  @@index([zoneName])
+}
+
+model Booking {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String        @db.Uuid
+  hotelId          String        @db.Uuid
+  checkInDate      DateTime
+  checkOutDate     DateTime
+  totalAmount      Decimal       @db.Decimal(10, 2)
+  commissionAmount Decimal       @db.Decimal(10, 2) @default(0)
+  currency         String        @default("USD")
+  status           BookingStatus @default(PENDING)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  hotel            Hotel         @relation(fields: [hotelId], references: [id])
+  user             User          @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([hotelId, checkInDate])
+}
+
+model Subscription {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String           @db.Uuid
+  tier             SubscriptionTier
+  provider         PaymentProvider
+  status           String
+  providerRef      String?
+  startedAt        DateTime         @default(now())
+  expiresAt        DateTime?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  user             User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, status])
+}
+
+model HotelPromotion {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId         String   @db.Uuid
+  partnerUserId   String   @db.Uuid
+  startsAt        DateTime
+  endsAt          DateTime
+  amountPaid      Decimal  @db.Decimal(10, 2)
+  currency        String   @default("USD")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  hotel           Hotel    @relation(fields: [hotelId], references: [id])
+  partnerUser     User     @relation(fields: [partnerUserId], references: [id])
+
+  @@index([hotelId, endsAt])
+}
+
+model OfflineMapPack {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  regionCode  String   @unique
+  name        String
+  tileUrl     String
+  sizeMb      Int
+  checksum    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RouteTemplate {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fromParkId       String?  @db.Uuid
+  stopHotelId      String?  @db.Uuid
+  destinationExpId String?  @db.Uuid
+  name             String
+  estimatedHours   Float
+  tags             String[] @default([])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ChatConversation {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String        @db.Uuid
+  title          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id])
+  messages       ChatMessage[]
+
+  @@index([userId, createdAt])
+}
+
+model ChatMessage {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId    String            @db.Uuid
+  role              ConversationRole
+  content           String
+  contextSnapshot   Json?
+  createdAt         DateTime          @default(now())
+  conversation      ChatConversation  @relation(fields: [conversationId], references: [id])
+
+  @@index([conversationId, createdAt])
+}
+
+model AnalyticsEvent {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String?  @db.Uuid
+  eventName    String
+  distinctId   String
+  properties   Json?
+  createdAt    DateTime @default(now())
+  user         User?    @relation(fields: [userId], references: [id])
+
+  @@index([eventName, createdAt])
+  @@index([distinctId, createdAt])
+}
