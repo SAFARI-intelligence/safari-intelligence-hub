@@ -10,18 +10,12 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "codex:setup": "npm install && npm run prisma:generate && npm run postgis:extensions && npm run prisma:migrate && npm run prisma:seed && npm run postgis:apply",
-    "codex:api": "npm run dev:api",
-    "codex:mobile": "npm run dev:mobile",
-    "codex:typecheck": "npm run typecheck",
-    "prisma:generate": "npm run prisma:generate --workspace apps/api",
-    "prisma:migrate": "npm run prisma:migrate --workspace apps/api",
-    "prisma:seed": "npm run prisma:seed --workspace apps/api",
-    "postgis:extensions": "npm run postgis:extensions --workspace apps/api",
-    "postgis:apply": "npm run postgis:apply --workspace apps/api",
-    "dev:api": "npm run start:dev --workspace apps/api",
-    "dev:mobile": "npm run build --workspace packages/contracts && npm run build --workspace packages/utils && npm run build --workspace packages/ui && npm run start --workspace apps/mobile",
-    "build": "npm run build --workspace packages/contracts && npm run build --workspace packages/utils && npm run build --workspace packages/config && npm run build --workspace packages/ui && npm run build --workspace apps/api && npm run build --workspace apps/mobile",
-    "typecheck": "npm run typecheck --workspace packages/contracts && npm run typecheck --workspace packages/utils && npm run typecheck --workspace packages/config && npm run typecheck --workspace packages/ui && npm run typecheck --workspace apps/api && npm run typecheck --workspace apps/mobile"
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:mobile\"",
+    "dev:api": "npm --workspace apps/api run start:dev",
+    "dev:mobile": "npm --workspace apps/mobile run start",
+    "dev:mobile:ios": "npm --workspace apps/mobile run ios"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    
+
+    {
+      "name": "Expo: Start",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli.js",
+      "args": ["start"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Expo: Android",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli.js",
+      "args": ["start", "--android"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Expo: iOS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli.js",
+      "args": ["start", "--ios"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Expo: Web",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/expo/bin/cli.js",
+      "args": ["start", "--web"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
