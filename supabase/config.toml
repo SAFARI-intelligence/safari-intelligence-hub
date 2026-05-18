@@ -1,0 +1,4 @@
+project_id = "aialbryksqnqzmezofqu"
+
+[functions.ai-planner]
+verify_jwt = true
