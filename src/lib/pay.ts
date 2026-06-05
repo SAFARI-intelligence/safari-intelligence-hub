@@ -63,8 +63,8 @@ export async function checkout(args: {
     p_provider: args.provider,
     p_idempotency_key: args.idempotencyKey,
     p_provider_ref: args.providerRef,
-    p_display_currency: args.displayCurrency ?? null,
-    p_display_amount: args.displayAmount ?? null,
+    p_display_currency: args.displayCurrency ?? undefined,
+    p_display_amount: args.displayAmount ?? undefined,
   });
   if (error) throw error;
   return data as { id: string; status: string; total_amount: number; currency: string };
