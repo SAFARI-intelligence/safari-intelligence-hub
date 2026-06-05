@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shell } from "@/components/safari/Shell";
-import { Lock, Plus, Info } from "lucide-react";
+import { Lock, Plus, Info, Coins } from "lucide-react";
 
 export const Route = createFileRoute("/wallet")({
   head: () => ({
