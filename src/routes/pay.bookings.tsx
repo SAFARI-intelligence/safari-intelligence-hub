@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { formatMoney, statusTone } from "@/lib/pay";
+import { cancelBooking, formatMoney, statusTone } from "@/lib/pay";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/pay/bookings")({
