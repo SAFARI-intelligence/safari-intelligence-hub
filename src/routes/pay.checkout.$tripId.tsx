@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { convert, formatMoney, getFxRate, mockCharge, type Currency } from "@/lib/pay";
+import { checkout, convert, formatMoney, generateIdempotencyKey, getFxRate, mockCharge, type Currency } from "@/lib/pay";
 import { toast } from "sonner";
 import { ShieldCheck, CreditCard, Smartphone, Wallet, Lock } from "lucide-react";
 
