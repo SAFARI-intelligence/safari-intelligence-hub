@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Menu, X, Globe, LogIn, LogOut, Shield, Building2,
-  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked,
+  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked, Coins,
 } from "lucide-react";
 import { SafariIcon, type IconName } from "@/components/icons";
 import { MaasaiDivider } from "./MaasaiDivider";
