@@ -48,9 +48,22 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "SW">("EN");
+  const [points, setPoints] = useState(0);
   const location = useLocation();
   const { user, primaryRole, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const read = () => {
+      const stored = typeof window !== "undefined" ? localStorage.getItem("simba_points") : null;
+      setPoints(stored ? parseInt(stored, 10) || 0 : 6420);
+    };
+    read();
+    const onStorage = (e: StorageEvent) => { if (e.key === "simba_points") read(); };
+    window.addEventListener("storage", onStorage);
+    const i = setInterval(read, 1500);
+    return () => { window.removeEventListener("storage", onStorage); clearInterval(i); };
+  }, []);
 
   // close menus on route change
   useEffect(() => {
