@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shell } from "@/components/safari/Shell";
-import { Lock, Plus, Info } from "lucide-react";
+import { Lock, Plus, Info, Coins } from "lucide-react";
 
 export const Route = createFileRoute("/wallet")({
   head: () => ({
@@ -54,6 +54,12 @@ function WalletPage() {
   const [provFilter, setProvFilter] = useState<"all" | Tx["provider"]>("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const stored = typeof window !== "undefined" ? localStorage.getItem("simba_points") : null;
+    setPoints(stored ? parseInt(stored, 10) || 0 : 6420);
+  }, []);
 
   const filtered = mockTx.filter((t) => {
     if (typeFilter !== "all" && t.type !== typeFilter) return false;
@@ -75,7 +81,28 @@ function WalletPage() {
         </header>
 
         {/* Balance cards */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
+          {/* Simba Points / Token Balance */}
+          <Link
+            to="/simba"
+            className="relative rounded-3xl p-6 sm:p-7 overflow-hidden text-white group transition hover:scale-[1.01]"
+            style={{ background: "linear-gradient(135deg, #C9922A, #8a6310)" }}
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.18em] opacity-90">Simba Points</div>
+                <div className="font-display text-4xl sm:text-5xl font-bold mt-2 tabular-nums">
+                  {points.toLocaleString()}
+                </div>
+                <div className="text-xs opacity-90 mt-2">Loyalty tokens · earn on every trip</div>
+              </div>
+              <Coins className="h-6 w-6 opacity-90" />
+            </div>
+            <div className="mt-5 text-xs opacity-90 underline-offset-2 group-hover:underline">
+              Redeem rewards →
+            </div>
+          </Link>
+
           {/* Trip Wallet */}
           <div className="relative rounded-3xl p-6 sm:p-7 text-white overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3C2E, #0E261C)" }}>
             <div className="flex items-start justify-between">

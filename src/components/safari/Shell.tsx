@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Menu, X, Globe, LogIn, LogOut, Shield, Building2,
-  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked,
+  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked, Coins,
 } from "lucide-react";
 import { SafariIcon, type IconName } from "@/components/icons";
 import { MaasaiDivider } from "./MaasaiDivider";
@@ -48,9 +48,22 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "SW">("EN");
+  const [points, setPoints] = useState(0);
   const location = useLocation();
   const { user, primaryRole, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const read = () => {
+      const stored = typeof window !== "undefined" ? localStorage.getItem("simba_points") : null;
+      setPoints(stored ? parseInt(stored, 10) || 0 : 6420);
+    };
+    read();
+    const onStorage = (e: StorageEvent) => { if (e.key === "simba_points") read(); };
+    window.addEventListener("storage", onStorage);
+    const i = setInterval(read, 1500);
+    return () => { window.removeEventListener("storage", onStorage); clearInterval(i); };
+  }, []);
 
   // close menus on route change
   useEffect(() => {
@@ -130,6 +143,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
               >
                 <terminalLink.icon className="h-3.5 w-3.5" />
                 {terminalLink.label}
+              </Link>
+            )}
+
+            {user && (
+              <Link
+                to="/simba"
+                title={`${points.toLocaleString()} Simba Points`}
+                className="hidden sm:flex items-center gap-1.5 px-2.5 h-9 rounded-lg border border-white/15 hover:border-white/40 transition text-xs font-semibold tabular-nums"
+                style={{ color: NAV_ACCENT }}
+              >
+                <Coins className="h-3.5 w-3.5" />
+                {points.toLocaleString()}
+                <span className="text-[10px] font-medium text-white/60 ml-0.5">pts</span>
               </Link>
             )}
 
