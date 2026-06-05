@@ -54,6 +54,12 @@ function WalletPage() {
   const [provFilter, setProvFilter] = useState<"all" | Tx["provider"]>("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const stored = typeof window !== "undefined" ? localStorage.getItem("simba_points") : null;
+    setPoints(stored ? parseInt(stored, 10) || 0 : 6420);
+  }, []);
 
   const filtered = mockTx.filter((t) => {
     if (typeFilter !== "all" && t.type !== typeFilter) return false;
