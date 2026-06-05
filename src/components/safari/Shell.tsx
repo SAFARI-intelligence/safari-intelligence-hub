@@ -146,6 +146,19 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </Link>
             )}
 
+            {user && (
+              <Link
+                to="/simba"
+                title={`${points.toLocaleString()} Simba Points`}
+                className="hidden sm:flex items-center gap-1.5 px-2.5 h-9 rounded-lg border border-white/15 hover:border-white/40 transition text-xs font-semibold tabular-nums"
+                style={{ color: NAV_ACCENT }}
+              >
+                <Coins className="h-3.5 w-3.5" />
+                {points.toLocaleString()}
+                <span className="text-[10px] font-medium text-white/60 ml-0.5">pts</span>
+              </Link>
+            )}
+
             {user ? (
               <div className="relative">
                 <button
