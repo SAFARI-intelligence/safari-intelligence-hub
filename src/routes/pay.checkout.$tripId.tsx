@@ -58,90 +58,40 @@ function CheckoutPage() {
     if (!user || !trip || !wallet) return;
     setBusy(true);
 
-    // 1. Create booking in trip's native currency
-    const { data: booking, error: bErr } = await supabase
-      .from("pay_bookings")
-      .insert({
-        user_id: user.id,
-        trip_id: trip.id,
+    try {
+      // 1. Charge the gateway (mocked) to obtain a provider_ref. Wallet skips this.
+      let providerRef = `wallet_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      if (provider !== "wallet") {
+        const charge = await mockCharge({ provider, amount: totalBase, currency: trip.currency as Currency });
+        if (!charge.ok) {
+          setBusy(false);
+          return toast.error("Payment declined");
+        }
+        providerRef = charge.ref;
+      }
+
+      // 2. Atomic checkout RPC — booking + tx + wallet + escrow + capacity, all-or-nothing.
+      //    Safe to retry under the same idempotency key.
+      await checkout({
+        tripId: trip.id,
         guests,
-        total_amount: totalBase,
-        currency: trip.currency,
-        status: "pending",
-      })
-      .select()
-      .single();
-    if (bErr || !booking) {
+        provider,
+        idempotencyKey: idemKey,
+        providerRef,
+        displayCurrency,
+        displayAmount: totalDisplay,
+      });
+
+      toast.success("Booking confirmed — funds safely escrowed.");
+      setIdemKey(generateIdempotencyKey());
+      navigate({ to: "/pay/bookings" });
+    } catch (e: any) {
+      toast.error(e?.message ?? "Checkout failed");
+    } finally {
       setBusy(false);
-      return toast.error(bErr?.message ?? "Booking failed");
     }
-
-    // 2. Charge
-    let chargeOk = false;
-    let providerRef = "";
-    if (provider === "wallet") {
-      const flex = Number(wallet.flex_balance);
-      if (flex < totalBase) {
-        await supabase.from("pay_bookings").update({ status: "cancelled" }).eq("id", booking.id);
-        setBusy(false);
-        return toast.error("Insufficient Flex balance");
-      }
-      chargeOk = true;
-      providerRef = `wallet_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    } else {
-      const charge = await mockCharge({ provider, amount: totalBase, currency: trip.currency as Currency });
-      chargeOk = charge.ok;
-      providerRef = charge.ref;
-      if (!chargeOk) {
-        await supabase.from("pay_bookings").update({ status: "cancelled" }).eq("id", booking.id);
-        setBusy(false);
-        return toast.error("Payment declined");
-      }
-    }
-
-    // 3. Record transaction
-    await supabase.from("pay_transactions").insert({
-      wallet_id: wallet.id,
-      user_id: user.id,
-      booking_id: booking.id,
-      amount: totalBase,
-      currency: trip.currency,
-      type: "payment",
-      provider,
-      provider_ref: providerRef,
-      status: "success",
-      metadata: { display_currency: displayCurrency, display_amount: totalDisplay },
-    });
-
-    // 4. Move funds
-    if (provider === "wallet") {
-      await supabase
-        .from("pay_wallets")
-        .update({
-          flex_balance: Number(wallet.flex_balance) - totalBase,
-          trip_balance: Number(wallet.trip_balance) + totalBase,
-        })
-        .eq("id", wallet.id);
-    } else {
-      await supabase
-        .from("pay_wallets")
-        .update({ trip_balance: Number(wallet.trip_balance) + totalBase })
-        .eq("id", wallet.id);
-    }
-
-    // 5. Escrow + confirm booking
-    await supabase.from("pay_escrows").insert({
-      booking_id: booking.id,
-      amount: totalBase,
-      currency: trip.currency,
-      status: "held",
-    });
-    await supabase.from("pay_bookings").update({ status: "confirmed" }).eq("id", booking.id);
-
-    toast.success("Booking confirmed — funds safely escrowed.");
-    setBusy(false);
-    navigate({ to: "/pay/bookings" });
   };
+
 
   if (!trip) return <div className="text-sm text-stone-500">Loading trip…</div>;
 
