@@ -32,6 +32,7 @@ function CheckoutPage() {
   const [displayCurrency, setDisplayCurrency] = useState<Currency>("KES");
   const [fx, setFx] = useState(1);
   const [busy, setBusy] = useState(false);
+  const [idemKey, setIdemKey] = useState(() => generateIdempotencyKey());
 
   useEffect(() => {
     (async () => {
