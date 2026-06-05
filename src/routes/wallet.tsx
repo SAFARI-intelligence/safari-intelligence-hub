@@ -81,7 +81,28 @@ function WalletPage() {
         </header>
 
         {/* Balance cards */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
+          {/* Simba Points / Token Balance */}
+          <Link
+            to="/simba"
+            className="relative rounded-3xl p-6 sm:p-7 overflow-hidden text-white group transition hover:scale-[1.01]"
+            style={{ background: "linear-gradient(135deg, #C9922A, #8a6310)" }}
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.18em] opacity-90">Simba Points</div>
+                <div className="font-display text-4xl sm:text-5xl font-bold mt-2 tabular-nums">
+                  {points.toLocaleString()}
+                </div>
+                <div className="text-xs opacity-90 mt-2">Loyalty tokens · earn on every trip</div>
+              </div>
+              <Coins className="h-6 w-6 opacity-90" />
+            </div>
+            <div className="mt-5 text-xs opacity-90 underline-offset-2 group-hover:underline">
+              Redeem rewards →
+            </div>
+          </Link>
+
           {/* Trip Wallet */}
           <div className="relative rounded-3xl p-6 sm:p-7 text-white overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3C2E, #0E261C)" }}>
             <div className="flex items-start justify-between">
