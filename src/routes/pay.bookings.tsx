@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { formatMoney, statusTone } from "@/lib/pay";
+import { cancelBooking, formatMoney, statusTone } from "@/lib/pay";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/pay/bookings")({
@@ -44,32 +44,13 @@ function BookingsPage() {
 
   const cancel = async (b: Booking) => {
     if (!confirm("Cancel this booking and refund?")) return;
-    // Mark booking cancelled, escrow refunded, refund tx
-    const { data: w } = await supabase.from("pay_wallets").select("*").eq("user_id", user!.id).maybeSingle();
-    if (!w) return;
-
-    await supabase.from("pay_bookings").update({ status: "cancelled" }).eq("id", b.id);
-    await supabase.from("pay_escrows").update({ status: "refunded", released_at: new Date().toISOString() }).eq("booking_id", b.id);
-    await supabase
-      .from("pay_wallets")
-      .update({
-        trip_balance: Number(w.trip_balance) - Number(b.total_amount),
-        flex_balance: Number(w.flex_balance) + Number(b.total_amount),
-      })
-      .eq("id", w.id);
-    await supabase.from("pay_transactions").insert({
-      wallet_id: w.id,
-      user_id: user!.id,
-      booking_id: b.id,
-      amount: b.total_amount,
-      currency: b.currency,
-      type: "refund",
-      provider: "wallet",
-      provider_ref: `refund_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      status: "success",
-    });
-    toast.success("Booking cancelled — refunded to Flex Wallet");
-    load();
+    try {
+      await cancelBooking(b.id);
+      toast.success("Booking cancelled — refunded to Flex Wallet");
+      load();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Cancel failed");
+    }
   };
 
   if (loading) return <div className="text-sm text-stone-500">Loading…</div>;

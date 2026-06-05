@@ -1,76 +1,96 @@
-## SAFARI Icon System
+## Goal
 
-A single, unified icon layer the whole app imports from. Built on Lucide (already used everywhere) with a thin wrapper that enforces stroke width, sizing tiers, color states, and hover motion — plus 3 custom brand icons (Safari Jeep, Acacia Tree, Tent) so we own the look.
+Eliminate the race conditions in the current SAFARI checkout. Today `pay.checkout.$tripId.tsx` runs ~6 separate Supabase calls from the browser (insert booking → charge → insert tx → update wallet → insert escrow → update booking). Two rapid clicks (double-tap, retry, two tabs) or a network hiccup can produce: duplicate bookings, double wallet debits, orphan escrows, or a `confirmed` booking with no escrow.
 
-### What gets built
+We port the "Lock → Check → Execute → Release" pattern from the original patch, but adapted to this stack — there is no Redis or worker. Postgres is the single source of truth; locks are **Postgres advisory locks** + **SELECT … FOR UPDATE**, all inside one SECURITY DEFINER RPC that runs atomically in a transaction.
 
-1. **`src/components/icons/SafariIcon.tsx`** — wrapper component
-   - Props: `name`, `size` ("sm" 16 / "md" 20 / "nav" 24 / "feature" 32), `tone` ("default" | "active" | "muted" | "disabled" | "premium"), `interactive` (adds hover scale 1.05 + 150ms color shift), `className`
-   - Forces `strokeWidth={1.75}`, round caps/joins
-   - Tone mapping uses CSS tokens (no hardcoded hex):
-     - default → `text-muted-foreground`
-     - active → `text-[var(--gold)]`
-     - muted → `text-foreground/60`
-     - disabled → `text-foreground/30`
-     - premium → duotone effect via gold fill at 15% + gold stroke (used only for AI/premium icons)
+## What changes
 
-2. **`src/components/icons/registry.ts`** — single source of truth
-   - Maps semantic names → Lucide components or custom SVGs
-   - Categories per spec: nav, travel, booking, social, ai, utility
-   - Names: `home, explore, trips, bookings, profile, map, pin, compass, jeep, tent, mountain, calendar, ticket, wallet, payment, receipt, chat, notifications, like, share, ai, recommendations, insights, search, filter, settings, menu, back`
+### 1. Schema additions (one migration)
 
-3. **`src/components/icons/custom/`** — 3 hand-crafted SVG components
-   - `Jeep.tsx` — silhouette safari vehicle, 24px grid, 1.75 stroke
-   - `Acacia.tsx` — flat-top acacia tree
-   - `Tent.tsx` — luxury safari tent
-   - All use `currentColor`, `stroke-linecap="round"`, `stroke-linejoin="round"` for visual parity with Lucide
+- `pay_bookings`: add `capacity_slot_id uuid NULL` (reserved for per-date inventory later — nullable now, indexed).
+- `pay_trips`: add `capacity int NOT NULL DEFAULT 999`, `booked int NOT NULL DEFAULT 0`. This gives us a real "is the trip full?" check the lock can guard.
+- `pay_transactions`: add `idempotency_key text NULL` and a partial unique index `(user_id, idempotency_key) WHERE idempotency_key IS NOT NULL`. This is the equivalent of the patch's "external lock key" — a client-supplied UUID that makes the whole checkout safe to retry.
+- New enum value already exists for booking status; no change.
 
-4. **`src/components/icons/index.ts`** — barrel export: `SafariIcon`, `iconRegistry`, type `IconName`
+### 2. New RPC: `public.pay_checkout(...)` (SECURITY DEFINER)
 
-5. **Refactor key surfaces to use SafariIcon:**
-   - `src/components/safari/Shell.tsx` — desktop nav, mobile tab bar (uses active tone on selected)
-   - Direct Lucide imports remain valid elsewhere (no breaking change), but Shell becomes the showcase
-
-6. **`src/routes/icons.tsx`** — internal usage-guideline page at `/icons`
-   - Live grid of all icons grouped by category
-   - Size scale demo (16/20/24/32)
-   - State demo (default/active/hover/disabled/premium)
-   - Spacing rules card ("8px between icon and text")
-   - Light + dark mode shown via existing theme toggle (no new code needed — design tokens already adapt)
-
-### Design token usage
-
-No new colors. Reuses existing tokens which already match the brief:
-- `--gold` (Lion Gold) ≈ Savannah Gold accent
-- `--muted-foreground` for default neutral
-- `--maasai` reserved for destructive only (not icon default)
-
-The `tone="premium"` duotone wraps the icon in a `relative` span with a soft gold radial behind at 15% opacity.
-
-### Interaction
-
-`interactive` prop adds:
+Signature:
 ```
-transition-all duration-150 ease-out hover:scale-105 hover:text-[var(--gold)]
+pay_checkout(
+  p_trip_id uuid,
+  p_guests int,
+  p_provider pay_provider,   -- 'mpesa' | 'stripe' | 'wallet'
+  p_idempotency_key text,
+  p_provider_ref text,       -- mock charge ref from client; real gateway ref later
+  p_display_currency text,
+  p_display_amount numeric
+) returns pay_bookings
 ```
 
-### Files
+Body, in order — this is the atomic Lock-Check-Execute:
 
-```text
-src/components/icons/
-  SafariIcon.tsx        new
-  registry.ts           new
-  index.ts              new
-  custom/
-    Jeep.tsx            new
-    Acacia.tsx          new
-    Tent.tsx            new
-src/components/safari/Shell.tsx   edit (swap nav icons)
-src/routes/icons.tsx              new (showcase + guidelines)
-```
+1. **Auth check** — `auth.uid()` must equal the wallet owner; raise otherwise.
+2. **Idempotency short-circuit** — `SELECT booking_id FROM pay_transactions WHERE user_id=auth.uid() AND idempotency_key=p_idempotency_key`. If found, return that booking and exit. This is what kills the "two rapid clicks" class of bug.
+3. **Acquire trip-level advisory lock** — `PERFORM pg_advisory_xact_lock(hashtext('trip:'||p_trip_id::text))`. Auto-released at commit/rollback. Serializes all checkouts for that trip across the whole cluster — no Redis needed.
+4. **Lock the rows** — `SELECT … FROM pay_trips WHERE id=p_trip_id FOR UPDATE` and `SELECT … FROM pay_wallets WHERE user_id=auth.uid() FOR UPDATE`.
+5. **Validate**:
+   - trip exists, status active, `booked + p_guests <= capacity`.
+   - guests in 1..12.
+   - for `wallet` provider: `flex_balance >= total`.
+6. **Execute** — all in the same transaction:
+   - INSERT `pay_bookings` (status='confirmed', total derived server-side from `base_price * guests`).
+   - UPDATE `pay_trips SET booked = booked + p_guests`.
+   - INSERT `pay_transactions` with `idempotency_key`, `provider_ref`, `status='success'`.
+   - UPDATE `pay_wallets` (flex→trip move for wallet provider; trip_balance += total otherwise).
+   - INSERT `pay_escrows` (status='held').
+7. RETURN the booking row.
 
-### Out of scope (ask if you want these)
+If anything raises, the transaction rolls back — no orphan rows, advisory lock auto-released.
 
-- Replacing every `lucide-react` import across all 17 routes (can be done incrementally; wrapper is opt-in)
-- Figma export / SVG sprite file generation
-- Standalone downloadable SVG library zip
+GRANT EXECUTE to `authenticated`. No GRANT to `anon`.
+
+### 3. Cancel/refund RPC: `public.pay_cancel_booking(p_booking_id uuid)`
+
+Same pattern (advisory lock on trip, FOR UPDATE on booking + wallet + escrow), so cancel can't race with another checkout on the same trip and can't double-refund. Replaces the multi-step cancel in `pay.bookings.tsx`.
+
+### 4. Client refactor
+
+- `src/lib/pay.ts`: add `generateIdempotencyKey()` (crypto.randomUUID) and a `checkout()` helper that calls `supabase.rpc('pay_checkout', {...})`.
+- `src/routes/pay.checkout.$tripId.tsx`:
+  - Generate one idempotency key per checkout session (useState, regenerated on success).
+  - Replace the 6-call sequence with a single `pay_checkout` RPC call.
+  - Keep the existing `mockCharge()` to obtain `provider_ref` before the RPC (so the RPC stays payment-gateway-agnostic).
+  - Disable the submit button while in flight (already done) — but now retries are safe because the RPC is idempotent.
+- `src/routes/pay.bookings.tsx`: cancel button calls `pay_cancel_booking` RPC.
+
+### 5. Observability (lightweight, no Prometheus)
+
+- Add `pay_lock_events` table: `(id, event text, trip_id, user_id, created_at)` for `lock_wait`, `lock_contention`, `idempotent_replay`. The RPC logs `idempotent_replay` and (optionally) wraps the advisory lock in `pg_try_advisory_xact_lock` first; if it fails it logs `lock_contention`, then falls back to the blocking variant. Surface counts in `/operator/analytics` later — out of scope this round.
+
+## Technical details (race coverage)
+
+| Race | Defense |
+|---|---|
+| Double-click submit | `idempotency_key` partial-unique index → second call returns existing booking |
+| Two tabs, same trip | advisory lock serializes; second tab sees `booked` already incremented |
+| Concurrent cancel + checkout | both take the same trip advisory lock |
+| Wallet drain across two trips | wallet row is `FOR UPDATE` inside each RPC |
+| Partial failure mid-flow | single transaction, rolls back atomically |
+| Gateway succeeds but RPC fails | `provider_ref` stored on retry under same idempotency key; no second charge attempted because client checks RPC result before re-charging |
+
+## Out of scope this round
+
+- Real M-Pesa / Stripe webhooks (still stubbed via `mockCharge`).
+- Per-date inventory slots (`capacity_slot_id` added but unused).
+- Worker / cron-based escrow auto-release.
+- Prometheus / external telemetry.
+
+## File touch list
+
+- `supabase/migrations/<new>.sql` — schema + two RPCs + grants.
+- `src/lib/pay.ts` — add `checkout`, `cancelBooking`, `generateIdempotencyKey`.
+- `src/routes/pay.checkout.$tripId.tsx` — swap inline flow for RPC call.
+- `src/routes/pay.bookings.tsx` — swap cancel flow for RPC call.
+
+No changes to auth, navigation, Shell, wallet UI, or Simba points.

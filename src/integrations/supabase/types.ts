@@ -347,6 +347,7 @@ export type Database = {
       }
       pay_bookings: {
         Row: {
+          capacity_slot_id: string | null
           created_at: string
           currency: string
           guests: number
@@ -358,6 +359,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          capacity_slot_id?: string | null
           created_at?: string
           currency?: string
           guests?: number
@@ -369,6 +371,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          capacity_slot_id?: string | null
           created_at?: string
           currency?: string
           guests?: number
@@ -451,6 +454,30 @@ export type Database = {
         }
         Relationships: []
       }
+      pay_lock_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          trip_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          trip_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          trip_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       pay_transactions: {
         Row: {
           amount: number
@@ -458,6 +485,7 @@ export type Database = {
           created_at: string
           currency: string
           id: string
+          idempotency_key: string | null
           metadata: Json
           provider: Database["public"]["Enums"]["pay_provider"]
           provider_ref: string
@@ -472,6 +500,7 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
           provider: Database["public"]["Enums"]["pay_provider"]
           provider_ref: string
@@ -486,6 +515,7 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          idempotency_key?: string | null
           metadata?: Json
           provider?: Database["public"]["Enums"]["pay_provider"]
           provider_ref?: string
@@ -514,6 +544,8 @@ export type Database = {
       pay_trips: {
         Row: {
           base_price: number
+          booked: number
+          capacity: number
           created_at: string
           currency: string
           description: string | null
@@ -528,6 +560,8 @@ export type Database = {
         }
         Insert: {
           base_price: number
+          booked?: number
+          capacity?: number
           created_at?: string
           currency?: string
           description?: string | null
@@ -542,6 +576,8 @@ export type Database = {
         }
         Update: {
           base_price?: number
+          booked?: number
+          capacity?: number
           created_at?: string
           currency?: string
           description?: string | null
@@ -740,6 +776,56 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      pay_cancel_booking: {
+        Args: { p_booking_id: string }
+        Returns: {
+          capacity_slot_id: string | null
+          created_at: string
+          currency: string
+          guests: number
+          id: string
+          status: Database["public"]["Enums"]["pay_booking_status"]
+          total_amount: number
+          trip_id: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pay_bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      pay_checkout: {
+        Args: {
+          p_display_amount?: number
+          p_display_currency?: string
+          p_guests: number
+          p_idempotency_key: string
+          p_provider: Database["public"]["Enums"]["pay_provider"]
+          p_provider_ref: string
+          p_trip_id: string
+        }
+        Returns: {
+          capacity_slot_id: string | null
+          created_at: string
+          currency: string
+          guests: number
+          id: string
+          status: Database["public"]["Enums"]["pay_booking_status"]
+          total_amount: number
+          trip_id: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "pay_bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
