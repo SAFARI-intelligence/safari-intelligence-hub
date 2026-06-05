@@ -43,6 +43,41 @@ export async function mockCharge(opts: {
   };
 }
 
+export function generateIdempotencyKey(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `idem_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
+export async function checkout(args: {
+  tripId: string;
+  guests: number;
+  provider: Exclude<Provider, "mock">;
+  idempotencyKey: string;
+  providerRef: string;
+  displayCurrency?: Currency;
+  displayAmount?: number;
+}) {
+  const { data, error } = await supabase.rpc("pay_checkout", {
+    p_trip_id: args.tripId,
+    p_guests: args.guests,
+    p_provider: args.provider,
+    p_idempotency_key: args.idempotencyKey,
+    p_provider_ref: args.providerRef,
+    p_display_currency: args.displayCurrency ?? null,
+    p_display_amount: args.displayAmount ?? null,
+  });
+  if (error) throw error;
+  return data as { id: string; status: string; total_amount: number; currency: string };
+}
+
+export async function cancelBooking(bookingId: string) {
+  const { data, error } = await supabase.rpc("pay_cancel_booking", {
+    p_booking_id: bookingId,
+  });
+  if (error) throw error;
+  return data;
+}
+
 export function statusTone(status: string) {
   switch (status) {
     case "confirmed":
