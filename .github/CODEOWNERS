@@ -1,0 +1,20 @@
+# SAFARI-intelligence CODEOWNERS
+# This file defines who should review code changes in specific parts of the repository.
+# For more info, see https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owners for the entire repository
+* @SAFARI-intelligence/developers
+
+# TypeScript/Frontend code owners
+/src/** @SAFARI-intelligence/developers
+/pages/** @SAFARI-intelligence/developers
+
+# Configuration files
+/.github/** @SAFARI-intelligence/developers
+/tsconfig.json @SAFARI-intelligence/developers
+/package.json @SAFARI-intelligence/developers
+/next.config.js @SAFARI-intelligence/developers
+
+# Documentation
+/docs/** @SAFARI-intelligence/developers
+/README.md @SAFARI-intelligence/developers
