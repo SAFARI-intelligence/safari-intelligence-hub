@@ -62,19 +62,50 @@ function ProfilePage() {
 
   const reload = async () => {
     if (!user) return;
-    const [b, r, t, i, p] = await Promise.all([
+    const [b, r, t, i, p, pb] = await Promise.all([
       supabase.from("bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("reviews").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("support_tickets").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("itineraries").select("id,title,total_cost,duration_days,created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("profiles").select("name").eq("id", user.id).maybeSingle(),
+      supabase.from("pay_bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
     ]);
     setBookings((b.data as Booking[]) || []);
     setReviews((r.data as Review[]) || []);
     setTickets((t.data as Ticket[]) || []);
     setItineraries((i.data as Itinerary[]) || []);
+    setPayBookings((pb.data as PayBooking[]) || []);
     setName(p.data?.name || user.email?.split("@")[0] || "");
     setLoading(false);
+
+    // hydrate existing summaries
+    const ids = (pb.data ?? []).map((x) => x.id);
+    if (ids.length) {
+      const out: Record<string, TripSummary> = {};
+      await Promise.all(ids.map(async (id) => {
+        try {
+          const res = await fetchSummary({ data: { bookingId: id } });
+          if (res.summary) out[id] = res.summary as TripSummary;
+        } catch { /* ignore */ }
+      }));
+      setSummaries(out);
+    }
+  };
+
+  const handleGenerate = async (bookingId: string) => {
+    setSummarizing(bookingId);
+    try {
+      const res = await genSummary({ data: { bookingId } });
+      setSummaries((prev) => ({ ...prev, [bookingId]: res.summary as TripSummary }));
+      toast.success("Trip reflection ready.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed";
+      if (msg.includes("429")) toast.error("AI is busy — try again in a moment.");
+      else if (msg.includes("402")) toast.error("AI credits exhausted — see workspace billing.");
+      else toast.error(msg);
+    } finally {
+      setSummarizing(null);
+    }
   };
 
   useEffect(() => { reload(); }, [user]);
