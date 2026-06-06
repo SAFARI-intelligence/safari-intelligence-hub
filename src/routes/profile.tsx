@@ -35,6 +35,9 @@ const tiers = [
   { name: "Legend", min: 15000, color: "var(--charcoal)" },
 ];
 
+type PayBooking = { id: string; trip_id: string; guests: number; total_amount: number; currency: string; status: string; created_at: string };
+type TripSummary = { id: string; booking_id: string; narrative: string; top_moments: Array<{ title: string; why: string; rarity_score: number }> };
+
 function ProfilePage() {
   const { user, roles } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -42,12 +45,18 @@ function ProfilePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
+  const [payBookings, setPayBookings] = useState<PayBooking[]>([]);
+  const [summaries, setSummaries] = useState<Record<string, TripSummary>>({});
+  const [summarizing, setSummarizing] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [ticketSubj, setTicketSubj] = useState("");
   const [ticketMsg, setTicketMsg] = useState("");
   const [points] = useState(() => {
     try { return Number(localStorage.getItem("simba-points") || 6420); } catch { return 6420; }
   });
+
+  const genSummary = useServerFn(generateTripSummary);
+  const fetchSummary = useServerFn(getTripSummary);
 
   const currentTier = [...tiers].reverse().find((t) => points >= t.min) || tiers[0];
 
