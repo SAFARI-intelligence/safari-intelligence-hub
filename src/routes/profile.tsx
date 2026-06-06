@@ -85,7 +85,7 @@ function ProfilePage() {
       await Promise.all(ids.map(async (id) => {
         try {
           const res = await fetchSummary({ data: { bookingId: id } });
-          if (res.summary) out[id] = res.summary as TripSummary;
+          if (res.summary) out[id] = res.summary as unknown as TripSummary;
         } catch { /* ignore */ }
       }));
       setSummaries(out);
