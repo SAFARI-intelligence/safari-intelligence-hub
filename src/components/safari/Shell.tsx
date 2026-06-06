@@ -21,6 +21,7 @@ const drawerLinks = [
   { to: "/hotels", label: "Hotels" },
   { to: "/stories", label: "Stories" },
   { to: "/wildlife", label: "Big Five Tracker" },
+  { to: "/journal", label: "Safari Journal" },
   { to: "/map", label: "Interactive Map" },
   { to: "/expansion", label: "About SAFARI" },
   { to: "/support", label: "Contact" },
@@ -188,6 +189,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
                       >
                         <BookMarked className="h-4 w-4 text-[var(--maasai)]" /> My Bookings
+                      </Link>
+                      <Link
+                        to="/journal"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
+                      >
+                        <BookMarked className="h-4 w-4 text-[var(--gold)]" /> Safari Journal
                       </Link>
                       <Link
                         to={

@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Sparkles, Code, Copy, Check } from "lucide-react";
+import { MapPin, Clock, Sparkles, Code, Copy, Check, BookOpen, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { sightings, images } from "@/lib/safari-data";
+import { getSpeciesFact } from "@/lib/wis.functions";
 
 export const Route = createFileRoute("/wildlife")({
   head: () => ({
@@ -32,6 +34,20 @@ function WildlifePage() {
   const [filter, setFilter] = useState("All");
   const [copied, setCopied] = useState(false);
   const [selected, setSelected] = useState(sightings[0]);
+  const [fact, setFact] = useState<string | null>(null);
+  const [factLoading, setFactLoading] = useState(false);
+  const fetchFact = useServerFn(getSpeciesFact);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFact(null);
+    setFactLoading(true);
+    fetchFact({ data: { species: selected.species, behavior: selected.behavior } })
+      .then((r) => { if (!cancelled) setFact(r.body); })
+      .catch(() => { if (!cancelled) setFact(null); })
+      .finally(() => { if (!cancelled) setFactLoading(false); });
+    return () => { cancelled = true; };
+  }, [selected.id, selected.species, selected.behavior, fetchFact]);
 
   const filtered =
     filter === "All" ? sightings : sightings.filter((s) => s.species === filter);
@@ -170,6 +186,29 @@ function WildlifePage() {
   https://api.safari-os.africa/v1/sightings`}
               </pre>
             </div>
+
+            {/* Did you know? — AI species fact */}
+            <div className="glass rounded-2xl p-5 border border-[var(--gold)]/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs uppercase tracking-[0.18em] font-semibold text-[var(--gold)] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" /> Did you know?
+                </span>
+                <span className="text-[10px] text-muted-foreground">{selected.species}</span>
+              </div>
+              {factLoading ? (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground py-3">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> SAFARI Intelligence is thinking…
+                </div>
+              ) : fact ? (
+                <p className="font-serif text-[14px] leading-relaxed text-foreground/95">{fact}</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">No insight available right now.</p>
+              )}
+              <Link to="/journal" className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--maasai)] hover:underline">
+                <BookOpen className="h-3 w-3" /> Log this in your journal
+              </Link>
+            </div>
+
 
             {/* Mini map */}
             <div className="glass rounded-2xl p-4">

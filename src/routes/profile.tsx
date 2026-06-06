@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Shell } from "@/components/safari/Shell";
 import { RoleGuard } from "@/components/safari/RoleGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Loader2, BedDouble, Star, LifeBuoy, Send, MapPin, Trash2, Sparkles } from "lucide-react";
+import { Loader2, BedDouble, Star, LifeBuoy, Send, MapPin, Trash2, Sparkles, BookOpen } from "lucide-react";
 import { toast } from "sonner";
+import { generateTripSummary, getTripSummary } from "@/lib/wis.functions";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -33,6 +35,9 @@ const tiers = [
   { name: "Legend", min: 15000, color: "var(--charcoal)" },
 ];
 
+type PayBooking = { id: string; trip_id: string; guests: number; total_amount: number; currency: string; status: string; created_at: string };
+type TripSummary = { id: string; booking_id: string; narrative: string; top_moments: Array<{ title: string; why: string; rarity_score: number }> };
+
 function ProfilePage() {
   const { user, roles } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -40,6 +45,9 @@ function ProfilePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
+  const [payBookings, setPayBookings] = useState<PayBooking[]>([]);
+  const [summaries, setSummaries] = useState<Record<string, TripSummary>>({});
+  const [summarizing, setSummarizing] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [ticketSubj, setTicketSubj] = useState("");
   const [ticketMsg, setTicketMsg] = useState("");
@@ -47,23 +55,57 @@ function ProfilePage() {
     try { return Number(localStorage.getItem("simba-points") || 6420); } catch { return 6420; }
   });
 
+  const genSummary = useServerFn(generateTripSummary);
+  const fetchSummary = useServerFn(getTripSummary);
+
   const currentTier = [...tiers].reverse().find((t) => points >= t.min) || tiers[0];
 
   const reload = async () => {
     if (!user) return;
-    const [b, r, t, i, p] = await Promise.all([
+    const [b, r, t, i, p, pb] = await Promise.all([
       supabase.from("bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("reviews").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("support_tickets").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("itineraries").select("id,title,total_cost,duration_days,created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
       supabase.from("profiles").select("name").eq("id", user.id).maybeSingle(),
+      supabase.from("pay_bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
     ]);
     setBookings((b.data as Booking[]) || []);
     setReviews((r.data as Review[]) || []);
     setTickets((t.data as Ticket[]) || []);
     setItineraries((i.data as Itinerary[]) || []);
+    setPayBookings((pb.data as PayBooking[]) || []);
     setName(p.data?.name || user.email?.split("@")[0] || "");
     setLoading(false);
+
+    // hydrate existing summaries
+    const ids = (pb.data ?? []).map((x) => x.id);
+    if (ids.length) {
+      const out: Record<string, TripSummary> = {};
+      await Promise.all(ids.map(async (id) => {
+        try {
+          const res = await fetchSummary({ data: { bookingId: id } });
+          if (res.summary) out[id] = res.summary as unknown as TripSummary;
+        } catch { /* ignore */ }
+      }));
+      setSummaries(out);
+    }
+  };
+
+  const handleGenerate = async (bookingId: string) => {
+    setSummarizing(bookingId);
+    try {
+      const res = await genSummary({ data: { bookingId } });
+      setSummaries((prev) => ({ ...prev, [bookingId]: res.summary as unknown as TripSummary }));
+      toast.success("Trip reflection ready.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed";
+      if (msg.includes("429")) toast.error("AI is busy — try again in a moment.");
+      else if (msg.includes("402")) toast.error("AI credits exhausted — see workspace billing.");
+      else toast.error(msg);
+    } finally {
+      setSummarizing(null);
+    }
   };
 
   useEffect(() => { reload(); }, [user]);
@@ -166,6 +208,58 @@ function ProfilePage() {
             </div>
           )}
         </section>
+
+        {/* Trip Reflections */}
+        <section className="glass rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-xl font-bold flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-[var(--gold)]" /> Trip Reflections
+            </h2>
+            <Link to="/journal" className="text-xs text-[var(--maasai)] font-semibold hover:underline">Journal →</Link>
+          </div>
+          {payBookings.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No safari trips yet. Reflections appear here after booking.</p>
+          ) : (
+            <div className="space-y-3">
+              {payBookings.map((b) => {
+                const s = summaries[b.id];
+                return (
+                  <div key={b.id} className="p-4 rounded-xl border border-border/50">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm">Trip · {b.guests} guest{b.guests > 1 ? "s" : ""} · {b.currency} {Number(b.total_amount).toLocaleString()}</p>
+                        <p className="text-[11px] text-muted-foreground">{new Date(b.created_at).toLocaleDateString()} · {b.status}</p>
+                      </div>
+                      <button
+                        onClick={() => handleGenerate(b.id)}
+                        disabled={summarizing === b.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold disabled:opacity-60"
+                      >
+                        {summarizing === b.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        {s ? "Regenerate" : "Generate Top 5"}
+                      </button>
+                    </div>
+                    {s && (
+                      <div className="mt-3 pt-3 border-t border-[var(--gold)]/30">
+                        <ol className="space-y-1.5 text-sm">
+                          {s.top_moments?.slice(0, 5).map((m, idx) => (
+                            <li key={idx} className="flex gap-2">
+                              <span className="font-mono text-[var(--gold)] font-bold">{idx + 1}.</span>
+                              <span><strong>{m.title}</strong> <span className="text-xs text-muted-foreground">· rarity {m.rarity_score}/10</span><br /><span className="text-xs text-foreground/80">{m.why}</span></span>
+                            </li>
+                          ))}
+                        </ol>
+                        <p className="mt-3 font-serif text-[14px] leading-relaxed text-foreground/95 italic">"{s.narrative}"</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+
 
         {/* Bookings */}
         <section className="glass rounded-2xl p-6">

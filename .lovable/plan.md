@@ -1,96 +1,120 @@
+
+# SAFARI · Wildlife Intelligence + Storytelling — Phase 1
+
+Narrative Synthesis first. Predictive Movement Modeling is **Phase 2** (scaffolded only — schema reserved, no UI).
+
 ## Goal
 
-Eliminate the race conditions in the current SAFARI checkout. Today `pay.checkout.$tripId.tsx` runs ~6 separate Supabase calls from the browser (insert booking → charge → insert tx → update wallet → insert escrow → update booking). Two rapid clicks (double-tap, retry, two tabs) or a network hiccup can produce: duplicate bookings, double wallet debits, orphan escrows, or a `confirmed` booking with no escrow.
+Turn the static `sightings` feed into a personalized, AI-narrated experience:
+1. Tourists keep a **Digital Safari Journal** (sighting + note + optional photo).
+2. AI auto-drafts a **daily narrative snippet** per journal entry.
+3. The Wildlife Story Feed surfaces a **"Did you know?"** contextual snippet for the selected sighting.
+4. After a trip, a **Top 5 Intelligence Moments** summary is generated, scored by a simple rarity index.
 
-We port the "Lock → Check → Execute → Release" pattern from the original patch, but adapted to this stack — there is no Redis or worker. Postgres is the single source of truth; locks are **Postgres advisory locks** + **SELECT … FOR UPDATE**, all inside one SECURITY DEFINER RPC that runs atomically in a transaction.
+All real: Supabase tables, RLS, Lovable AI via `createServerFn` (no edge functions).
 
-## What changes
+---
 
-### 1. Schema additions (one migration)
+## Scope
 
-- `pay_bookings`: add `capacity_slot_id uuid NULL` (reserved for per-date inventory later — nullable now, indexed).
-- `pay_trips`: add `capacity int NOT NULL DEFAULT 999`, `booked int NOT NULL DEFAULT 0`. This gives us a real "is the trip full?" check the lock can guard.
-- `pay_transactions`: add `idempotency_key text NULL` and a partial unique index `(user_id, idempotency_key) WHERE idempotency_key IS NOT NULL`. This is the equivalent of the patch's "external lock key" — a client-supplied UUID that makes the whole checkout safe to retry.
-- New enum value already exists for booking status; no change.
+### In
+- New tables: `wis_journal_entries`, `wis_narratives`, `wis_species_rarity` (seed data), `wis_trip_summaries`
+- New server functions in `src/lib/wis.functions.ts` + AI helper in `src/lib/wis-ai.server.ts`
+- New route `/_authenticated/journal` — list + create journal entries, view AI snippets
+- Wildlife feed (`/wildlife`): inline **"Did you know?"** panel for selected sighting (AI, cached per species+behavior)
+- Post-trip summary card on `/profile` calling `generateTripSummary(bookingId)`
 
-### 2. New RPC: `public.pay_checkout(...)` (SECURITY DEFINER)
+### Out (Phase 2 — not built now)
+- Predictive probability map / heatmap
+- Ethological auto-classification of all sightings (reserved column only)
+- Edge-compute telemetry ingestion
+- Share/export of narratives
 
-Signature:
+---
+
+## Data model
+
+```text
+wis_journal_entries
+  id, user_id, booking_id (nullable, → pay_bookings),
+  species, park, observed_at, note (≤500), photo_url (nullable),
+  behavior_tag (nullable, free text for now),
+  created_at, updated_at
+
+wis_narratives                          -- one per journal entry; also reused for "Did you know?"
+  id, user_id (nullable for shared species facts),
+  scope ('journal' | 'species_fact' | 'trip_summary'),
+  ref_id (journal_entry_id | sighting species key | booking_id),
+  model, prompt_hash, body (text), tokens_in, tokens_out,
+  created_at
+  UNIQUE (scope, ref_id, prompt_hash)   -- cache key
+
+wis_species_rarity                       -- seeded, read-only to clients
+  species PK, rarity_score (1-10), region, notes
+
+wis_trip_summaries
+  id, user_id, booking_id, top_moments jsonb, narrative text, created_at
 ```
-pay_checkout(
-  p_trip_id uuid,
-  p_guests int,
-  p_provider pay_provider,   -- 'mpesa' | 'stripe' | 'wallet'
-  p_idempotency_key text,
-  p_provider_ref text,       -- mock charge ref from client; real gateway ref later
-  p_display_currency text,
-  p_display_amount numeric
-) returns pay_bookings
-```
 
-Body, in order — this is the atomic Lock-Check-Execute:
+RLS: journal + trip_summaries scoped to `auth.uid()`. `wis_species_rarity` public read. `wis_narratives` readable by owner OR when `scope='species_fact'` (shared cache).
 
-1. **Auth check** — `auth.uid()` must equal the wallet owner; raise otherwise.
-2. **Idempotency short-circuit** — `SELECT booking_id FROM pay_transactions WHERE user_id=auth.uid() AND idempotency_key=p_idempotency_key`. If found, return that booking and exit. This is what kills the "two rapid clicks" class of bug.
-3. **Acquire trip-level advisory lock** — `PERFORM pg_advisory_xact_lock(hashtext('trip:'||p_trip_id::text))`. Auto-released at commit/rollback. Serializes all checkouts for that trip across the whole cluster — no Redis needed.
-4. **Lock the rows** — `SELECT … FROM pay_trips WHERE id=p_trip_id FOR UPDATE` and `SELECT … FROM pay_wallets WHERE user_id=auth.uid() FOR UPDATE`.
-5. **Validate**:
-   - trip exists, status active, `booked + p_guests <= capacity`.
-   - guests in 1..12.
-   - for `wallet` provider: `flex_balance >= total`.
-6. **Execute** — all in the same transaction:
-   - INSERT `pay_bookings` (status='confirmed', total derived server-side from `base_price * guests`).
-   - UPDATE `pay_trips SET booked = booked + p_guests`.
-   - INSERT `pay_transactions` with `idempotency_key`, `provider_ref`, `status='success'`.
-   - UPDATE `pay_wallets` (flex→trip move for wallet provider; trip_balance += total otherwise).
-   - INSERT `pay_escrows` (status='held').
-7. RETURN the booking row.
+GRANTs in same migration per house rules.
 
-If anything raises, the transaction rolls back — no orphan rows, advisory lock auto-released.
+---
 
-GRANT EXECUTE to `authenticated`. No GRANT to `anon`.
+## Server functions (`src/lib/wis.functions.ts`)
 
-### 3. Cancel/refund RPC: `public.pay_cancel_booking(p_booking_id uuid)`
+All use `requireSupabaseAuth` except `getSpeciesFact` (public).
 
-Same pattern (advisory lock on trip, FOR UPDATE on booking + wallet + escrow), so cancel can't race with another checkout on the same trip and can't double-refund. Replaces the multi-step cancel in `pay.bookings.tsx`.
+- `createJournalEntry({ species, park, observedAt, note, photoUrl?, bookingId? })` → inserts row, fires-and-awaits `generateJournalNarrative` then returns `{ entry, narrative }`.
+- `listMyJournal({ bookingId? })` → entries + narratives joined.
+- `getSpeciesFact({ species, behavior? })` → checks `wis_narratives` cache by `prompt_hash`; if miss, calls Lovable AI, inserts, returns body. **Used by `/wildlife` "Did you know?" panel.**
+- `generateTripSummary({ bookingId })` → loads user's journal for booking + species rarity, calls AI for Top 5 + narrative, upserts `wis_trip_summaries`.
 
-### 4. Client refactor
+AI helper `src/lib/wis-ai.server.ts`:
+- Uses `createLovableAiGatewayProvider` (gateway pattern from knowledge).
+- Model: `google/gemini-3-flash-preview`.
+- `generateText` for snippets (short, 80–140 words).
+- `generateText` + `Output.object` with small Zod schema for trip summary (`{ top: [{title, why, rarityScore}], narrative }`).
+- Reads `process.env.LOVABLE_API_KEY` inside handler only.
 
-- `src/lib/pay.ts`: add `generateIdempotencyKey()` (crypto.randomUUID) and a `checkout()` helper that calls `supabase.rpc('pay_checkout', {...})`.
-- `src/routes/pay.checkout.$tripId.tsx`:
-  - Generate one idempotency key per checkout session (useState, regenerated on success).
-  - Replace the 6-call sequence with a single `pay_checkout` RPC call.
-  - Keep the existing `mockCharge()` to obtain `provider_ref` before the RPC (so the RPC stays payment-gateway-agnostic).
-  - Disable the submit button while in flight (already done) — but now retries are safe because the RPC is idempotent.
-- `src/routes/pay.bookings.tsx`: cancel button calls `pay_cancel_booking` RPC.
+---
 
-### 5. Observability (lightweight, no Prometheus)
+## UI
 
-- Add `pay_lock_events` table: `(id, event text, trip_id, user_id, created_at)` for `lock_wait`, `lock_contention`, `idempotent_replay`. The RPC logs `idempotent_replay` and (optionally) wraps the advisory lock in `pg_try_advisory_xact_lock` first; if it fails it logs `lock_contention`, then falls back to the blocking variant. Surface counts in `/operator/analytics` later — out of scope this round.
+- **`src/routes/_authenticated/journal.tsx`** — new. List view + "Add entry" form. Each card shows entry meta + AI narrative (Cormorant heading, DM Sans body, gold accent rule). Empty state with Swahili: *"Andika safari yako"*.
+- **`src/routes/wildlife.tsx`** — add right-aside "Did you know?" card under the JSON panel: calls `getSpeciesFact` on `selected` change with React Query; loading shimmer, error toast on 429/402.
+- **`src/routes/profile.tsx`** — add "Trip Reflections" section listing bookings with a "Generate summary" button → calls `generateTripSummary`, then renders Top 5 + narrative.
+- **`src/components/safari/Shell.tsx`** — add "Journal" nav link for `user` role.
 
-## Technical details (race coverage)
+Styling stays inside existing tokens (obsidian/amber/cream, glass cards, Maasai divider between snippets).
 
-| Race | Defense |
-|---|---|
-| Double-click submit | `idempotency_key` partial-unique index → second call returns existing booking |
-| Two tabs, same trip | advisory lock serializes; second tab sees `booked` already incremented |
-| Concurrent cancel + checkout | both take the same trip advisory lock |
-| Wallet drain across two trips | wallet row is `FOR UPDATE` inside each RPC |
-| Partial failure mid-flow | single transaction, rolls back atomically |
-| Gateway succeeds but RPC fails | `provider_ref` stored on retry under same idempotency key; no second charge attempted because client checks RPC result before re-charging |
+---
 
-## Out of scope this round
+## Error handling
 
-- Real M-Pesa / Stripe webhooks (still stubbed via `mockCharge`).
-- Per-date inventory slots (`capacity_slot_id` added but unused).
-- Worker / cron-based escrow auto-release.
-- Prometheus / external telemetry.
+Surface gateway 429 ("AI is busy — try again in a moment") and 402 ("AI credits exhausted — see workspace billing") as sonner toasts. Journal entry still saves even if narrative generation fails; narrative can be retried with a "Regenerate" button.
 
-## File touch list
+---
 
-- `supabase/migrations/<new>.sql` — schema + two RPCs + grants.
-- `src/lib/pay.ts` — add `checkout`, `cancelBooking`, `generateIdempotencyKey`.
-- `src/routes/pay.checkout.$tripId.tsx` — swap inline flow for RPC call.
-- `src/routes/pay.bookings.tsx` — swap cancel flow for RPC call.
+## Files
 
-No changes to auth, navigation, Shell, wallet UI, or Simba points.
+**Create**
+- `supabase/migrations/<ts>_wis_phase1.sql` (4 tables + GRANTs + RLS + rarity seed)
+- `src/lib/wis.functions.ts`
+- `src/lib/wis-ai.server.ts`
+- `src/lib/ai-gateway.server.ts` (if not already present — gateway helper from knowledge)
+- `src/routes/_authenticated/journal.tsx`
+
+**Edit**
+- `src/routes/wildlife.tsx` (Did you know? aside)
+- `src/routes/profile.tsx` (Trip Reflections section)
+- `src/components/safari/Shell.tsx` (nav link)
+
+No changes to: auth, payments RPCs, operator portal, support portal, RoleGuard, existing `safari-data.ts`.
+
+---
+
+## Phase 2 (deferred, for reference only)
+
+Predictive Movement Modeling will add `wis_observation_signals` (env vars + telemetry), `wis_probability_cells` (h3-style grid + score), a nightly `pg_cron` job that recomputes scores, and an overlay on `/wildlife`. Not built in this plan.

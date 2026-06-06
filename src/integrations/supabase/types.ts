@@ -741,6 +741,151 @@ export type Database = {
         }
         Relationships: []
       }
+      wis_journal_entries: {
+        Row: {
+          behavior_tag: string | null
+          booking_id: string | null
+          created_at: string
+          id: string
+          note: string
+          observed_at: string
+          park: string
+          photo_url: string | null
+          species: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          behavior_tag?: string | null
+          booking_id?: string | null
+          created_at?: string
+          id?: string
+          note: string
+          observed_at?: string
+          park: string
+          photo_url?: string | null
+          species: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          behavior_tag?: string | null
+          booking_id?: string | null
+          created_at?: string
+          id?: string
+          note?: string
+          observed_at?: string
+          park?: string
+          photo_url?: string | null
+          species?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wis_journal_entries_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "pay_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wis_narratives: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          model: string
+          prompt_hash: string
+          ref_id: string
+          scope: string
+          tokens_in: number | null
+          tokens_out: number | null
+          user_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          model: string
+          prompt_hash: string
+          ref_id: string
+          scope: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          model?: string
+          prompt_hash?: string
+          ref_id?: string
+          scope?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      wis_species_rarity: {
+        Row: {
+          notes: string | null
+          rarity_score: number
+          region: string | null
+          species: string
+        }
+        Insert: {
+          notes?: string | null
+          rarity_score: number
+          region?: string | null
+          species: string
+        }
+        Update: {
+          notes?: string | null
+          rarity_score?: number
+          region?: string | null
+          species?: string
+        }
+        Relationships: []
+      }
+      wis_trip_summaries: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          narrative: string
+          top_moments: Json
+          user_id: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          narrative: string
+          top_moments?: Json
+          user_id: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          narrative?: string
+          top_moments?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wis_trip_summaries_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "pay_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       profiles_public: {
