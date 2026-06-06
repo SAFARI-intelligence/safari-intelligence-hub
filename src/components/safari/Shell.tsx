@@ -21,6 +21,7 @@ const drawerLinks = [
   { to: "/hotels", label: "Hotels" },
   { to: "/stories", label: "Stories" },
   { to: "/wildlife", label: "Big Five Tracker" },
+  { to: "/journal", label: "Safari Journal" },
   { to: "/map", label: "Interactive Map" },
   { to: "/expansion", label: "About SAFARI" },
   { to: "/support", label: "Contact" },
