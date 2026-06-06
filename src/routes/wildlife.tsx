@@ -34,6 +34,20 @@ function WildlifePage() {
   const [filter, setFilter] = useState("All");
   const [copied, setCopied] = useState(false);
   const [selected, setSelected] = useState(sightings[0]);
+  const [fact, setFact] = useState<string | null>(null);
+  const [factLoading, setFactLoading] = useState(false);
+  const fetchFact = useServerFn(getSpeciesFact);
+
+  useEffect(() => {
+    let cancelled = false;
+    setFact(null);
+    setFactLoading(true);
+    fetchFact({ data: { species: selected.species, behavior: selected.behavior } })
+      .then((r) => { if (!cancelled) setFact(r.body); })
+      .catch(() => { if (!cancelled) setFact(null); })
+      .finally(() => { if (!cancelled) setFactLoading(false); });
+    return () => { cancelled = true; };
+  }, [selected.id, selected.species, selected.behavior, fetchFact]);
 
   const filtered =
     filter === "All" ? sightings : sightings.filter((s) => s.species === filter);
