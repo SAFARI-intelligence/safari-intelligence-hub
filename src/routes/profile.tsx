@@ -209,6 +209,58 @@ function ProfilePage() {
           )}
         </section>
 
+        {/* Trip Reflections */}
+        <section className="glass rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display text-xl font-bold flex items-center gap-2">
+              <BookOpen className="h-5 w-5 text-[var(--gold)]" /> Trip Reflections
+            </h2>
+            <Link to="/journal" className="text-xs text-[var(--maasai)] font-semibold hover:underline">Journal →</Link>
+          </div>
+          {payBookings.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No safari trips yet. Reflections appear here after booking.</p>
+          ) : (
+            <div className="space-y-3">
+              {payBookings.map((b) => {
+                const s = summaries[b.id];
+                return (
+                  <div key={b.id} className="p-4 rounded-xl border border-border/50">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm">Trip · {b.guests} guest{b.guests > 1 ? "s" : ""} · {b.currency} {Number(b.total_amount).toLocaleString()}</p>
+                        <p className="text-[11px] text-muted-foreground">{new Date(b.created_at).toLocaleDateString()} · {b.status}</p>
+                      </div>
+                      <button
+                        onClick={() => handleGenerate(b.id)}
+                        disabled={summarizing === b.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold disabled:opacity-60"
+                      >
+                        {summarizing === b.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        {s ? "Regenerate" : "Generate Top 5"}
+                      </button>
+                    </div>
+                    {s && (
+                      <div className="mt-3 pt-3 border-t border-[var(--gold)]/30">
+                        <ol className="space-y-1.5 text-sm">
+                          {s.top_moments?.slice(0, 5).map((m, idx) => (
+                            <li key={idx} className="flex gap-2">
+                              <span className="font-mono text-[var(--gold)] font-bold">{idx + 1}.</span>
+                              <span><strong>{m.title}</strong> <span className="text-xs text-muted-foreground">· rarity {m.rarity_score}/10</span><br /><span className="text-xs text-foreground/80">{m.why}</span></span>
+                            </li>
+                          ))}
+                        </ol>
+                        <p className="mt-3 font-serif text-[14px] leading-relaxed text-foreground/95 italic">"{s.narrative}"</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+
+
         {/* Bookings */}
         <section className="glass rounded-2xl p-6">
           <h2 className="font-display text-xl font-bold mb-3 flex items-center gap-2">
