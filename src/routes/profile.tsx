@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Shell } from "@/components/safari/Shell";
 import { RoleGuard } from "@/components/safari/RoleGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Loader2, BedDouble, Star, LifeBuoy, Send, MapPin, Trash2, Sparkles } from "lucide-react";
+import { Loader2, BedDouble, Star, LifeBuoy, Send, MapPin, Trash2, Sparkles, BookOpen } from "lucide-react";
 import { toast } from "sonner";
+import { generateTripSummary, getTripSummary } from "@/lib/wis.functions";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
