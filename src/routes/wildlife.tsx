@@ -187,6 +187,29 @@ function WildlifePage() {
               </pre>
             </div>
 
+            {/* Did you know? — AI species fact */}
+            <div className="glass rounded-2xl p-5 border border-[var(--gold)]/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs uppercase tracking-[0.18em] font-semibold text-[var(--gold)] flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" /> Did you know?
+                </span>
+                <span className="text-[10px] text-muted-foreground">{selected.species}</span>
+              </div>
+              {factLoading ? (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground py-3">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> SAFARI Intelligence is thinking…
+                </div>
+              ) : fact ? (
+                <p className="font-serif text-[14px] leading-relaxed text-foreground/95">{fact}</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">No insight available right now.</p>
+              )}
+              <Link to="/journal" className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--maasai)] hover:underline">
+                <BookOpen className="h-3 w-3" /> Log this in your journal
+              </Link>
+            </div>
+
+
             {/* Mini map */}
             <div className="glass rounded-2xl p-4">
               <div className="flex items-center justify-between mb-2">
