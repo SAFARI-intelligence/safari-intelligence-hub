@@ -20,6 +20,7 @@ import { Route as PayRouteImport } from './routes/pay'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as OperatorRouteImport } from './routes/operator'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as IntelligenceRouteImport } from './routes/intelligence'
 import { Route as IconsRouteImport } from './routes/icons'
 import { Route as HotelsRouteImport } from './routes/hotels'
@@ -97,6 +98,11 @@ const OperatorRoute = OperatorRouteImport.update({
 const MapRoute = MapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntelligenceRoute = IntelligenceRouteImport.update({
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/hotels': typeof HotelsRouteWithChildren
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
+  '/journal': typeof JournalRoute
   '/map': typeof MapRoute
   '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
@@ -259,6 +266,7 @@ export interface FileRoutesByTo {
   '/hotels': typeof HotelsRouteWithChildren
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
+  '/journal': typeof JournalRoute
   '/map': typeof MapRoute
   '/partner': typeof PartnerRoute
   '/plan': typeof PlanRoute
@@ -294,6 +302,7 @@ export interface FileRoutesById {
   '/hotels': typeof HotelsRouteWithChildren
   '/icons': typeof IconsRoute
   '/intelligence': typeof IntelligenceRoute
+  '/journal': typeof JournalRoute
   '/map': typeof MapRoute
   '/operator': typeof OperatorRouteWithChildren
   '/partner': typeof PartnerRoute
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/hotels'
     | '/icons'
     | '/intelligence'
+    | '/journal'
     | '/map'
     | '/operator'
     | '/partner'
@@ -368,6 +378,7 @@ export interface FileRouteTypes {
     | '/hotels'
     | '/icons'
     | '/intelligence'
+    | '/journal'
     | '/map'
     | '/partner'
     | '/plan'
@@ -402,6 +413,7 @@ export interface FileRouteTypes {
     | '/hotels'
     | '/icons'
     | '/intelligence'
+    | '/journal'
     | '/map'
     | '/operator'
     | '/partner'
@@ -439,6 +451,7 @@ export interface RootRouteChildren {
   HotelsRoute: typeof HotelsRouteWithChildren
   IconsRoute: typeof IconsRoute
   IntelligenceRoute: typeof IntelligenceRoute
+  JournalRoute: typeof JournalRoute
   MapRoute: typeof MapRoute
   OperatorRoute: typeof OperatorRouteWithChildren
   PartnerRoute: typeof PartnerRoute
@@ -529,6 +542,13 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intelligence': {
@@ -780,6 +800,7 @@ const rootRouteChildren: RootRouteChildren = {
   HotelsRoute: HotelsRouteWithChildren,
   IconsRoute: IconsRoute,
   IntelligenceRoute: IntelligenceRoute,
+  JournalRoute: JournalRoute,
   MapRoute: MapRoute,
   OperatorRoute: OperatorRouteWithChildren,
   PartnerRoute: PartnerRoute,
