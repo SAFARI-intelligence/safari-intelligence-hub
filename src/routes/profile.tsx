@@ -96,7 +96,7 @@ function ProfilePage() {
     setSummarizing(bookingId);
     try {
       const res = await genSummary({ data: { bookingId } });
-      setSummaries((prev) => ({ ...prev, [bookingId]: res.summary as TripSummary }));
+      setSummaries((prev) => ({ ...prev, [bookingId]: res.summary as unknown as TripSummary }));
       toast.success("Trip reflection ready.");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed";
