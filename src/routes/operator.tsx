@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { OperatorShell } from "@/components/operator/OperatorShell";
+import { RoleGuard } from "@/components/safari/RoleGuard";
 
 export const Route = createFileRoute("/operator")({
   head: () => ({
@@ -11,8 +12,10 @@ export const Route = createFileRoute("/operator")({
     ],
   }),
   component: () => (
-    <OperatorShell>
-      <Outlet />
-    </OperatorShell>
+    <RoleGuard allow={["hotel"]}>
+      <OperatorShell>
+        <Outlet />
+      </OperatorShell>
+    </RoleGuard>
   ),
 });

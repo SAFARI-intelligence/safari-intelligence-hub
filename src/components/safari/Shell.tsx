@@ -190,10 +190,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         <BookMarked className="h-4 w-4 text-[var(--maasai)]" /> My Bookings
                       </Link>
                       <Link
-                        to="/profile"
+                        to={
+                          primaryRole === "support"
+                            ? "/support"
+                            : primaryRole === "hotel"
+                            ? "/operator"
+                            : "/profile"
+                        }
                         className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
                       >
-                        <UserIcon className="h-4 w-4" /> Profile
+                        <UserIcon className="h-4 w-4" />{" "}
+                        {primaryRole === "support"
+                          ? "Support Console"
+                          : primaryRole === "hotel"
+                          ? "Operator Portal"
+                          : "Profile"}
                       </Link>
                       <div className="h-px bg-border/60" />
                       <button

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/profile")({
     ],
   }),
   component: () => (
-    <RoleGuard allow={["user", "hotel", "support"]}>
+    <RoleGuard allow={["user"]}>
       <ProfilePage />
     </RoleGuard>
   ),
