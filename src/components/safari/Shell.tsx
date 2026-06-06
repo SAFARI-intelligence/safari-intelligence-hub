@@ -191,6 +191,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         <BookMarked className="h-4 w-4 text-[var(--maasai)]" /> My Bookings
                       </Link>
                       <Link
+                        to="/journal"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
+                      >
+                        <BookMarked className="h-4 w-4 text-[var(--gold)]" /> Safari Journal
+                      </Link>
+                      <Link
                         to={
                           primaryRole === "support"
                             ? "/support"
