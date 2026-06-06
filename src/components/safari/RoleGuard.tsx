@@ -3,15 +3,30 @@ import { useEffect, type ReactNode } from "react";
 import { useAuth, type AppRole } from "@/lib/auth";
 import { Loader2, ShieldAlert } from "lucide-react";
 
+const HOME_BY_ROLE: Record<AppRole, string> = {
+  user: "/profile",
+  hotel: "/operator",
+  support: "/support",
+};
+
 export function RoleGuard({ allow, children }: { allow: AppRole[]; children: ReactNode }) {
-  const { user, roles, loading } = useAuth();
+  const { user, roles, primaryRole, loading } = useAuth();
   const navigate = useNavigate();
 
+  const ok = roles.some((r) => allow.includes(r));
+
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+    if (!user) {
       navigate({ to: "/auth" });
+      return;
     }
-  }, [loading, user, navigate]);
+    // Logged in but wrong role → send them to their own home
+    if (!ok && primaryRole) {
+      const dest = HOME_BY_ROLE[primaryRole];
+      navigate({ to: dest });
+    }
+  }, [loading, user, ok, primaryRole, navigate]);
 
   if (loading) {
     return (
@@ -23,16 +38,19 @@ export function RoleGuard({ allow, children }: { allow: AppRole[]; children: Rea
 
   if (!user) return null;
 
-  const ok = roles.some((r) => allow.includes(r));
   if (!ok) {
+    // Fallback (e.g. user has no role at all)
     return (
       <div className="mx-auto max-w-md mt-12">
         <div className="glass-strong rounded-2xl p-6 text-center">
           <ShieldAlert className="h-10 w-10 mx-auto text-[var(--maasai)]" />
-          <h2 className="font-display text-lg font-bold mt-3">Hapana — access restricted</h2>
+          <h2 className="font-display text-lg font-bold mt-3">Hapana — wrong terminal</h2>
           <p className="text-sm text-muted-foreground mt-1">
-            This terminal requires the{" "}
+            This area is reserved for the{" "}
             <span className="font-semibold">{allow.join(" or ")}</span> role.
+            {primaryRole && (
+              <> Redirecting you to your <span className="font-semibold">{primaryRole}</span> home…</>
+            )}
           </p>
           <Link
             to="/hotels"
