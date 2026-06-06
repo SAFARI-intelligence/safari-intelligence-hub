@@ -1,10 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Sparkles, Code, Copy, Check } from "lucide-react";
+import { MapPin, Clock, Sparkles, Code, Copy, Check, BookOpen, Loader2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { Shell } from "@/components/safari/Shell";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { sightings, images } from "@/lib/safari-data";
+import { getSpeciesFact } from "@/lib/wis.functions";
 
 export const Route = createFileRoute("/wildlife")({
   head: () => ({
