@@ -147,7 +147,11 @@ function WalletPage() {
               </thead>
               <tbody>
                 {filtered.map((t) => (
-                  <tr key={t.id} className="border-t" style={{ borderColor: "rgba(26,60,46,0.08)" }}>
+                  <tr
+                    key={t.id}
+                    className="border-t"
+                    style={{ borderColor: "rgba(26,60,46,0.08)" }}
+                  >
                     <td className="px-4 py-2.5 text-stone-600">
                       {new Date(t.created_at).toLocaleString()}
                     </td>
@@ -214,10 +218,7 @@ function Balance({
   actions?: React.ReactNode;
 }) {
   return (
-    <div
-      className="rounded-2xl p-5 border bg-white"
-      style={{ borderColor: "rgba(26,60,46,0.12)" }}
-    >
+    <div className="rounded-2xl p-5 border bg-white" style={{ borderColor: "rgba(26,60,46,0.12)" }}>
       <div className="flex items-center justify-between">
         <div className="text-[11.5px] uppercase tracking-[0.18em] text-stone-500">
           {label} {locked && <span className="text-stone-400">· locked</span>}
@@ -238,7 +239,15 @@ function Balance({
   );
 }
 
-function Modal({ children, onClose, title }: { children: React.ReactNode; onClose: () => void; title: string }) {
+function Modal({
+  children,
+  onClose,
+  title,
+}: {
+  children: React.ReactNode;
+  onClose: () => void;
+  title: string;
+}) {
   return (
     <div
       className="fixed inset-0 z-50 grid place-items-center p-4"
@@ -262,7 +271,15 @@ function Modal({ children, onClose, title }: { children: React.ReactNode; onClos
   );
 }
 
-function TopUpDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () => void; onDone: () => void }) {
+function TopUpDialog({
+  wallet,
+  onClose,
+  onDone,
+}: {
+  wallet: Wallet;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const { user } = useAuth();
   const [amount, setAmount] = useState("5000");
   const [provider, setProvider] = useState<"stripe" | "mpesa">("mpesa");
@@ -303,7 +320,9 @@ function TopUpDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () 
 
   return (
     <Modal title="Top up Flex Wallet" onClose={onClose}>
-      <label className="block text-[12px] font-medium mb-1.5 text-stone-700">Amount ({wallet.currency})</label>
+      <label className="block text-[12px] font-medium mb-1.5 text-stone-700">
+        Amount ({wallet.currency})
+      </label>
       <input
         type="number"
         value={amount}
@@ -329,7 +348,8 @@ function TopUpDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () 
         ))}
       </div>
       <p className="text-[11px] text-stone-500 mb-4">
-        Demo mode — payment is simulated. Real {provider === "mpesa" ? "M-Pesa STK" : "Stripe"} will plug in next phase.
+        Demo mode — payment is simulated. Real {provider === "mpesa" ? "M-Pesa STK" : "Stripe"} will
+        plug in next phase.
       </p>
       <div className="flex gap-2">
         <button
@@ -352,7 +372,15 @@ function TopUpDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () 
   );
 }
 
-function TransferDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: () => void; onDone: () => void }) {
+function TransferDialog({
+  wallet,
+  onClose,
+  onDone,
+}: {
+  wallet: Wallet;
+  onClose: () => void;
+  onDone: () => void;
+}) {
   const { user } = useAuth();
   const [amount, setAmount] = useState("1000");
   const [direction, setDirection] = useState<"flex_to_trip" | "trip_to_flex">("flex_to_trip");
@@ -416,7 +444,9 @@ function TransferDialog({ wallet, onClose, onDone }: { wallet: Wallet; onClose: 
           </button>
         ))}
       </div>
-      <label className="block text-[12px] font-medium mb-1.5 text-stone-700">Amount ({wallet.currency})</label>
+      <label className="block text-[12px] font-medium mb-1.5 text-stone-700">
+        Amount ({wallet.currency})
+      </label>
       <input
         type="number"
         value={amount}

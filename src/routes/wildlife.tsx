@@ -43,14 +43,21 @@ function WildlifePage() {
     setFact(null);
     setFactLoading(true);
     fetchFact({ data: { species: selected.species, behavior: selected.behavior } })
-      .then((r) => { if (!cancelled) setFact(r.body); })
-      .catch(() => { if (!cancelled) setFact(null); })
-      .finally(() => { if (!cancelled) setFactLoading(false); });
-    return () => { cancelled = true; };
+      .then((r) => {
+        if (!cancelled) setFact(r.body);
+      })
+      .catch(() => {
+        if (!cancelled) setFact(null);
+      })
+      .finally(() => {
+        if (!cancelled) setFactLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [selected.id, selected.species, selected.behavior, fetchFact]);
 
-  const filtered =
-    filter === "All" ? sightings : sightings.filter((s) => s.species === filter);
+  const filtered = filter === "All" ? sightings : sightings.filter((s) => s.species === filter);
 
   const sample = JSON.stringify(
     {
@@ -86,8 +93,8 @@ function WildlifePage() {
               Wildlife Story Feed
             </h1>
             <p className="text-muted-foreground mt-2 max-w-2xl">
-              AI-generated stories from rangers, camera traps, and operator radios across the
-              region — refined every 90 seconds.
+              AI-generated stories from rangers, camera traps, and operator radios across the region
+              — refined every 90 seconds.
             </p>
           </div>
         </header>
@@ -182,7 +189,7 @@ function WildlifePage() {
                 Sample request
               </div>
               <pre className="bg-secondary rounded-lg p-3 text-[10.5px] font-mono overflow-x-auto">
-{`curl -H "Authorization: Bearer sk_safari_..." \\
+                {`curl -H "Authorization: Bearer sk_safari_..." \\
   https://api.safari-os.africa/v1/sightings`}
               </pre>
             </div>
@@ -204,11 +211,13 @@ function WildlifePage() {
               ) : (
                 <p className="text-xs text-muted-foreground">No insight available right now.</p>
               )}
-              <Link to="/journal" className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--maasai)] hover:underline">
+              <Link
+                to="/journal"
+                className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--maasai)] hover:underline"
+              >
                 <BookOpen className="h-3 w-3" /> Log this in your journal
               </Link>
             </div>
-
 
             {/* Mini map */}
             <div className="glass rounded-2xl p-4">
@@ -235,12 +244,7 @@ function WildlifePage() {
                     opacity="0.4"
                   />
                   <circle cx="50" cy="30" r="2" fill="var(--maasai)">
-                    <animate
-                      attributeName="r"
-                      values="2;5;2"
-                      dur="2s"
-                      repeatCount="indefinite"
-                    />
+                    <animate attributeName="r" values="2;5;2" dur="2s" repeatCount="indefinite" />
                   </circle>
                   <circle cx="50" cy="30" r="1" fill="white" />
                 </svg>

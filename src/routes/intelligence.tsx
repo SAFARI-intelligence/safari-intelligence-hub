@@ -52,12 +52,10 @@ function IntelligencePage() {
           <span className="text-xs uppercase tracking-[0.18em] text-[var(--maasai)] font-semibold">
             Akili · Intelligence seed
           </span>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold mt-2">
-            Build the Moat
-          </h1>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold mt-2">Build the Moat</h1>
           <p className="text-muted-foreground mt-2 max-w-2xl">
-            Manual seeding by rangers and operators powers our Wildlife Intelligence System —
-            the unfair advantage no competitor can replicate.
+            Manual seeding by rangers and operators powers our Wildlife Intelligence System — the
+            unfair advantage no competitor can replicate.
           </p>
         </header>
 
@@ -76,11 +74,18 @@ function IntelligencePage() {
                   onChange={(e) => setForm({ ...form, species: e.target.value })}
                   className="input"
                 >
-                  {["Elephant", "Lion", "Cheetah", "Mountain Gorilla", "Zebra", "Giraffe", "Buffalo", "Rhino"].map(
-                    (s) => (
-                      <option key={s}>{s}</option>
-                    ),
-                  )}
+                  {[
+                    "Elephant",
+                    "Lion",
+                    "Cheetah",
+                    "Mountain Gorilla",
+                    "Zebra",
+                    "Giraffe",
+                    "Buffalo",
+                    "Rhino",
+                  ].map((s) => (
+                    <option key={s}>{s}</option>
+                  ))}
                 </select>
               </Field>
               <Field label="Count">
@@ -98,7 +103,14 @@ function IntelligencePage() {
                   onChange={(e) => setForm({ ...form, park: e.target.value })}
                   className="input"
                 >
-                  {["Maasai Mara", "Serengeti", "Bwindi", "Volcanoes NP", "Murchison Falls", "Akagera"].map((p) => (
+                  {[
+                    "Maasai Mara",
+                    "Serengeti",
+                    "Bwindi",
+                    "Volcanoes NP",
+                    "Murchison Falls",
+                    "Akagera",
+                  ].map((p) => (
                     <option key={p}>{p}</option>
                   ))}
                 </select>
@@ -109,9 +121,11 @@ function IntelligencePage() {
                   onChange={(e) => setForm({ ...form, behavior: e.target.value })}
                   className="input"
                 >
-                  {["Migrating", "Hunting", "Resting", "Foraging", "Pre-crossing", "Browsing"].map((b) => (
-                    <option key={b}>{b}</option>
-                  ))}
+                  {["Migrating", "Hunting", "Resting", "Foraging", "Pre-crossing", "Browsing"].map(
+                    (b) => (
+                      <option key={b}>{b}</option>
+                    ),
+                  )}
                 </select>
               </Field>
               <Field label="Latitude">

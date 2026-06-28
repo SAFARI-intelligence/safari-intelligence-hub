@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Lock, Loader2, CheckCircle2, AlertTriangle, Smartphone, CreditCard, ShieldCheck } from "lucide-react";
+import {
+  X,
+  Lock,
+  Loader2,
+  CheckCircle2,
+  AlertTriangle,
+  Smartphone,
+  CreditCard,
+  ShieldCheck,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Package } from "@/lib/safari-data";
 
@@ -103,9 +112,15 @@ export function CheckoutModal({
               className="w-full max-w-5xl bg-background rounded-3xl overflow-hidden shadow-2xl border border-border/60"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-border/60" style={{ background: "#1A3C2E", color: "white" }}>
+              <div
+                className="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-border/60"
+                style={{ background: "#1A3C2E", color: "white" }}
+              >
                 <div>
-                  <div className="text-[10px] uppercase tracking-[0.18em]" style={{ color: "#C9922A" }}>
+                  <div
+                    className="text-[10px] uppercase tracking-[0.18em]"
+                    style={{ color: "#C9922A" }}
+                  >
                     Hifadhi · Secure Checkout
                   </div>
                   <h2 className="font-display text-xl font-bold">Confirm your safari</h2>
@@ -129,10 +144,22 @@ export function CheckoutModal({
                   <p className="text-sm text-muted-foreground">{pkg.subtitle}</p>
 
                   <dl className="mt-5 space-y-2.5 text-sm">
-                    <div className="flex justify-between"><dt className="text-muted-foreground">Destination</dt><dd className="font-medium">{pkg.country}</dd></div>
-                    <div className="flex justify-between"><dt className="text-muted-foreground">Departure</dt><dd className="font-medium">{departure}</dd></div>
-                    <div className="flex justify-between"><dt className="text-muted-foreground">Duration</dt><dd className="font-medium">{pkg.days} days</dd></div>
-                    <div className="flex justify-between"><dt className="text-muted-foreground">Travelers</dt><dd className="font-medium">{travelers}</dd></div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Destination</dt>
+                      <dd className="font-medium">{pkg.country}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Departure</dt>
+                      <dd className="font-medium">{departure}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Duration</dt>
+                      <dd className="font-medium">{pkg.days} days</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Travelers</dt>
+                      <dd className="font-medium">{travelers}</dd>
+                    </div>
                   </dl>
 
                   <div className="mt-5">
@@ -149,17 +176,22 @@ export function CheckoutModal({
                   </div>
 
                   <div className="mt-6 pt-5 border-t border-border/60">
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Total</div>
+                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Total
+                    </div>
                     <div className="font-display text-4xl font-bold text-[#1A3C2E] dark:text-white">
                       KSh {total.toLocaleString()}
                     </div>
-                    <div className="text-sm text-muted-foreground">≈ ${totalUsd.toLocaleString()} USD</div>
+                    <div className="text-sm text-muted-foreground">
+                      ≈ ${totalUsd.toLocaleString()} USD
+                    </div>
                   </div>
 
                   <div className="mt-5 flex items-center gap-2 text-xs">
                     <ShieldCheck className="h-4 w-4 text-[#1D9E75]" />
                     <span className="text-muted-foreground">
-                      Operator: <span className="font-semibold text-foreground">SAFARI Verified</span>
+                      Operator:{" "}
+                      <span className="font-semibold text-foreground">SAFARI Verified</span>
                     </span>
                   </div>
                 </div>
@@ -190,7 +222,9 @@ export function CheckoutModal({
                       {method === "mpesa" ? (
                         <div className="space-y-3">
                           <label className="block">
-                            <span className="text-xs font-medium text-muted-foreground">Phone number</span>
+                            <span className="text-xs font-medium text-muted-foreground">
+                              Phone number
+                            </span>
                             <input
                               value={phone}
                               onChange={(e) => setPhone(e.target.value)}
@@ -206,7 +240,9 @@ export function CheckoutModal({
                       ) : (
                         <div className="space-y-3">
                           <label className="block">
-                            <span className="text-xs font-medium text-muted-foreground">Name on card</span>
+                            <span className="text-xs font-medium text-muted-foreground">
+                              Name on card
+                            </span>
                             <input
                               value={cardName}
                               onChange={(e) => setCardName(e.target.value)}
@@ -215,7 +251,9 @@ export function CheckoutModal({
                             />
                           </label>
                           <label className="block">
-                            <span className="text-xs font-medium text-muted-foreground">Card number</span>
+                            <span className="text-xs font-medium text-muted-foreground">
+                              Card number
+                            </span>
                             <input
                               value={cardNum}
                               onChange={(e) => setCardNum(e.target.value)}
@@ -226,7 +264,9 @@ export function CheckoutModal({
                           </label>
                           <div className="grid grid-cols-2 gap-3">
                             <label className="block">
-                              <span className="text-xs font-medium text-muted-foreground">Expiry</span>
+                              <span className="text-xs font-medium text-muted-foreground">
+                                Expiry
+                              </span>
                               <input
                                 value={cardExp}
                                 onChange={(e) => setCardExp(e.target.value)}
@@ -257,7 +297,9 @@ export function CheckoutModal({
 
                       <div className="mt-4 flex items-start gap-2 text-xs text-muted-foreground">
                         <Lock className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-[#1D9E75]" />
-                        <span>Your funds are safely held in escrow until your adventure begins.</span>
+                        <span>
+                          Your funds are safely held in escrow until your adventure begins.
+                        </span>
                       </div>
                     </>
                   )}
@@ -265,7 +307,9 @@ export function CheckoutModal({
                   {step === "loading" && (
                     <div className="text-center py-10">
                       <Loader2 className="h-10 w-10 mx-auto animate-spin text-[#C9922A]" />
-                      <h3 className="mt-5 font-display text-xl font-bold">Processing your payment...</h3>
+                      <h3 className="mt-5 font-display text-xl font-bold">
+                        Processing your payment...
+                      </h3>
                       <p className="text-sm text-muted-foreground mt-2">
                         {method === "mpesa"
                           ? "Check your phone for the M-Pesa prompt"
@@ -297,9 +341,13 @@ export function CheckoutModal({
                         <CheckCircle2 className="h-10 w-10 text-[#1D9E75]" />
                       </motion.div>
                       <h3 className="mt-5 font-display text-2xl font-bold">Booking confirmed!</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Asante sana. Safari njema!</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Asante sana. Safari njema!
+                      </p>
                       <div className="mt-5 inline-block px-4 py-2.5 rounded-xl bg-foreground/5 border border-border/60">
-                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Booking ref</div>
+                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                          Booking ref
+                        </div>
                         <div className="font-mono text-lg font-bold">{bookingRef}</div>
                       </div>
                       <div className="mt-6 flex flex-col gap-2 text-sm">
@@ -310,7 +358,11 @@ export function CheckoutModal({
                         >
                           View in My Wallet →
                         </Link>
-                        <Link to="/" onClick={onClose} className="text-muted-foreground hover:underline">
+                        <Link
+                          to="/"
+                          onClick={onClose}
+                          className="text-muted-foreground hover:underline"
+                        >
                           Back to Explorer →
                         </Link>
                       </div>
@@ -337,7 +389,10 @@ export function CheckoutModal({
                           Try Again
                         </button>
                         <button
-                          onClick={() => { setMethod("card"); setStep("form"); }}
+                          onClick={() => {
+                            setMethod("card");
+                            setStep("form");
+                          }}
                           className="px-4 py-2.5 rounded-xl text-sm font-semibold border border-border/60 hover:bg-foreground/5"
                         >
                           Use Card Instead

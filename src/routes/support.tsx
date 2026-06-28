@@ -9,7 +9,10 @@ export const Route = createFileRoute("/support")({
   head: () => ({
     meta: [
       { title: "Support Console · SAFARI" },
-      { name: "description", content: "Internal admin console — manage users, hotels, tickets, and reviews." },
+      {
+        name: "description",
+        content: "Internal admin console — manage users, hotels, tickets, and reviews.",
+      },
     ],
   }),
   component: () => (
@@ -44,7 +47,9 @@ function SupportConsole() {
     setTickets(t.data || []);
     setReviews(r.data || []);
     const revenue =
-      b.data?.filter((x: any) => x.status === "confirmed").reduce((s: number, x: any) => s + Number(x.total_price), 0) || 0;
+      b.data
+        ?.filter((x: any) => x.status === "confirmed")
+        .reduce((s: number, x: any) => s + Number(x.total_price), 0) || 0;
     setStats({
       users: p.data?.length || 0,
       hotels: h.data?.length || 0,
@@ -60,7 +65,10 @@ function SupportConsole() {
   }, []);
 
   const updateTicket = async (id: string, status: string) => {
-    await supabase.from("support_tickets").update({ status: status as any }).eq("id", id);
+    await supabase
+      .from("support_tickets")
+      .update({ status: status as any })
+      .eq("id", id);
     load();
   };
 
@@ -95,8 +103,16 @@ function SupportConsole() {
           <div className="mt-5 grid grid-cols-2 lg:grid-cols-5 gap-3">
             <KStat label="Users" value={stats.users} icon={<Users className="h-4 w-4" />} />
             <KStat label="Hotels" value={stats.hotels} icon={<Building2 className="h-4 w-4" />} />
-            <KStat label="Bookings" value={stats.bookings} icon={<BookOpen className="h-4 w-4" />} />
-            <KStat label="Open tickets" value={stats.tickets} icon={<MessageSquare className="h-4 w-4" />} />
+            <KStat
+              label="Bookings"
+              value={stats.bookings}
+              icon={<BookOpen className="h-4 w-4" />}
+            />
+            <KStat
+              label="Open tickets"
+              value={stats.tickets}
+              icon={<MessageSquare className="h-4 w-4" />}
+            />
             <KStat
               label="Revenue (KSh)"
               value={stats.revenue.toLocaleString()}
@@ -131,16 +147,26 @@ function SupportConsole() {
                 <h2 className="font-display text-lg font-bold mb-3">Latest activity</h2>
                 <ul className="text-sm space-y-2">
                   {profiles.slice(0, 5).map((p) => (
-                    <li key={p.id} className="flex items-center justify-between border-b border-border/40 py-2">
-                      <span>👤 New user: <strong>{p.name || p.email}</strong></span>
+                    <li
+                      key={p.id}
+                      className="flex items-center justify-between border-b border-border/40 py-2"
+                    >
+                      <span>
+                        👤 New user: <strong>{p.name || p.email}</strong>
+                      </span>
                       <span className="text-xs text-muted-foreground">
                         {new Date(p.created_at).toLocaleDateString()}
                       </span>
                     </li>
                   ))}
                   {tickets.slice(0, 5).map((t) => (
-                    <li key={t.id} className="flex items-center justify-between border-b border-border/40 py-2">
-                      <span>🎫 Ticket: <strong>{t.subject}</strong></span>
+                    <li
+                      key={t.id}
+                      className="flex items-center justify-between border-b border-border/40 py-2"
+                    >
+                      <span>
+                        🎫 Ticket: <strong>{t.subject}</strong>
+                      </span>
                       <span className="text-xs text-muted-foreground">{t.status}</span>
                     </li>
                   ))}
@@ -151,7 +177,11 @@ function SupportConsole() {
             {tab === "users" && (
               <table className="w-full text-sm">
                 <thead className="text-left text-xs uppercase text-muted-foreground">
-                  <tr><th className="py-2">Name</th><th>Email</th><th>Joined</th></tr>
+                  <tr>
+                    <th className="py-2">Name</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {profiles.map((p) => (
@@ -170,18 +200,30 @@ function SupportConsole() {
             {tab === "hotels" && (
               <table className="w-full text-sm">
                 <thead className="text-left text-xs uppercase text-muted-foreground">
-                  <tr><th className="py-2">Name</th><th>Country</th><th>Price</th><th>Status</th><th></th></tr>
+                  <tr>
+                    <th className="py-2">Name</th>
+                    <th>Country</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
                 </thead>
                 <tbody>
                   {hotels.map((h) => (
                     <tr key={h.id} className="border-t border-border/40">
                       <td className="py-2.5 font-medium">{h.name}</td>
                       <td>{h.country}</td>
-                      <td className="text-[var(--gold)]">KSh {Number(h.price_min).toLocaleString()}</td>
+                      <td className="text-[var(--gold)]">
+                        KSh {Number(h.price_min).toLocaleString()}
+                      </td>
                       <td>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                          h.is_published ? "bg-[var(--forest)]/15 text-[var(--forest)]" : "bg-muted text-muted-foreground"
-                        }`}>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-full ${
+                            h.is_published
+                              ? "bg-[var(--forest)]/15 text-[var(--forest)]"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
                           {h.is_published ? "live" : "hidden"}
                         </span>
                       </td>
@@ -209,7 +251,9 @@ function SupportConsole() {
 
             {tab === "tickets" && (
               <div className="space-y-3">
-                {tickets.length === 0 && <p className="text-sm text-muted-foreground">No tickets.</p>}
+                {tickets.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No tickets.</p>
+                )}
                 {tickets.map((t) => (
                   <div key={t.id} className="rounded-xl border border-border/60 p-4">
                     <div className="flex items-start justify-between gap-2">
@@ -219,23 +263,33 @@ function SupportConsole() {
                           {t.priority} priority · {new Date(t.created_at).toLocaleString()}
                         </p>
                       </div>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-                        t.status === "closed"
-                          ? "bg-muted text-muted-foreground"
-                          : t.status === "in_progress"
-                          ? "bg-[var(--gold)]/15 text-[var(--gold)]"
-                          : "bg-[var(--maasai)]/15 text-[var(--maasai)]"
-                      }`}>{t.status}</span>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full ${
+                          t.status === "closed"
+                            ? "bg-muted text-muted-foreground"
+                            : t.status === "in_progress"
+                              ? "bg-[var(--gold)]/15 text-[var(--gold)]"
+                              : "bg-[var(--maasai)]/15 text-[var(--maasai)]"
+                        }`}
+                      >
+                        {t.status}
+                      </span>
                     </div>
                     <p className="text-sm mt-2">{t.message}</p>
                     <div className="mt-3 flex gap-1">
                       {t.status !== "in_progress" && (
-                        <button onClick={() => updateTicket(t.id, "in_progress")} className="text-xs px-2 py-1 rounded bg-[var(--gold)]/15 text-[var(--gold)]">
+                        <button
+                          onClick={() => updateTicket(t.id, "in_progress")}
+                          className="text-xs px-2 py-1 rounded bg-[var(--gold)]/15 text-[var(--gold)]"
+                        >
                           Mark in-progress
                         </button>
                       )}
                       {t.status !== "closed" && (
-                        <button onClick={() => updateTicket(t.id, "closed")} className="text-xs px-2 py-1 rounded bg-[var(--forest)]/15 text-[var(--forest)]">
+                        <button
+                          onClick={() => updateTicket(t.id, "closed")}
+                          className="text-xs px-2 py-1 rounded bg-[var(--forest)]/15 text-[var(--forest)]"
+                        >
                           Close
                         </button>
                       )}
@@ -247,11 +301,18 @@ function SupportConsole() {
 
             {tab === "reviews" && (
               <div className="space-y-2">
-                {reviews.length === 0 && <p className="text-sm text-muted-foreground">No reviews yet.</p>}
+                {reviews.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No reviews yet.</p>
+                )}
                 {reviews.map((r) => (
-                  <div key={r.id} className="flex items-start justify-between gap-3 border-b border-border/40 py-3">
+                  <div
+                    key={r.id}
+                    className="flex items-start justify-between gap-3 border-b border-border/40 py-3"
+                  >
                     <div>
-                      <p className="text-sm">⭐ {r.rating} — {r.comment || "(no comment)"}</p>
+                      <p className="text-sm">
+                        ⭐ {r.rating} — {r.comment || "(no comment)"}
+                      </p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">
                         {new Date(r.created_at).toLocaleString()}
                       </p>
@@ -273,14 +334,26 @@ function SupportConsole() {
   );
 }
 
-function KStat({ label, value, icon, accent }: { label: string; value: string | number; icon: React.ReactNode; accent?: boolean }) {
+function KStat({
+  label,
+  value,
+  icon,
+  accent,
+}: {
+  label: string;
+  value: string | number;
+  icon: React.ReactNode;
+  accent?: boolean;
+}) {
   return (
     <div className="rounded-xl border border-border/60 p-4">
       <div className="flex items-center justify-between">
         <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
         <span className="text-muted-foreground">{icon}</span>
       </div>
-      <p className={`font-display text-2xl font-bold mt-1 ${accent ? "text-[var(--gold)]" : ""}`}>{value}</p>
+      <p className={`font-display text-2xl font-bold mt-1 ${accent ? "text-[var(--gold)]" : ""}`}>
+        {value}
+      </p>
     </div>
   );
 }

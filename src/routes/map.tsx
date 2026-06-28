@@ -42,7 +42,10 @@ function MapPage() {
   useEffect(() => {
     (async () => {
       const [h, s, l] = await Promise.all([
-        supabase.from("hotels").select("id,name,latitude,longitude,park,price_min").eq("is_published", true),
+        supabase
+          .from("hotels")
+          .select("id,name,latitude,longitude,park,price_min")
+          .eq("is_published", true),
         supabase.from("animal_stories").select("id,name,slug,hero_image"),
         supabase
           .from("animal_locations")
@@ -70,7 +73,7 @@ function MapPage() {
         (payload) => {
           const row = payload.new as Loc;
           setLocations((prev) => ({ ...prev, [row.story_id]: row }));
-        }
+        },
       )
       .subscribe();
     return () => {
@@ -147,7 +150,13 @@ function MapPage() {
                   filter === f ? "bg-foreground text-background" : "hover:bg-foreground/10"
                 }`}
               >
-                {f === "all" ? <MapPin className="inline h-3 w-3 mr-1" /> : f === "animals" ? <PawPrint className="inline h-3 w-3 mr-1" /> : <BedDouble className="inline h-3 w-3 mr-1" />}
+                {f === "all" ? (
+                  <MapPin className="inline h-3 w-3 mr-1" />
+                ) : f === "animals" ? (
+                  <PawPrint className="inline h-3 w-3 mr-1" />
+                ) : (
+                  <BedDouble className="inline h-3 w-3 mr-1" />
+                )}
                 {f}
               </button>
             ))}
@@ -159,7 +168,10 @@ function MapPage() {
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         ) : (
-          <SafariMap markers={markers} className="h-[70vh] w-full rounded-3xl overflow-hidden border border-border/40 shadow-xl" />
+          <SafariMap
+            markers={markers}
+            className="h-[70vh] w-full rounded-3xl overflow-hidden border border-border/40 shadow-xl"
+          />
         )}
 
         <div className="grid grid-cols-3 gap-3 text-center text-xs">

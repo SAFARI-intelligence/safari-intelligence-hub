@@ -7,17 +7,16 @@ import { Shell } from "@/components/safari/Shell";
 import { RoleGuard } from "@/components/safari/RoleGuard";
 import { MaasaiDivider } from "@/components/safari/MaasaiDivider";
 import { useAuth } from "@/lib/auth";
-import {
-  listMyJournal,
-  createJournalEntry,
-  deleteJournalEntry,
-} from "@/lib/wis.functions";
+import { listMyJournal, createJournalEntry, deleteJournalEntry } from "@/lib/wis.functions";
 
 export const Route = createFileRoute("/journal")({
   head: () => ({
     meta: [
       { title: "Digital Safari Journal · SAFARI" },
-      { name: "description", content: "AI-narrated journal of your wildlife sightings across East Africa." },
+      {
+        name: "description",
+        content: "AI-narrated journal of your wildlife sightings across East Africa.",
+      },
     ],
   }),
   component: () => (
@@ -37,8 +36,31 @@ type Entry = {
   narrative: string | null;
 };
 
-const SPECIES = ["Lion", "Elephant", "Cheetah", "Leopard", "Giraffe", "Zebra", "Buffalo", "Black Rhino", "White Rhino", "Mountain Gorilla", "Wild Dog", "Hippo", "Serval"];
-const PARKS = ["Maasai Mara", "Amboseli", "Tsavo", "Samburu", "Lake Nakuru", "Ol Pejeta", "Serengeti", "Bwindi"];
+const SPECIES = [
+  "Lion",
+  "Elephant",
+  "Cheetah",
+  "Leopard",
+  "Giraffe",
+  "Zebra",
+  "Buffalo",
+  "Black Rhino",
+  "White Rhino",
+  "Mountain Gorilla",
+  "Wild Dog",
+  "Hippo",
+  "Serval",
+];
+const PARKS = [
+  "Maasai Mara",
+  "Amboseli",
+  "Tsavo",
+  "Samburu",
+  "Lake Nakuru",
+  "Ol Pejeta",
+  "Serengeti",
+  "Bwindi",
+];
 
 function JournalPage() {
   const { user } = useAuth();
@@ -128,16 +150,26 @@ function JournalPage() {
           <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2">
             <label className="text-sm">
               <span className="font-label text-xs text-muted-foreground block mb-1">Species</span>
-              <select value={species} onChange={(e) => setSpecies(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border/60 bg-background text-sm">
-                {SPECIES.map((s) => <option key={s}>{s}</option>)}
+              <select
+                value={species}
+                onChange={(e) => setSpecies(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border/60 bg-background text-sm"
+              >
+                {SPECIES.map((s) => (
+                  <option key={s}>{s}</option>
+                ))}
               </select>
             </label>
             <label className="text-sm">
               <span className="font-label text-xs text-muted-foreground block mb-1">Park</span>
-              <select value={park} onChange={(e) => setPark(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border/60 bg-background text-sm">
-                {PARKS.map((p) => <option key={p}>{p}</option>)}
+              <select
+                value={park}
+                onChange={(e) => setPark(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border/60 bg-background text-sm"
+              >
+                {PARKS.map((p) => (
+                  <option key={p}>{p}</option>
+                ))}
               </select>
             </label>
             <label className="text-sm sm:col-span-2">
@@ -155,7 +187,9 @@ function JournalPage() {
               />
             </label>
             <label className="text-sm sm:col-span-2">
-              <span className="font-label text-xs text-muted-foreground block mb-1">Photo URL (optional)</span>
+              <span className="font-label text-xs text-muted-foreground block mb-1">
+                Photo URL (optional)
+              </span>
               <input
                 type="url"
                 value={photoUrl}
@@ -169,7 +203,11 @@ function JournalPage() {
               disabled={submitting}
               className="sm:col-span-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-foreground text-background font-semibold text-sm disabled:opacity-60"
             >
-              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+              {submitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
               {submitting ? "Saving & weaving narrative…" : "Save & narrate"}
             </button>
           </form>
@@ -178,7 +216,9 @@ function JournalPage() {
         <MaasaiDivider />
 
         {loading ? (
-          <div className="grid place-items-center py-16"><Loader2 className="h-6 w-6 animate-spin" /></div>
+          <div className="grid place-items-center py-16">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
         ) : entries.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             <p className="font-display text-2xl italic">Andika safari yako</p>
@@ -216,7 +256,9 @@ function JournalPage() {
                       </p>
                     </div>
                   ) : (
-                    <p className="mt-3 text-xs text-muted-foreground">Narrative pending — try again shortly.</p>
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      Narrative pending — try again shortly.
+                    </p>
                   )}
                 </div>
               </article>
@@ -225,7 +267,10 @@ function JournalPage() {
         )}
 
         <p className="text-center">
-          <Link to="/wildlife" className="text-sm text-[var(--maasai)] font-semibold hover:underline">
+          <Link
+            to="/wildlife"
+            className="text-sm text-[var(--maasai)] font-semibold hover:underline"
+          >
             ← Back to Wildlife feed
           </Link>
         </p>

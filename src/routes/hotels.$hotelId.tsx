@@ -19,7 +19,9 @@ export const Route = createFileRoute("/hotels/$hotelId")({
     <Shell>
       <div className="mx-auto max-w-md text-center py-12">
         <p className="text-sm text-muted-foreground">{error.message}</p>
-        <Link to="/hotels" className="underline text-sm">Back to hotels</Link>
+        <Link to="/hotels" className="underline text-sm">
+          Back to hotels
+        </Link>
       </div>
     </Shell>
   ),
@@ -78,7 +80,11 @@ function HotelDetail() {
   useEffect(() => {
     Promise.all([
       supabase.from("hotels").select("*").eq("id", hotelId).maybeSingle(),
-      supabase.from("reviews").select("*").eq("hotel_id", hotelId).order("created_at", { ascending: false }),
+      supabase
+        .from("reviews")
+        .select("*")
+        .eq("hotel_id", hotelId)
+        .order("created_at", { ascending: false }),
     ]).then(([h, r]) => {
       setHotel((h.data as Hotel) || null);
       setReviews((r.data as Review[]) || []);
@@ -141,7 +147,9 @@ function HotelDetail() {
       <Shell>
         <div className="mx-auto max-w-md text-center py-12">
           <p>Hotel not found.</p>
-          <Link to="/hotels" className="underline text-sm">Browse all hotels</Link>
+          <Link to="/hotels" className="underline text-sm">
+            Browse all hotels
+          </Link>
         </div>
       </Shell>
     );
@@ -150,7 +158,11 @@ function HotelDetail() {
     <Shell>
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="relative rounded-3xl overflow-hidden aspect-[16/7]">
-          <img src={heroImg} alt={hotel.name} className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src={heroImg}
+            alt={hotel.name}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center gap-2 text-xs uppercase tracking-widest opacity-90">
@@ -192,13 +204,15 @@ function HotelDetail() {
                 <SafariMap
                   center={[Number(hotel.latitude), Number(hotel.longitude)]}
                   zoom={11}
-                  markers={[{
-                    id: hotel.id,
-                    lat: Number(hotel.latitude),
-                    lng: Number(hotel.longitude),
-                    type: "hotel",
-                    label: hotel.name,
-                  }]}
+                  markers={[
+                    {
+                      id: hotel.id,
+                      lat: Number(hotel.latitude),
+                      lng: Number(hotel.longitude),
+                      type: "hotel",
+                      label: hotel.name,
+                    },
+                  ]}
                   className="h-[320px] w-full rounded-xl overflow-hidden"
                 />
                 <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
@@ -220,7 +234,9 @@ function HotelDetail() {
                         <Star
                           key={i}
                           className={`h-3 w-3 ${
-                            i < r.rating ? "fill-[var(--gold)] text-[var(--gold)]" : "text-muted-foreground"
+                            i < r.rating
+                              ? "fill-[var(--gold)] text-[var(--gold)]"
+                              : "text-muted-foreground"
                           }`}
                         />
                       ))}
@@ -234,7 +250,10 @@ function HotelDetail() {
               </div>
 
               {user && (
-                <form onSubmit={submitReview} className="mt-5 space-y-2 border-t border-border/40 pt-5">
+                <form
+                  onSubmit={submitReview}
+                  className="mt-5 space-y-2 border-t border-border/40 pt-5"
+                >
                   <h3 className="text-sm font-semibold">Leave a review</h3>
                   <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((n) => (
@@ -246,7 +265,9 @@ function HotelDetail() {
                       >
                         <Star
                           className={`h-5 w-5 ${
-                            n <= reviewRating ? "fill-[var(--gold)] text-[var(--gold)]" : "text-muted-foreground"
+                            n <= reviewRating
+                              ? "fill-[var(--gold)] text-[var(--gold)]"
+                              : "text-muted-foreground"
                           }`}
                         />
                       </button>

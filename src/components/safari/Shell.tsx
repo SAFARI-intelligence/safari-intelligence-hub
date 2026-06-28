@@ -1,8 +1,20 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
-  Menu, X, Globe, LogIn, LogOut, Shield, Building2,
-  User as UserIcon, Sun, Moon, ChevronDown, Wallet, BookMarked, Coins,
+  Menu,
+  X,
+  Globe,
+  LogIn,
+  LogOut,
+  Shield,
+  Building2,
+  User as UserIcon,
+  Sun,
+  Moon,
+  ChevronDown,
+  Wallet,
+  BookMarked,
+  Coins,
 } from "lucide-react";
 import { SafariIcon, type IconName } from "@/components/icons";
 import { MaasaiDivider } from "./MaasaiDivider";
@@ -60,10 +72,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
       setPoints(stored ? parseInt(stored, 10) || 0 : 6420);
     };
     read();
-    const onStorage = (e: StorageEvent) => { if (e.key === "simba_points") read(); };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "simba_points") read();
+    };
     window.addEventListener("storage", onStorage);
     const i = setInterval(read, 1500);
-    return () => { window.removeEventListener("storage", onStorage); clearInterval(i); };
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      clearInterval(i);
+    };
   }, []);
 
   // close menus on route change
@@ -76,8 +93,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
     primaryRole === "support"
       ? { to: "/support", label: "Support", icon: Shield }
       : primaryRole === "hotel"
-      ? { to: "/partner", label: "Partner", icon: Building2 }
-      : null;
+        ? { to: "/partner", label: "Partner", icon: Building2 }
+        : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -173,10 +190,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </button>
                 {acctOpen && (
                   <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setAcctOpen(false)}
-                    />
+                    <div className="fixed inset-0 z-40" onClick={() => setAcctOpen(false)} />
                     <div className="absolute right-0 mt-2 w-52 rounded-xl bg-background text-foreground border border-border/60 shadow-xl z-50 overflow-hidden">
                       <Link
                         to="/wallet"
@@ -201,8 +215,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
                           primaryRole === "support"
                             ? "/support"
                             : primaryRole === "hotel"
-                            ? "/operator"
-                            : "/profile"
+                              ? "/operator"
+                              : "/profile"
                         }
                         className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5"
                       >
@@ -210,12 +224,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
                         {primaryRole === "support"
                           ? "Support Console"
                           : primaryRole === "hotel"
-                          ? "Operator Portal"
-                          : "Profile"}
+                            ? "Operator Portal"
+                            : "Profile"}
                       </Link>
                       <div className="h-px bg-border/60" />
                       <button
-                        onClick={() => { setAcctOpen(false); signOut(); }}
+                        onClick={() => {
+                          setAcctOpen(false);
+                          signOut();
+                        }}
                         className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-foreground/5 text-left"
                       >
                         <LogOut className="h-4 w-4" /> Sign Out
@@ -252,9 +269,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm animate-fade-in"
             onClick={() => setDrawerOpen(false)}
           />
-          <aside
-            className="fixed top-0 right-0 bottom-0 z-[70] w-72 max-w-[85vw] bg-background border-l border-border/60 shadow-2xl animate-slide-in-right"
-          >
+          <aside className="fixed top-0 right-0 bottom-0 z-[70] w-72 max-w-[85vw] bg-background border-l border-border/60 shadow-2xl animate-slide-in-right">
             <div
               className="flex items-center justify-between px-5 py-4 text-white"
               style={{ background: NAV_BG }}
@@ -304,8 +319,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <MaasaiDivider className="mb-6" />
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <p>
-              <span className="font-display text-foreground">SAFARI</span> · Built in
-              Nairobi · Powered by Wildlife Intelligence™
+              <span className="font-display text-foreground">SAFARI</span> · Built in Nairobi ·
+              Powered by Wildlife Intelligence™
             </p>
             <ul className="flex flex-wrap items-center gap-4">
               {footerLinks.map((l) => (

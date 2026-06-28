@@ -5,7 +5,17 @@ import { Shell } from "@/components/safari/Shell";
 import { RoleGuard } from "@/components/safari/RoleGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Loader2, BedDouble, Star, LifeBuoy, Send, MapPin, Trash2, Sparkles, BookOpen } from "lucide-react";
+import {
+  Loader2,
+  BedDouble,
+  Star,
+  LifeBuoy,
+  Send,
+  MapPin,
+  Trash2,
+  Sparkles,
+  BookOpen,
+} from "lucide-react";
 import { toast } from "sonner";
 import { generateTripSummary, getTripSummary } from "@/lib/wis.functions";
 
@@ -23,10 +33,37 @@ export const Route = createFileRoute("/profile")({
   ),
 });
 
-type Booking = { id: string; hotel_name: string; check_in: string; check_out: string; guests: number; total_price: number; status: string };
-type Review = { id: string; hotel_id: string; rating: number; comment: string | null; created_at: string };
-type Ticket = { id: string; subject: string; message: string; status: string; priority: string; created_at: string };
-type Itinerary = { id: string; title: string; total_cost: number; duration_days: number; created_at: string };
+type Booking = {
+  id: string;
+  hotel_name: string;
+  check_in: string;
+  check_out: string;
+  guests: number;
+  total_price: number;
+  status: string;
+};
+type Review = {
+  id: string;
+  hotel_id: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+};
+type Ticket = {
+  id: string;
+  subject: string;
+  message: string;
+  status: string;
+  priority: string;
+  created_at: string;
+};
+type Itinerary = {
+  id: string;
+  title: string;
+  total_cost: number;
+  duration_days: number;
+  created_at: string;
+};
 
 const tiers = [
   { name: "Cub", min: 0, color: "var(--forest)" },
@@ -35,8 +72,21 @@ const tiers = [
   { name: "Legend", min: 15000, color: "var(--charcoal)" },
 ];
 
-type PayBooking = { id: string; trip_id: string; guests: number; total_amount: number; currency: string; status: string; created_at: string };
-type TripSummary = { id: string; booking_id: string; narrative: string; top_moments: Array<{ title: string; why: string; rarity_score: number }> };
+type PayBooking = {
+  id: string;
+  trip_id: string;
+  guests: number;
+  total_amount: number;
+  currency: string;
+  status: string;
+  created_at: string;
+};
+type TripSummary = {
+  id: string;
+  booking_id: string;
+  narrative: string;
+  top_moments: Array<{ title: string; why: string; rarity_score: number }>;
+};
 
 function ProfilePage() {
   const { user, roles } = useAuth();
@@ -52,7 +102,11 @@ function ProfilePage() {
   const [ticketSubj, setTicketSubj] = useState("");
   const [ticketMsg, setTicketMsg] = useState("");
   const [points] = useState(() => {
-    try { return Number(localStorage.getItem("simba-points") || 6420); } catch { return 6420; }
+    try {
+      return Number(localStorage.getItem("simba-points") || 6420);
+    } catch {
+      return 6420;
+    }
   });
 
   const genSummary = useServerFn(generateTripSummary);
@@ -63,12 +117,32 @@ function ProfilePage() {
   const reload = async () => {
     if (!user) return;
     const [b, r, t, i, p, pb] = await Promise.all([
-      supabase.from("bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.from("reviews").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.from("support_tickets").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
-      supabase.from("itineraries").select("id,title,total_cost,duration_days,created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase
+        .from("bookings")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("reviews")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("support_tickets")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("itineraries")
+        .select("id,title,total_cost,duration_days,created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
       supabase.from("profiles").select("name").eq("id", user.id).maybeSingle(),
-      supabase.from("pay_bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase
+        .from("pay_bookings")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
     ]);
     setBookings((b.data as Booking[]) || []);
     setReviews((r.data as Review[]) || []);
@@ -82,12 +156,16 @@ function ProfilePage() {
     const ids = (pb.data ?? []).map((x) => x.id);
     if (ids.length) {
       const out: Record<string, TripSummary> = {};
-      await Promise.all(ids.map(async (id) => {
-        try {
-          const res = await fetchSummary({ data: { bookingId: id } });
-          if (res.summary) out[id] = res.summary as unknown as TripSummary;
-        } catch { /* ignore */ }
-      }));
+      await Promise.all(
+        ids.map(async (id) => {
+          try {
+            const res = await fetchSummary({ data: { bookingId: id } });
+            if (res.summary) out[id] = res.summary as unknown as TripSummary;
+          } catch {
+            /* ignore */
+          }
+        }),
+      );
       setSummaries(out);
     }
   };
@@ -108,7 +186,9 @@ function ProfilePage() {
     }
   };
 
-  useEffect(() => { reload(); }, [user]);
+  useEffect(() => {
+    reload();
+  }, [user]);
 
   const submitTicket = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +201,8 @@ function ProfilePage() {
     if (error) toast.error(error.message);
     else {
       toast.success("Asante — your ticket has been submitted.");
-      setTicketSubj(""); setTicketMsg("");
+      setTicketSubj("");
+      setTicketMsg("");
       reload();
     }
   };
@@ -134,7 +215,9 @@ function ProfilePage() {
   if (loading) {
     return (
       <Shell>
-        <div className="grid place-items-center py-24"><Loader2 className="h-6 w-6 animate-spin" /></div>
+        <div className="grid place-items-center py-24">
+          <Loader2 className="h-6 w-6 animate-spin" />
+        </div>
       </Shell>
     );
   }
@@ -164,7 +247,10 @@ function ProfilePage() {
                   {points.toLocaleString()} Simba pts
                 </span>
                 {roles.map((r) => (
-                  <span key={r} className="text-[10px] uppercase px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground font-semibold tracking-wider">
+                  <span
+                    key={r}
+                    className="text-[10px] uppercase px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground font-semibold tracking-wider"
+                  >
                     {r}
                   </span>
                 ))}
@@ -177,7 +263,11 @@ function ProfilePage() {
           <Stat label="Bookings" value={bookings.length} />
           <Stat label="Itineraries" value={itineraries.length} />
           <Stat label="Reviews" value={reviews.length} />
-          <Stat label="Open tickets" value={tickets.filter(t => t.status === "open").length} accent />
+          <Stat
+            label="Open tickets"
+            value={tickets.filter((t) => t.status === "open").length}
+            accent
+          />
         </div>
 
         {/* Itineraries */}
@@ -186,21 +276,35 @@ function ProfilePage() {
             <h2 className="font-display text-xl font-bold flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-[var(--gold)]" /> My AI itineraries
             </h2>
-            <Link to="/plan" className="text-xs text-[var(--maasai)] font-semibold hover:underline">Plan new →</Link>
+            <Link to="/plan" className="text-xs text-[var(--maasai)] font-semibold hover:underline">
+              Plan new →
+            </Link>
           </div>
           {itineraries.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No itineraries yet. <Link to="/plan" className="underline">Plan one now</Link>.</p>
+            <p className="text-sm text-muted-foreground">
+              No itineraries yet.{" "}
+              <Link to="/plan" className="underline">
+                Plan one now
+              </Link>
+              .
+            </p>
           ) : (
             <div className="space-y-2">
               {itineraries.map((i) => (
-                <div key={i.id} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border/50">
+                <div
+                  key={i.id}
+                  className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border/50"
+                >
                   <div className="min-w-0">
                     <p className="font-semibold truncate">{i.title}</p>
                     <p className="text-xs text-muted-foreground">
                       {i.duration_days} days · KSh {Number(i.total_cost).toLocaleString()}
                     </p>
                   </div>
-                  <button onClick={() => deleteItinerary(i.id)} className="text-[var(--maasai)] p-1.5">
+                  <button
+                    onClick={() => deleteItinerary(i.id)}
+                    className="text-[var(--maasai)] p-1.5"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
@@ -215,10 +319,17 @@ function ProfilePage() {
             <h2 className="font-display text-xl font-bold flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-[var(--gold)]" /> Trip Reflections
             </h2>
-            <Link to="/journal" className="text-xs text-[var(--maasai)] font-semibold hover:underline">Journal →</Link>
+            <Link
+              to="/journal"
+              className="text-xs text-[var(--maasai)] font-semibold hover:underline"
+            >
+              Journal →
+            </Link>
           </div>
           {payBookings.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No safari trips yet. Reflections appear here after booking.</p>
+            <p className="text-sm text-muted-foreground">
+              No safari trips yet. Reflections appear here after booking.
+            </p>
           ) : (
             <div className="space-y-3">
               {payBookings.map((b) => {
@@ -227,15 +338,24 @@ function ProfilePage() {
                   <div key={b.id} className="p-4 rounded-xl border border-border/50">
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <div className="min-w-0">
-                        <p className="font-semibold text-sm">Trip · {b.guests} guest{b.guests > 1 ? "s" : ""} · {b.currency} {Number(b.total_amount).toLocaleString()}</p>
-                        <p className="text-[11px] text-muted-foreground">{new Date(b.created_at).toLocaleDateString()} · {b.status}</p>
+                        <p className="font-semibold text-sm">
+                          Trip · {b.guests} guest{b.guests > 1 ? "s" : ""} · {b.currency}{" "}
+                          {Number(b.total_amount).toLocaleString()}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {new Date(b.created_at).toLocaleDateString()} · {b.status}
+                        </p>
                       </div>
                       <button
                         onClick={() => handleGenerate(b.id)}
                         disabled={summarizing === b.id}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold disabled:opacity-60"
                       >
-                        {summarizing === b.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        {summarizing === b.id ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <Sparkles className="h-3 w-3" />
+                        )}
                         {s ? "Regenerate" : "Generate Top 5"}
                       </button>
                     </div>
@@ -244,12 +364,23 @@ function ProfilePage() {
                         <ol className="space-y-1.5 text-sm">
                           {s.top_moments?.slice(0, 5).map((m, idx) => (
                             <li key={idx} className="flex gap-2">
-                              <span className="font-mono text-[var(--gold)] font-bold">{idx + 1}.</span>
-                              <span><strong>{m.title}</strong> <span className="text-xs text-muted-foreground">· rarity {m.rarity_score}/10</span><br /><span className="text-xs text-foreground/80">{m.why}</span></span>
+                              <span className="font-mono text-[var(--gold)] font-bold">
+                                {idx + 1}.
+                              </span>
+                              <span>
+                                <strong>{m.title}</strong>{" "}
+                                <span className="text-xs text-muted-foreground">
+                                  · rarity {m.rarity_score}/10
+                                </span>
+                                <br />
+                                <span className="text-xs text-foreground/80">{m.why}</span>
+                              </span>
                             </li>
                           ))}
                         </ol>
-                        <p className="mt-3 font-serif text-[14px] leading-relaxed text-foreground/95 italic">"{s.narrative}"</p>
+                        <p className="mt-3 font-serif text-[14px] leading-relaxed text-foreground/95 italic">
+                          "{s.narrative}"
+                        </p>
                       </div>
                     )}
                   </div>
@@ -259,19 +390,26 @@ function ProfilePage() {
           )}
         </section>
 
-
-
         {/* Bookings */}
         <section className="glass rounded-2xl p-6">
           <h2 className="font-display text-xl font-bold mb-3 flex items-center gap-2">
             <BedDouble className="h-5 w-5" /> My bookings
           </h2>
           {bookings.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No bookings yet. <Link to="/hotels" className="underline">Browse hotels</Link>.</p>
+            <p className="text-sm text-muted-foreground">
+              No bookings yet.{" "}
+              <Link to="/hotels" className="underline">
+                Browse hotels
+              </Link>
+              .
+            </p>
           ) : (
             <div className="space-y-2">
               {bookings.map((b) => (
-                <div key={b.id} className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border/50">
+                <div
+                  key={b.id}
+                  className="flex items-center justify-between gap-3 p-3 rounded-xl border border-border/50"
+                >
                   <div className="min-w-0">
                     <p className="font-semibold truncate">{b.hotel_name}</p>
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -288,8 +426,8 @@ function ProfilePage() {
                         b.status === "confirmed"
                           ? "bg-[var(--forest)]/15 text-[var(--forest)]"
                           : b.status === "cancelled"
-                          ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
-                          : "bg-[var(--gold)]/15 text-[var(--gold)]"
+                            ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
+                            : "bg-[var(--gold)]/15 text-[var(--gold)]"
                       }`}
                     >
                       {b.status}
@@ -366,8 +504,8 @@ function ProfilePage() {
                         t.status === "resolved"
                           ? "bg-[var(--forest)]/15 text-[var(--forest)]"
                           : t.status === "open"
-                          ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
-                          : "bg-[var(--gold)]/15 text-[var(--gold)]"
+                            ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
+                            : "bg-[var(--gold)]/15 text-[var(--gold)]"
                       }`}
                     >
                       {t.status}

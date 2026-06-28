@@ -106,9 +106,7 @@ function SimbaPage() {
                         }}
                       />
                       <span
-                        className={
-                          i <= currentTierIdx ? "font-semibold" : "text-muted-foreground"
-                        }
+                        className={i <= currentTierIdx ? "font-semibold" : "text-muted-foreground"}
                       >
                         {t.name}
                       </span>
@@ -151,9 +149,7 @@ function SimbaPage() {
                 </div>
                 <div className="p-4 flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">Adoption tier</span>
-                  <span className="text-sm font-bold text-[var(--gold)]">
-                    {a.points} pts/yr
-                  </span>
+                  <span className="text-sm font-bold text-[var(--gold)]">{a.points} pts/yr</span>
                 </div>
               </article>
             ))}

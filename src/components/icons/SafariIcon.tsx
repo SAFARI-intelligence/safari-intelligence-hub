@@ -57,10 +57,7 @@ export function SafariIcon({
 
   if (tone === "premium") {
     return (
-      <span
-        className="relative inline-grid place-items-center"
-        style={{ width: px, height: px }}
-      >
+      <span className="relative inline-grid place-items-center" style={{ width: px, height: px }}>
         <span
           aria-hidden
           className="absolute inset-0 rounded-full"

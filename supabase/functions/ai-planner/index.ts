@@ -23,7 +23,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
+      { global: { headers: { Authorization: authHeader } } },
     );
     const { data: userData, error: userErr } = await supabase.auth.getUser();
     if (userErr || !userData?.user) {
@@ -33,8 +33,13 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { destinations = [], duration = 5, budget = "Mid-range", interests = [], groupSize = 2 } =
-      await req.json().catch(() => ({}));
+    const {
+      destinations = [],
+      duration = 5,
+      budget = "Mid-range",
+      interests = [],
+      groupSize = 2,
+    } = await req.json().catch(() => ({}));
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -58,7 +63,10 @@ Return strict JSON: { "title": string, "summary": string, "totalCost": number (K
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
         messages: [
-          { role: "system", content: "You are a Kenyan safari planner. Respond with ONLY valid JSON, no prose." },
+          {
+            role: "system",
+            content: "You are a Kenyan safari planner. Respond with ONLY valid JSON, no prose.",
+          },
           { role: "user", content: prompt },
         ],
       }),

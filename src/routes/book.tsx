@@ -44,7 +44,9 @@ function BookPage() {
           <label className="flex items-center gap-3 px-4 py-3 rounded-xl bg-background/60 border border-border/60">
             <Calendar className="h-4 w-4 text-[var(--gold)]" />
             <div className="flex-1">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Departure</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                Departure
+              </div>
               <input
                 type="date"
                 value={departure}
@@ -56,20 +58,36 @@ function BookPage() {
           <label className="flex items-center gap-3 px-4 py-3 rounded-xl bg-background/60 border border-border/60">
             <Users className="h-4 w-4 text-[var(--maasai)]" />
             <div className="flex-1">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Travelers</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                Travelers
+              </div>
               <div className="flex items-center gap-3">
-                <button onClick={() => setTravelers(Math.max(1, travelers - 1))} className="grid h-6 w-6 place-items-center rounded bg-foreground/5">−</button>
+                <button
+                  onClick={() => setTravelers(Math.max(1, travelers - 1))}
+                  className="grid h-6 w-6 place-items-center rounded bg-foreground/5"
+                >
+                  −
+                </button>
                 <span className="text-sm font-semibold">{travelers}</span>
-                <button onClick={() => setTravelers(travelers + 1)} className="grid h-6 w-6 place-items-center rounded bg-foreground/5">+</button>
+                <button
+                  onClick={() => setTravelers(travelers + 1)}
+                  className="grid h-6 w-6 place-items-center rounded bg-foreground/5"
+                >
+                  +
+                </button>
               </div>
             </div>
           </label>
           <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-[var(--gold)]/15 to-[var(--maasai)]/15 border border-[var(--gold)]/30">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Currency</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                Currency
+              </div>
               <div className="text-sm font-semibold">KSh (Kenyan Shilling)</div>
             </div>
-            <span className="text-xs px-2 py-1 rounded-full bg-[var(--forest)] text-white font-bold">Best rate</span>
+            <span className="text-xs px-2 py-1 rounded-full bg-[var(--forest)] text-white font-bold">
+              Best rate
+            </span>
           </div>
         </div>
 
@@ -85,13 +103,18 @@ function BookPage() {
                 className="group glass rounded-2xl overflow-hidden flex flex-col"
               >
                 <div className="relative h-52 overflow-hidden">
-                  <img src={p.image} alt={p.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
                   <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[10px] font-medium">
                     {p.country} · {p.days}D
                   </div>
                   <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--gold)] text-[var(--gold-foreground)] text-[11px] font-bold">
-                    <Star className="h-3 w-3 fill-current" />{p.rating}
+                    <Star className="h-3 w-3 fill-current" />
+                    {p.rating}
                   </div>
                   <div className="absolute bottom-3 left-3 right-3 text-white">
                     <h3 className="font-display text-2xl font-bold leading-tight">{p.title}</h3>
@@ -112,8 +135,12 @@ function BookPage() {
                         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                           {travelers} traveler{travelers > 1 ? "s" : ""}
                         </div>
-                        <div className="font-display text-2xl font-bold">KSh {total.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">≈ ${(p.priceUsd * travelers).toLocaleString()} USD</div>
+                        <div className="font-display text-2xl font-bold">
+                          KSh {total.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          ≈ ${(p.priceUsd * travelers).toLocaleString()} USD
+                        </div>
                       </div>
                       <button
                         onClick={() => setActivePkg(p)}
@@ -131,7 +158,10 @@ function BookPage() {
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
-          Need help? <Link to="/support" className="underline">Talk to our team</Link>
+          Need help?{" "}
+          <Link to="/support" className="underline">
+            Talk to our team
+          </Link>
         </p>
       </div>
 

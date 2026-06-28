@@ -25,5 +25,5 @@ export const Acacia = forwardRef<SVGSVGElement, SVGProps<SVGSVGElement>>(
         <path d="M7.5 21h9" />
       </svg>
     );
-  }
+  },
 );

@@ -39,7 +39,11 @@ function Dashboard() {
     if (!user) return;
     (async () => {
       const [w, b, t] = await Promise.all([
-        supabase.from("pay_wallets").select("trip_balance,flex_balance,currency").eq("user_id", user.id).maybeSingle(),
+        supabase
+          .from("pay_wallets")
+          .select("trip_balance,flex_balance,currency")
+          .eq("user_id", user.id)
+          .maybeSingle(),
         supabase
           .from("pay_bookings")
           .select("id,total_amount,currency,status,created_at,trip:pay_trips(title,start_date)")
@@ -188,7 +192,11 @@ function Dashboard() {
               </thead>
               <tbody>
                 {tx.map((t) => (
-                  <tr key={t.id} className="border-t" style={{ borderColor: "rgba(26,60,46,0.08)" }}>
+                  <tr
+                    key={t.id}
+                    className="border-t"
+                    style={{ borderColor: "rgba(26,60,46,0.08)" }}
+                  >
                     <td className="px-4 py-2.5 text-stone-600">
                       {new Date(t.created_at).toLocaleDateString()}
                     </td>
@@ -293,7 +301,10 @@ function SectionHeader({
         {title}
       </h2>
       {linkTo && (
-        <Link to={linkTo} className="text-[12px] text-stone-600 hover:text-[#1A3C2E] underline-offset-4 hover:underline">
+        <Link
+          to={linkTo}
+          className="text-[12px] text-stone-600 hover:text-[#1A3C2E] underline-offset-4 hover:underline"
+        >
           {linkLabel}
         </Link>
       )}

@@ -10,9 +10,15 @@ export const Route = createFileRoute("/hotels")({
   head: () => ({
     meta: [
       { title: "Hotels & Villas · SAFARI" },
-      { name: "description", content: "Browse premium safari lodges, tented camps and villas across East Africa." },
+      {
+        name: "description",
+        content: "Browse premium safari lodges, tented camps and villas across East Africa.",
+      },
       { property: "og:title", content: "SAFARI — Hotels & Villas" },
-      { property: "og:description", content: "Hand-picked stays inside Maasai Mara, Serengeti, Bwindi & more." },
+      {
+        property: "og:description",
+        content: "Hand-picked stays inside Maasai Mara, Serengeti, Bwindi & more.",
+      },
     ],
   }),
   component: HotelsPage,
@@ -63,7 +69,7 @@ function HotelsPage() {
       (country === "all" || h.country === country) &&
       (q === "" ||
         h.name.toLowerCase().includes(q.toLowerCase()) ||
-        (h.park || "").toLowerCase().includes(q.toLowerCase()))
+        (h.park || "").toLowerCase().includes(q.toLowerCase())),
   );
 
   return (
@@ -116,7 +122,10 @@ function HotelsPage() {
             <p className="font-display text-lg">No hotels yet</p>
             <p className="text-sm text-muted-foreground mt-1">
               Hotel partners haven't published any listings.{" "}
-              <Link to="/auth" className="underline">Become a partner</Link>.
+              <Link to="/auth" className="underline">
+                Become a partner
+              </Link>
+              .
             </p>
           </div>
         ) : (

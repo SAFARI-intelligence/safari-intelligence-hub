@@ -24,11 +24,51 @@ type Tx = {
 };
 
 const mockTx: Tx[] = [
-  { id: "TX-1A2B", date: "2026-05-04", description: "Maasai Mara Classic — Booking", type: "PAYMENT", provider: "M-Pesa", amount: -179000, status: "SUCCESS" },
-  { id: "TX-1A2C", date: "2026-05-03", description: "Hot-air balloon add-on", type: "ADD-ON", provider: "Stripe", amount: -28500, status: "SUCCESS" },
-  { id: "TX-1A2D", date: "2026-04-28", description: "Top-up — Flex Wallet", type: "PAYMENT", provider: "M-Pesa", amount: -15000, status: "PENDING" },
-  { id: "TX-1A2E", date: "2026-04-19", description: "Cancellation refund — Diani", type: "REFUND", provider: "Stripe", amount: 42000, status: "SUCCESS" },
-  { id: "TX-1A2F", date: "2026-04-10", description: "Sundowner upgrade", type: "ADD-ON", provider: "M-Pesa", amount: -7500, status: "FAILED" },
+  {
+    id: "TX-1A2B",
+    date: "2026-05-04",
+    description: "Maasai Mara Classic — Booking",
+    type: "PAYMENT",
+    provider: "M-Pesa",
+    amount: -179000,
+    status: "SUCCESS",
+  },
+  {
+    id: "TX-1A2C",
+    date: "2026-05-03",
+    description: "Hot-air balloon add-on",
+    type: "ADD-ON",
+    provider: "Stripe",
+    amount: -28500,
+    status: "SUCCESS",
+  },
+  {
+    id: "TX-1A2D",
+    date: "2026-04-28",
+    description: "Top-up — Flex Wallet",
+    type: "PAYMENT",
+    provider: "M-Pesa",
+    amount: -15000,
+    status: "PENDING",
+  },
+  {
+    id: "TX-1A2E",
+    date: "2026-04-19",
+    description: "Cancellation refund — Diani",
+    type: "REFUND",
+    provider: "Stripe",
+    amount: 42000,
+    status: "SUCCESS",
+  },
+  {
+    id: "TX-1A2F",
+    date: "2026-04-10",
+    description: "Sundowner upgrade",
+    type: "ADD-ON",
+    provider: "M-Pesa",
+    amount: -7500,
+    status: "FAILED",
+  },
 ];
 
 const typeBadge: Record<Tx["type"], string> = {
@@ -73,7 +113,10 @@ function WalletPage() {
     <Shell>
       <div className="mx-auto max-w-7xl space-y-8">
         <header>
-          <span className="text-xs uppercase tracking-[0.18em] font-semibold" style={{ color: "#C9922A" }}>
+          <span
+            className="text-xs uppercase tracking-[0.18em] font-semibold"
+            style={{ color: "#C9922A" }}
+          >
             Mfuko Wangu
           </span>
           <h1 className="font-display text-4xl sm:text-5xl font-bold mt-2">My Wallet</h1>
@@ -90,7 +133,9 @@ function WalletPage() {
           >
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] opacity-90">Simba Points</div>
+                <div className="text-[10px] uppercase tracking-[0.18em] opacity-90">
+                  Simba Points
+                </div>
                 <div className="font-display text-4xl sm:text-5xl font-bold mt-2 tabular-nums">
                   {points.toLocaleString()}
                 </div>
@@ -104,18 +149,24 @@ function WalletPage() {
           </Link>
 
           {/* Trip Wallet */}
-          <div className="relative rounded-3xl p-6 sm:p-7 text-white overflow-hidden" style={{ background: "linear-gradient(135deg, #1A3C2E, #0E261C)" }}>
+          <div
+            className="relative rounded-3xl p-6 sm:p-7 text-white overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #1A3C2E, #0E261C)" }}
+          >
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] opacity-80">Trip Wallet</div>
-                <div className="font-display text-4xl sm:text-5xl font-bold mt-2">
-                  KSh 179,000
+                <div className="text-[10px] uppercase tracking-[0.18em] opacity-80">
+                  Trip Wallet
                 </div>
+                <div className="font-display text-4xl sm:text-5xl font-bold mt-2">KSh 179,000</div>
                 <div className="text-xs opacity-80 mt-2">
                   Held for: Maasai Mara Classic · Jun 12–15
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold" style={{ background: "#C9922A", color: "#0D0D0D" }}>
+              <span
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold"
+                style={{ background: "#C9922A", color: "#0D0D0D" }}
+              >
                 <Lock className="h-3 w-3" /> LOCKED
               </span>
             </div>
@@ -129,10 +180,10 @@ function WalletPage() {
           <div className="relative rounded-3xl p-6 sm:p-7 overflow-hidden border border-border/60 bg-background">
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Flex Wallet</div>
-                <div className="font-display text-4xl sm:text-5xl font-bold mt-2">
-                  KSh 12,500
+                <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Flex Wallet
                 </div>
+                <div className="font-display text-4xl sm:text-5xl font-bold mt-2">KSh 12,500</div>
                 <div className="text-xs text-muted-foreground mt-2">
                   Available for add-ons and extras
                 </div>
@@ -141,7 +192,10 @@ function WalletPage() {
                 AVAILABLE
               </span>
             </div>
-            <button className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-sm" style={{ background: "#1A3C2E", color: "#C9922A" }}>
+            <button
+              className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-semibold text-sm"
+              style={{ background: "#1A3C2E", color: "#C9922A" }}
+            >
               <Plus className="h-4 w-4" /> Top Up
             </button>
           </div>
@@ -160,9 +214,19 @@ function WalletPage() {
             <option value="ADD-ON">Add-On</option>
             <option value="PAYOUT">Payout</option>
           </select>
-          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="px-3 py-2 rounded-lg border border-border/60 bg-background text-sm" />
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="px-3 py-2 rounded-lg border border-border/60 bg-background text-sm"
+          />
           <span className="text-muted-foreground text-xs">to</span>
-          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="px-3 py-2 rounded-lg border border-border/60 bg-background text-sm" />
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="px-3 py-2 rounded-lg border border-border/60 bg-background text-sm"
+          />
           <div className="flex p-1 rounded-lg bg-foreground/5 ml-auto">
             {(["all", "M-Pesa", "Stripe"] as const).map((p) => (
               <button
@@ -183,7 +247,11 @@ function WalletPage() {
           {filtered.length === 0 ? (
             <div className="p-10 text-center">
               <p className="text-muted-foreground text-sm">
-                No transactions yet — <Link to="/book" className="underline">book your first safari</Link> to get started.
+                No transactions yet —{" "}
+                <Link to="/book" className="underline">
+                  book your first safari
+                </Link>{" "}
+                to get started.
               </p>
             </div>
           ) : (
@@ -202,23 +270,33 @@ function WalletPage() {
                 <tbody>
                   {filtered.map((t) => (
                     <tr key={t.id} className="border-t border-border/60 hover:bg-foreground/[0.02]">
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{t.date}</td>
+                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                        {t.date}
+                      </td>
                       <td className="px-4 py-3 font-medium">{t.description}</td>
                       <td className="px-4 py-3">
-                        <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${typeBadge[t.type]}`}>
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${typeBadge[t.type]}`}
+                        >
                           {t.type}
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${providerBadge[t.provider]}`}>
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${providerBadge[t.provider]}`}
+                        >
                           {t.provider}
                         </span>
                       </td>
-                      <td className={`px-4 py-3 text-right font-mono font-semibold ${t.amount < 0 ? "text-foreground" : "text-[#1D9E75]"}`}>
+                      <td
+                        className={`px-4 py-3 text-right font-mono font-semibold ${t.amount < 0 ? "text-foreground" : "text-[#1D9E75]"}`}
+                      >
                         {t.amount < 0 ? "−" : "+"}KSh {Math.abs(t.amount).toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${statusBadge[t.status]}`}>
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${statusBadge[t.status]}`}
+                        >
                           {t.status}
                         </span>
                       </td>

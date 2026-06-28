@@ -14,7 +14,8 @@ export const Route = createFileRoute("/plan")({
       { title: "AI Travel Planner · SAFARI" },
       {
         name: "description",
-        content: "Craft a bespoke East African safari itinerary in seconds with SAFARI AI — day-by-day, priced in KSh, rooted in Kenyan soul.",
+        content:
+          "Craft a bespoke East African safari itinerary in seconds with SAFARI AI — day-by-day, priced in KSh, rooted in Kenyan soul.",
       },
       { property: "og:title", content: "AI Travel Planner · SAFARI" },
       { property: "og:description", content: "Bespoke safari itineraries. Intelligent. Kenyan." },
@@ -40,8 +41,27 @@ type Itinerary = {
   days: Day[];
 };
 
-const allDestinations = ["Maasai Mara", "Amboseli", "Tsavo", "Samburu", "Diani Beach", "Lamu", "Serengeti", "Bwindi", "Ngorongoro"];
-const allInterests = ["Big Five", "Birding", "Culture", "Photography", "Conservation", "Beach", "Hiking", "Gorilla trekking"];
+const allDestinations = [
+  "Maasai Mara",
+  "Amboseli",
+  "Tsavo",
+  "Samburu",
+  "Diani Beach",
+  "Lamu",
+  "Serengeti",
+  "Bwindi",
+  "Ngorongoro",
+];
+const allInterests = [
+  "Big Five",
+  "Birding",
+  "Culture",
+  "Photography",
+  "Conservation",
+  "Beach",
+  "Hiking",
+  "Gorilla trekking",
+];
 const budgets = ["Budget", "Mid-range", "Luxury", "Ultra-luxury"];
 
 function PlanPage() {
@@ -119,7 +139,8 @@ function PlanPage() {
               </span>
             </h1>
             <p className="mt-4 text-white/85 max-w-xl">
-              Tell us your dream, and our AI crafts a day-by-day itinerary — priced in KSh, rooted in conservation, woven with Kenyan soul.
+              Tell us your dream, and our AI crafts a day-by-day itinerary — priced in KSh, rooted
+              in conservation, woven with Kenyan soul.
             </p>
           </div>
         </section>
@@ -230,9 +251,13 @@ function PlanPage() {
               className="shimmer w-full py-3 rounded-xl bg-gradient-to-r from-[var(--gold)] to-[var(--maasai)] text-white font-semibold shadow-[var(--shadow-glow-gold)] flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? (
-                <><Loader2 className="h-4 w-4 animate-spin" /> Crafting your safari…</>
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Crafting your safari…
+                </>
               ) : (
-                <><Sparkles className="h-4 w-4" /> Generate itinerary</>
+                <>
+                  <Sparkles className="h-4 w-4" /> Generate itinerary
+                </>
               )}
             </button>
           </div>
@@ -268,7 +293,8 @@ function PlanPage() {
                   <div className="text-5xl mb-3">🦁</div>
                   <h3 className="font-display text-2xl font-bold">Your itinerary appears here</h3>
                   <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
-                    Select your destinations, duration, budget, and interests — then hit generate to see SAFARI AI at work.
+                    Select your destinations, duration, budget, and interests — then hit generate to
+                    see SAFARI AI at work.
                   </p>
                 </motion.div>
               )}
@@ -343,7 +369,8 @@ function PlanPage() {
                             ))}
                           </ul>
                           <div className="text-xs text-muted-foreground">
-                            <span className="font-semibold">Stay: </span>{d.accommodation}
+                            <span className="font-semibold">Stay: </span>
+                            {d.accommodation}
                           </div>
                           <div className="mt-2 flex items-start gap-1.5 text-[11px] p-2 rounded-lg bg-[var(--forest)]/10 text-[var(--forest)]">
                             <Leaf className="h-3 w-3 mt-0.5 flex-shrink-0" />

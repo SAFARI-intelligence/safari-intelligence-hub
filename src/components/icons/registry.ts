@@ -1,10 +1,28 @@
 import {
-  Home, Compass, Luggage, Ticket, User,
-  Map, MapPin, Mountain,
-  Calendar, Wallet, CreditCard, Receipt,
-  MessageCircle, Bell, Heart, Share2,
-  Sparkles, Lightbulb, BarChart3,
-  Search, SlidersHorizontal, Settings, Menu, ArrowLeft,
+  Home,
+  Compass,
+  Luggage,
+  Ticket,
+  User,
+  Map,
+  MapPin,
+  Mountain,
+  Calendar,
+  Wallet,
+  CreditCard,
+  Receipt,
+  MessageCircle,
+  Bell,
+  Heart,
+  Share2,
+  Sparkles,
+  Lightbulb,
+  BarChart3,
+  Search,
+  SlidersHorizontal,
+  Settings,
+  Menu,
+  ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
 import { Jeep } from "./custom/Jeep";
@@ -14,7 +32,11 @@ import { Tent } from "./custom/Tent";
 export type IconCategory = "nav" | "travel" | "booking" | "social" | "ai" | "utility";
 
 export type IconDef = {
-  Component: LucideIcon | React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement> & React.RefAttributes<SVGSVGElement>>;
+  Component:
+    | LucideIcon
+    | React.ForwardRefExoticComponent<
+        React.SVGProps<SVGSVGElement> & React.RefAttributes<SVGSVGElement>
+      >;
   category: IconCategory;
   /** True for custom SAFARI brand icons. */
   custom?: boolean;

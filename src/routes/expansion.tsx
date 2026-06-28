@@ -45,8 +45,8 @@ function ExpansionPage() {
             One Safari, All of East Africa
           </h1>
           <p className="text-muted-foreground mt-2 max-w-2xl">
-            From Maasai Mara to Bwindi — a single platform unifying tourism across the East
-            African Community.
+            From Maasai Mara to Bwindi — a single platform unifying tourism across the East African
+            Community.
           </p>
         </header>
 
@@ -123,7 +123,13 @@ function ExpansionPage() {
                       cx={pos.x}
                       cy={pos.y}
                       r="6"
-                      fill={isLive ? "var(--maasai)" : c.status === "soon" ? "var(--gold)" : "var(--muted-foreground)"}
+                      fill={
+                        isLive
+                          ? "var(--maasai)"
+                          : c.status === "soon"
+                            ? "var(--gold)"
+                            : "var(--muted-foreground)"
+                      }
                       stroke="white"
                       strokeWidth="2"
                     />

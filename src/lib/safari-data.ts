@@ -286,7 +286,10 @@ export const packages: Package[] = [
 export const swahiliProverbs = [
   { sw: "Haraka haraka haina baraka", en: "Hurry has no blessing" },
   { sw: "Pole pole ndio mwendo", en: "Slow and steady is the way" },
-  { sw: "Asiyefunzwa na mamaye hufunzwa na ulimwengu", en: "Who is not taught by mother is taught by the world" },
+  {
+    sw: "Asiyefunzwa na mamaye hufunzwa na ulimwengu",
+    en: "Who is not taught by mother is taught by the world",
+  },
   { sw: "Haba na haba hujaza kibaba", en: "Little by little fills the measure" },
   { sw: "Umoja ni nguvu, utengano ni udhaifu", en: "Unity is strength, division is weakness" },
 ];
@@ -307,8 +310,22 @@ export const tiers: Tier[] = [
 
 export const adoptions = [
   { id: "a1", name: "Zuri", species: "Cheetah", age: "3 yrs", image: cheetahImg, points: 800 },
-  { id: "a2", name: "Tembo Jr.", species: "Elephant calf", age: "2 yrs", image: elephantsImg, points: 1200 },
-  { id: "a3", name: "Makara", species: "Silverback", age: "22 yrs", image: gorillaImg, points: 2500 },
+  {
+    id: "a2",
+    name: "Tembo Jr.",
+    species: "Elephant calf",
+    age: "2 yrs",
+    image: elephantsImg,
+    points: 1200,
+  },
+  {
+    id: "a3",
+    name: "Makara",
+    species: "Silverback",
+    age: "22 yrs",
+    image: gorillaImg,
+    points: 2500,
+  },
 ];
 
 export const badges = [
@@ -338,18 +355,81 @@ export type Listing = {
 };
 
 export const listings: Listing[] = [
-  { id: "L-01", name: "Mara Sunrise Camp", type: "Lodge", status: "active", bookings: 42, revenue: 1_280_000 },
-  { id: "L-02", name: "Serengeti Balloon Tour", type: "Activity", status: "active", bookings: 28, revenue: 840_000 },
-  { id: "L-03", name: "Gorilla Trek 4D", type: "Package", status: "active", bookings: 15, revenue: 2_240_000 },
-  { id: "L-04", name: "Coast & Bush 7D", type: "Package", status: "paused", bookings: 8, revenue: 920_000 },
-  { id: "L-05", name: "Naivasha Boat Safari", type: "Activity", status: "draft", bookings: 0, revenue: 0 },
+  {
+    id: "L-01",
+    name: "Mara Sunrise Camp",
+    type: "Lodge",
+    status: "active",
+    bookings: 42,
+    revenue: 1_280_000,
+  },
+  {
+    id: "L-02",
+    name: "Serengeti Balloon Tour",
+    type: "Activity",
+    status: "active",
+    bookings: 28,
+    revenue: 840_000,
+  },
+  {
+    id: "L-03",
+    name: "Gorilla Trek 4D",
+    type: "Package",
+    status: "active",
+    bookings: 15,
+    revenue: 2_240_000,
+  },
+  {
+    id: "L-04",
+    name: "Coast & Bush 7D",
+    type: "Package",
+    status: "paused",
+    bookings: 8,
+    revenue: 920_000,
+  },
+  {
+    id: "L-05",
+    name: "Naivasha Boat Safari",
+    type: "Activity",
+    status: "draft",
+    bookings: 0,
+    revenue: 0,
+  },
 ];
 
 export const leads = [
-  { id: "ld1", name: "Sarah Chen", country: "Singapore", interest: "Gorilla Trek", date: "2026-05-12", status: "new" },
-  { id: "ld2", name: "Marco Rossi", country: "Italy", interest: "Migration 5D", date: "2026-06-03", status: "responded" },
-  { id: "ld3", name: "Priya Patel", country: "UK", interest: "Bush & Beach", date: "2026-07-21", status: "new" },
-  { id: "ld4", name: "James O'Connor", country: "USA", interest: "Maasai Classic", date: "2026-04-29", status: "booked" },
+  {
+    id: "ld1",
+    name: "Sarah Chen",
+    country: "Singapore",
+    interest: "Gorilla Trek",
+    date: "2026-05-12",
+    status: "new",
+  },
+  {
+    id: "ld2",
+    name: "Marco Rossi",
+    country: "Italy",
+    interest: "Migration 5D",
+    date: "2026-06-03",
+    status: "responded",
+  },
+  {
+    id: "ld3",
+    name: "Priya Patel",
+    country: "UK",
+    interest: "Bush & Beach",
+    date: "2026-07-21",
+    status: "new",
+  },
+  {
+    id: "ld4",
+    name: "James O'Connor",
+    country: "USA",
+    interest: "Maasai Classic",
+    date: "2026-04-29",
+    status: "booked",
+  },
 ];
 
 export const revenueByMonth = [

@@ -47,9 +47,9 @@ function IconsPage() {
           The SAFARI Icon System
         </h1>
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          One unified iconography for every surface — built on a refined Lucide foundation,
-          extended with custom safari-native marks. 1.75px stroke. Round joins. Equal weight.
-          Premium by default.
+          One unified iconography for every surface — built on a refined Lucide foundation, extended
+          with custom safari-native marks. 1.75px stroke. Round joins. Equal weight. Premium by
+          default.
         </p>
         <div className="mt-6 flex flex-wrap gap-2 text-xs">
           <Pill>Stroke 1.75</Pill>
@@ -83,7 +83,11 @@ function IconsPage() {
 
       {/* States */}
       <section>
-        <SectionHeading title="States" sw="Hali" caption="default · active · muted · disabled · premium" />
+        <SectionHeading
+          title="States"
+          sw="Hali"
+          caption="default · active · muted · disabled · premium"
+        />
         <div className="glass rounded-2xl p-8 grid grid-cols-2 sm:grid-cols-5 gap-6">
           {(["default", "active", "muted", "disabled", "premium"] as IconTone[]).map((t) => (
             <div
@@ -129,9 +133,7 @@ function IconsPage() {
           {grouped.map(({ cat, items }) => (
             <div key={cat}>
               <div className="flex items-baseline gap-3 mb-3">
-                <h3 className="font-display text-2xl font-semibold">
-                  {categoryLabel[cat].en}
-                </h3>
+                <h3 className="font-display text-2xl font-semibold">{categoryLabel[cat].en}</h3>
                 <span className="font-label text-[11px] tracking-[0.2em] text-muted-foreground">
                   {categoryLabel[cat].sw.toUpperCase()}
                 </span>
@@ -190,9 +192,7 @@ function IconsPage() {
           <RuleCard
             title="Premium duotone for AI only"
             body="The soft gold halo behind an icon signals intelligence and luxury. Use sparingly — once per screen."
-            demo={
-              <SafariIcon name="ai" size="feature" tone="premium" />
-            }
+            demo={<SafariIcon name="ai" size="feature" tone="premium" />}
           />
           <RuleCard
             title="Never mix outline + filled"
@@ -236,7 +236,7 @@ function IconsPage() {
       <section className="pb-20">
         <SectionHeading title="Use it" sw="Tumia" />
         <pre className="glass-strong rounded-2xl p-6 overflow-x-auto text-xs font-mono leading-relaxed">
-{`import { SafariIcon } from "@/components/icons";
+          {`import { SafariIcon } from "@/components/icons";
 
 <SafariIcon name="ai" size="nav" tone="premium" />
 <SafariIcon name="jeep" size="feature" tone="active" interactive />
@@ -255,15 +255,7 @@ function Pill({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SectionHeading({
-  title,
-  sw,
-  caption,
-}: {
-  title: string;
-  sw: string;
-  caption?: string;
-}) {
+function SectionHeading({ title, sw, caption }: { title: string; sw: string; caption?: string }) {
   return (
     <div className="mb-5">
       <div className="flex items-baseline gap-3 flex-wrap">
@@ -277,15 +269,7 @@ function SectionHeading({
   );
 }
 
-function RuleCard({
-  title,
-  body,
-  demo,
-}: {
-  title: string;
-  body: string;
-  demo: React.ReactNode;
-}) {
+function RuleCard({ title, body, demo }: { title: string; body: string; demo: React.ReactNode }) {
   return (
     <div className="glass rounded-2xl p-5 flex flex-col gap-4">
       <div className="min-h-[64px] grid place-items-center rounded-xl bg-foreground/[0.025] border border-border/40 py-4">

@@ -1,4 +1,3 @@
-
 # SAFARI · Wildlife Intelligence + Storytelling — Phase 1
 
 Narrative Synthesis first. Predictive Movement Modeling is **Phase 2** (scaffolded only — schema reserved, no UI).
@@ -6,6 +5,7 @@ Narrative Synthesis first. Predictive Movement Modeling is **Phase 2** (scaffold
 ## Goal
 
 Turn the static `sightings` feed into a personalized, AI-narrated experience:
+
 1. Tourists keep a **Digital Safari Journal** (sighting + note + optional photo).
 2. AI auto-drafts a **daily narrative snippet** per journal entry.
 3. The Wildlife Story Feed surfaces a **"Did you know?"** contextual snippet for the selected sighting.
@@ -18,6 +18,7 @@ All real: Supabase tables, RLS, Lovable AI via `createServerFn` (no edge functio
 ## Scope
 
 ### In
+
 - New tables: `wis_journal_entries`, `wis_narratives`, `wis_species_rarity` (seed data), `wis_trip_summaries`
 - New server functions in `src/lib/wis.functions.ts` + AI helper in `src/lib/wis-ai.server.ts`
 - New route `/_authenticated/journal` — list + create journal entries, view AI snippets
@@ -25,6 +26,7 @@ All real: Supabase tables, RLS, Lovable AI via `createServerFn` (no edge functio
 - Post-trip summary card on `/profile` calling `generateTripSummary(bookingId)`
 
 ### Out (Phase 2 — not built now)
+
 - Predictive probability map / heatmap
 - Ethological auto-classification of all sightings (reserved column only)
 - Edge-compute telemetry ingestion
@@ -72,6 +74,7 @@ All use `requireSupabaseAuth` except `getSpeciesFact` (public).
 - `generateTripSummary({ bookingId })` → loads user's journal for booking + species rarity, calls AI for Top 5 + narrative, upserts `wis_trip_summaries`.
 
 AI helper `src/lib/wis-ai.server.ts`:
+
 - Uses `createLovableAiGatewayProvider` (gateway pattern from knowledge).
 - Model: `google/gemini-3-flash-preview`.
 - `generateText` for snippets (short, 80–140 words).
@@ -82,7 +85,7 @@ AI helper `src/lib/wis-ai.server.ts`:
 
 ## UI
 
-- **`src/routes/_authenticated/journal.tsx`** — new. List view + "Add entry" form. Each card shows entry meta + AI narrative (Cormorant heading, DM Sans body, gold accent rule). Empty state with Swahili: *"Andika safari yako"*.
+- **`src/routes/_authenticated/journal.tsx`** — new. List view + "Add entry" form. Each card shows entry meta + AI narrative (Cormorant heading, DM Sans body, gold accent rule). Empty state with Swahili: _"Andika safari yako"_.
 - **`src/routes/wildlife.tsx`** — add right-aside "Did you know?" card under the JSON panel: calls `getSpeciesFact` on `selected` change with React Query; loading shimmer, error toast on 429/402.
 - **`src/routes/profile.tsx`** — add "Trip Reflections" section listing bookings with a "Generate summary" button → calls `generateTripSummary`, then renders Top 5 + narrative.
 - **`src/components/safari/Shell.tsx`** — add "Journal" nav link for `user` role.
@@ -100,6 +103,7 @@ Surface gateway 429 ("AI is busy — try again in a moment") and 402 ("AI credit
 ## Files
 
 **Create**
+
 - `supabase/migrations/<ts>_wis_phase1.sql` (4 tables + GRANTs + RLS + rarity seed)
 - `src/lib/wis.functions.ts`
 - `src/lib/wis-ai.server.ts`
@@ -107,6 +111,7 @@ Surface gateway 429 ("AI is busy — try again in a moment") and 402 ("AI credit
 - `src/routes/_authenticated/journal.tsx`
 
 **Edit**
+
 - `src/routes/wildlife.tsx` (Did you know? aside)
 - `src/routes/profile.tsx` (Trip Reflections section)
 - `src/components/safari/Shell.tsx` (nav link)

@@ -1,11 +1,14 @@
 // Server-only helper for Lovable AI Gateway calls (Wildlife Intelligence narratives).
 // Uses direct fetch to keep dependencies minimal.
 
-const GATEWAY_URL = 'https://ai.gateway.lovable.dev/v1/chat/completions';
-const DEFAULT_MODEL = 'google/gemini-3-flash-preview';
+const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const DEFAULT_MODEL = "google/gemini-3-flash-preview";
 
 export class AiGatewayError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
     super(message);
   }
 }
@@ -16,27 +19,27 @@ export async function callGatewayText(opts: {
   model?: string;
 }): Promise<{ text: string; model: string; tokensIn?: number; tokensOut?: number }> {
   const key = process.env.LOVABLE_API_KEY;
-  if (!key) throw new AiGatewayError(500, 'Missing LOVABLE_API_KEY');
+  if (!key) throw new AiGatewayError(500, "Missing LOVABLE_API_KEY");
   const model = opts.model ?? DEFAULT_MODEL;
 
   const res = await fetch(GATEWAY_URL, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Lovable-API-Key': key,
-      'X-Lovable-AIG-SDK': 'fetch',
+      "Content-Type": "application/json",
+      "Lovable-API-Key": key,
+      "X-Lovable-AIG-SDK": "fetch",
     },
     body: JSON.stringify({
       model,
       messages: [
-        { role: 'system', content: opts.system },
-        { role: 'user', content: opts.user },
+        { role: "system", content: opts.system },
+        { role: "user", content: opts.user },
       ],
     }),
   });
 
   if (!res.ok) {
-    const body = await res.text().catch(() => '');
+    const body = await res.text().catch(() => "");
     throw new AiGatewayError(res.status, body || `Gateway ${res.status}`);
   }
 
@@ -44,7 +47,7 @@ export async function callGatewayText(opts: {
     choices?: Array<{ message?: { content?: string } }>;
     usage?: { prompt_tokens?: number; completion_tokens?: number };
   };
-  const text = data.choices?.[0]?.message?.content?.trim() ?? '';
+  const text = data.choices?.[0]?.message?.content?.trim() ?? "";
   return {
     text,
     model,
@@ -59,36 +62,42 @@ export async function callGatewayJson<T>(opts: {
   model?: string;
 }): Promise<{ data: T; model: string; tokensIn?: number; tokensOut?: number }> {
   const key = process.env.LOVABLE_API_KEY;
-  if (!key) throw new AiGatewayError(500, 'Missing LOVABLE_API_KEY');
+  if (!key) throw new AiGatewayError(500, "Missing LOVABLE_API_KEY");
   const model = opts.model ?? DEFAULT_MODEL;
 
   const res = await fetch(GATEWAY_URL, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Lovable-API-Key': key,
-      'X-Lovable-AIG-SDK': 'fetch',
+      "Content-Type": "application/json",
+      "Lovable-API-Key": key,
+      "X-Lovable-AIG-SDK": "fetch",
     },
     body: JSON.stringify({
       model,
       messages: [
-        { role: 'system', content: opts.system + '\n\nRespond ONLY with valid minified JSON. No markdown.' },
-        { role: 'user', content: opts.user },
+        {
+          role: "system",
+          content: opts.system + "\n\nRespond ONLY with valid minified JSON. No markdown.",
+        },
+        { role: "user", content: opts.user },
       ],
-      response_format: { type: 'json_object' },
+      response_format: { type: "json_object" },
     }),
   });
 
   if (!res.ok) {
-    const body = await res.text().catch(() => '');
+    const body = await res.text().catch(() => "");
     throw new AiGatewayError(res.status, body || `Gateway ${res.status}`);
   }
   const raw = (await res.json()) as {
     choices?: Array<{ message?: { content?: string } }>;
     usage?: { prompt_tokens?: number; completion_tokens?: number };
   };
-  const text = raw.choices?.[0]?.message?.content?.trim() ?? '{}';
-  const cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  const text = raw.choices?.[0]?.message?.content?.trim() ?? "{}";
+  const cleaned = text
+    .replace(/^```json\s*/i, "")
+    .replace(/```$/, "")
+    .trim();
   const data = JSON.parse(cleaned) as T;
   return {
     data,
@@ -105,5 +114,5 @@ export function hashPrompt(input: string): string {
     h ^= input.charCodeAt(i);
     h = Math.imul(h, 0x01000193);
   }
-  return (h >>> 0).toString(16).padStart(8, '0');
+  return (h >>> 0).toString(16).padStart(8, "0");
 }

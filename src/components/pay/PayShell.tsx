@@ -97,7 +97,11 @@ export function PayShell({ children }: { children?: ReactNode }) {
       {/* Mobile bottom tabs */}
       <nav
         className="lg:hidden fixed bottom-0 inset-x-0 border-t z-30 grid grid-cols-4"
-        style={{ background: "rgba(247,244,239,0.96)", borderColor: "rgba(26,60,46,0.15)", backdropFilter: "blur(8px)" }}
+        style={{
+          background: "rgba(247,244,239,0.96)",
+          borderColor: "rgba(26,60,46,0.15)",
+          backdropFilter: "blur(8px)",
+        }}
       >
         {nav.map((item) => {
           const active = isActive(item.to, item.exact);

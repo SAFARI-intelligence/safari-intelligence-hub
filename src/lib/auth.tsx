@@ -72,13 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const primaryRole: AppRole | null = roles.includes("support")
     ? "support"
     : roles.includes("hotel")
-    ? "hotel"
-    : roles.includes("user")
-    ? "user"
-    : null;
+      ? "hotel"
+      : roles.includes("user")
+        ? "user"
+        : null;
 
   return (
-    <AuthContext.Provider value={{ user, session, roles, loading, primaryRole, signOut, refreshRoles }}>
+    <AuthContext.Provider
+      value={{ user, session, roles, loading, primaryRole, signOut, refreshRoles }}
+    >
       {children}
     </AuthContext.Provider>
   );

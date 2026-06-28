@@ -71,8 +71,8 @@ function KshTag({
   ksh,
   perNight = false,
   showUsd = true,
-  size = "md",  // sm | md | lg | xl
-  layout = "stacked",  // stacked | inline
+  size = "md", // sm | md | lg | xl
+  layout = "stacked", // stacked | inline
 }) {
   const sizes = {
     sm: { main: 13, label: 9, sub: 10 },
@@ -88,7 +88,14 @@ function KshTag({
     return (
       <span style={{ display: "inline-flex", alignItems: "baseline", gap: 4 }}>
         <span style={{ fontSize: s.label, color: T.gold, fontWeight: 700 }}>KSh</span>
-        <span style={{ fontSize: s.main, fontWeight: 900, color: T.cream, fontFamily: "Georgia, serif" }}>
+        <span
+          style={{
+            fontSize: s.main,
+            fontWeight: 900,
+            color: T.cream,
+            fontFamily: "Georgia, serif",
+          }}
+        >
           {formatted}
         </span>
         {perNight && <span style={{ fontSize: s.sub, color: T.muted }}>/night</span>}
@@ -101,14 +108,19 @@ function KshTag({
     <div>
       <div style={{ display: "flex", alignItems: "baseline", gap: 3 }}>
         <span style={{ fontSize: s.label, color: T.gold, fontWeight: 700 }}>KSh</span>
-        <span style={{ fontSize: s.main, fontWeight: 900, color: T.cream, fontFamily: "Georgia, serif" }}>
+        <span
+          style={{
+            fontSize: s.main,
+            fontWeight: 900,
+            color: T.cream,
+            fontFamily: "Georgia, serif",
+          }}
+        >
           {formatted}
         </span>
         {perNight && <span style={{ fontSize: s.sub, color: T.muted }}> /night</span>}
       </div>
-      {usd && (
-        <div style={{ fontSize: s.sub, color: T.muted, marginTop: 1 }}>{usd} per night</div>
-      )}
+      {usd && <div style={{ fontSize: s.sub, color: T.muted, marginTop: 1 }}>{usd} per night</div>}
     </div>
   );
 }
@@ -116,24 +128,35 @@ function KshTag({
 // ─── SURFACE 1: SEARCH RESULT CARD ─────────────────────────
 function SearchResultCard({ lodge }) {
   return (
-    <div style={{
-      background: T.surfaceHigh,
-      border: `1px solid rgba(201,168,76,0.1)`,
-      borderRadius: 10, overflow: "hidden",
-      display: "flex", gap: 0,
-    }}>
+    <div
+      style={{
+        background: T.surfaceHigh,
+        border: `1px solid rgba(201,168,76,0.1)`,
+        borderRadius: 10,
+        overflow: "hidden",
+        display: "flex",
+        gap: 0,
+      }}
+    >
       {/* Image placeholder */}
-      <div style={{
-        width: 120, flexShrink: 0,
-        background: `linear-gradient(135deg, #1A2E0A 0%, #0D1A05 100%)`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 32,
-      }}>
+      <div
+        style={{
+          width: 120,
+          flexShrink: 0,
+          background: `linear-gradient(135deg, #1A2E0A 0%, #0D1A05 100%)`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 32,
+        }}
+      >
         🏕️
       </div>
 
       {/* Content */}
-      <div style={{ padding: "14px 16px", flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+      <div
+        style={{ padding: "14px 16px", flex: 1, display: "flex", flexDirection: "column", gap: 6 }}
+      >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, color: T.cream }}>{lodge.name}</div>
@@ -146,21 +169,38 @@ function SearchResultCard({ lodge }) {
         </div>
 
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {lodge.tags.map(tag => (
-            <span key={tag} style={{
-              fontSize: 10, color: T.gold, background: T.goldLight,
-              padding: "2px 8px", borderRadius: 3,
-            }}>{tag}</span>
+          {lodge.tags.map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: 10,
+                color: T.gold,
+                background: T.goldLight,
+                padding: "2px 8px",
+                borderRadius: 3,
+              }}
+            >
+              {tag}
+            </span>
           ))}
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 11, color: T.muted }}>⭐ {lodge.rating} · {lodge.ratingCount} reviews</span>
-          <button style={{
-            background: T.gold, color: T.black, border: "none",
-            padding: "7px 16px", borderRadius: 5, fontWeight: 800, fontSize: 11,
-            cursor: "pointer",
-          }}>
+          <span style={{ fontSize: 11, color: T.muted }}>
+            ⭐ {lodge.rating} · {lodge.ratingCount} reviews
+          </span>
+          <button
+            style={{
+              background: T.gold,
+              color: T.black,
+              border: "none",
+              padding: "7px 16px",
+              borderRadius: 5,
+              fontWeight: 800,
+              fontSize: 11,
+              cursor: "pointer",
+            }}
+          >
             Select
           </button>
         </div>
@@ -182,23 +222,43 @@ function PriceFilter({ onFilter }) {
   ];
 
   return (
-    <div style={{
-      display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center",
-      padding: "12px 0",
-    }}>
-      <span style={{ fontSize: 11, color: T.muted, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: 8,
+        flexWrap: "wrap",
+        alignItems: "center",
+        padding: "12px 0",
+      }}
+    >
+      <span
+        style={{
+          fontSize: 11,
+          color: T.muted,
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+        }}
+      >
         Budget (KSh/night):
       </span>
-      {ranges.map(r => (
+      {ranges.map((r) => (
         <button
           key={r.id}
-          onClick={() => { setSelected(r.id); onFilter && onFilter(r); }}
+          onClick={() => {
+            setSelected(r.id);
+            onFilter && onFilter(r);
+          }}
           style={{
-            fontSize: 11, fontWeight: 600, padding: "5px 12px", borderRadius: 5,
+            fontSize: 11,
+            fontWeight: 600,
+            padding: "5px 12px",
+            borderRadius: 5,
             border: selected === r.id ? `2px solid ${T.gold}` : `1px solid rgba(201,168,76,0.2)`,
             background: selected === r.id ? T.goldLight : "transparent",
             color: selected === r.id ? T.gold : T.muted,
-            cursor: "pointer", transition: "all 0.15s",
+            cursor: "pointer",
+            transition: "all 0.15s",
           }}
         >
           {r.label}
@@ -211,21 +271,31 @@ function PriceFilter({ onFilter }) {
 // ─── SURFACE 3: COMPARISON TABLE ───────────────────────────
 function LodgeComparisonTable({ lodges }) {
   return (
-    <div style={{
-      background: T.surfaceHigh, borderRadius: 10,
-      border: `1px solid rgba(201,168,76,0.1)`,
-      overflow: "hidden",
-    }}>
-      <div style={{
-        display: "grid", gridTemplateColumns: `160px repeat(${lodges.length}, 1fr)`,
-        borderBottom: `1px solid rgba(201,168,76,0.1)`,
-      }}>
+    <div
+      style={{
+        background: T.surfaceHigh,
+        borderRadius: 10,
+        border: `1px solid rgba(201,168,76,0.1)`,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `160px repeat(${lodges.length}, 1fr)`,
+          borderBottom: `1px solid rgba(201,168,76,0.1)`,
+        }}
+      >
         <div style={{ padding: "12px 16px", fontSize: 11, color: T.muted, fontWeight: 700 }} />
-        {lodges.map(l => (
-          <div key={l.name} style={{
-            padding: "12px 16px", textAlign: "center",
-            borderLeft: `1px solid rgba(201,168,76,0.06)`,
-          }}>
+        {lodges.map((l) => (
+          <div
+            key={l.name}
+            style={{
+              padding: "12px 16px",
+              textAlign: "center",
+              borderLeft: `1px solid rgba(201,168,76,0.06)`,
+            }}
+          >
             <div style={{ fontSize: 13, fontWeight: 700, color: T.cream }}>{l.name}</div>
             <div style={{ fontSize: 10, color: T.muted }}>{l.park}</div>
           </div>
@@ -239,7 +309,14 @@ function LodgeComparisonTable({ lodges }) {
           render: (l) => (
             <div style={{ textAlign: "center" }}>
               {/* ✅ KSh PRIMARY — most prominent field */}
-              <div style={{ fontSize: 18, fontWeight: 900, color: T.gold, fontFamily: "Georgia, serif" }}>
+              <div
+                style={{
+                  fontSize: 18,
+                  fontWeight: 900,
+                  color: T.gold,
+                  fontFamily: "Georgia, serif",
+                }}
+              >
                 KSh {pricing.formatKsh(l.pricePerNightKsh)}
               </div>
               <div style={{ fontSize: 10, color: T.muted, marginTop: 2 }}>
@@ -248,9 +325,26 @@ function LodgeComparisonTable({ lodges }) {
             </div>
           ),
         },
-        { label: "Rating", render: (l) => <div style={{ textAlign: "center", color: T.cream, fontSize: 13, fontWeight: 700 }}>⭐ {l.rating}</div> },
-        { label: "Meal plan", render: (l) => <div style={{ textAlign: "center", color: T.muted, fontSize: 12 }}>{l.meals}</div> },
-        { label: "Game drives", render: (l) => <div style={{ textAlign: "center", fontSize: 16 }}>{l.gameDrives ? "✅" : "❌"}</div> },
+        {
+          label: "Rating",
+          render: (l) => (
+            <div style={{ textAlign: "center", color: T.cream, fontSize: 13, fontWeight: 700 }}>
+              ⭐ {l.rating}
+            </div>
+          ),
+        },
+        {
+          label: "Meal plan",
+          render: (l) => (
+            <div style={{ textAlign: "center", color: T.muted, fontSize: 12 }}>{l.meals}</div>
+          ),
+        },
+        {
+          label: "Game drives",
+          render: (l) => (
+            <div style={{ textAlign: "center", fontSize: 16 }}>{l.gameDrives ? "✅" : "❌"}</div>
+          ),
+        },
         {
           label: "Conservation",
           render: (l) => (
@@ -269,20 +363,27 @@ function LodgeComparisonTable({ lodges }) {
             background: ri === 0 ? "rgba(201,168,76,0.04)" : "transparent",
           }}
         >
-          <div style={{
-            padding: "12px 16px", fontSize: 11, color: T.muted,
-            fontWeight: ri === 0 ? 700 : 500,
-            color: ri === 0 ? T.gold : T.muted,
-            textTransform: ri === 0 ? "uppercase" : "none",
-            letterSpacing: ri === 0 ? "0.06em" : 0,
-          }}>
+          <div
+            style={{
+              padding: "12px 16px",
+              fontSize: 11,
+              color: T.muted,
+              fontWeight: ri === 0 ? 700 : 500,
+              color: ri === 0 ? T.gold : T.muted,
+              textTransform: ri === 0 ? "uppercase" : "none",
+              letterSpacing: ri === 0 ? "0.06em" : 0,
+            }}
+          >
             {row.label}
           </div>
-          {lodges.map(l => (
-            <div key={l.name} style={{
-              padding: "12px 16px",
-              borderLeft: `1px solid rgba(201,168,76,0.06)`,
-            }}>
+          {lodges.map((l) => (
+            <div
+              key={l.name}
+              style={{
+                padding: "12px 16px",
+                borderLeft: `1px solid rgba(201,168,76,0.06)`,
+              }}
+            >
               {row.render(l)}
             </div>
           ))}
@@ -304,25 +405,43 @@ function CartSummaryHeader({ items }) {
   const finalKsh = totalKsh + conservationKsh;
 
   return (
-    <div style={{
-      background: T.surface,
-      border: `1px solid rgba(201,168,76,0.15)`,
-      borderRadius: 10, padding: "20px 24px",
-      display: "flex", flexWrap: "wrap", gap: 20,
-      alignItems: "flex-start", justifyContent: "space-between",
-    }}>
+    <div
+      style={{
+        background: T.surface,
+        border: `1px solid rgba(201,168,76,0.15)`,
+        borderRadius: 10,
+        padding: "20px 24px",
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 20,
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+      }}
+    >
       <div>
-        <div style={{
-          fontSize: 10, color: T.gold, fontWeight: 700,
-          textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8,
-        }}>
+        <div
+          style={{
+            fontSize: 10,
+            color: T.gold,
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            marginBottom: 8,
+          }}
+        >
           Your Safari Cart
         </div>
-        {items.map(item => (
-          <div key={item.name} style={{
-            display: "flex", justifyContent: "space-between", gap: 40,
-            padding: "6px 0", borderBottom: `1px solid rgba(255,255,255,0.04)`,
-          }}>
+        {items.map((item) => (
+          <div
+            key={item.name}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 40,
+              padding: "6px 0",
+              borderBottom: `1px solid rgba(255,255,255,0.04)`,
+            }}
+          >
             <div>
               <span style={{ fontSize: 13, color: T.cream, fontWeight: 600 }}>{item.name}</span>
               <span style={{ fontSize: 11, color: T.muted, marginLeft: 8 }}>
@@ -330,10 +449,17 @@ function CartSummaryHeader({ items }) {
               </span>
             </div>
             {/* ✅ KSh shown inline for every line item */}
-            <KshTag ksh={item.pricePerNightKsh * item.nights} size="sm" layout="inline" showUsd={false} />
+            <KshTag
+              ksh={item.pricePerNightKsh * item.nights}
+              size="sm"
+              layout="inline"
+              showUsd={false}
+            />
           </div>
         ))}
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 40, padding: "8px 0" }}>
+        <div
+          style={{ display: "flex", justifyContent: "space-between", gap: 40, padding: "8px 0" }}
+        >
           <span style={{ fontSize: 12, color: "#4CAF50" }}>🌿 Conservation (2%)</span>
           <KshTag ksh={conservationKsh} size="sm" layout="inline" showUsd={false} />
         </div>
@@ -355,9 +481,36 @@ function CartSummaryHeader({ items }) {
 
 // ─── DEMO WRAPPER ──────────────────────────────────────────
 const SAMPLE_LODGES = [
-  { name: "Sarova Mara", park: "Maasai Mara", pricePerNightKsh: 28500, rating: 4.8, ratingCount: 847, tags: ["Migration View", "Full Board"], gameDrives: true, meals: "Full Board" },
-  { name: "Rekero Camp", park: "Maasai Mara", pricePerNightKsh: 45000, rating: 4.9, ratingCount: 512, tags: ["Riverside", "Luxury"], gameDrives: true, meals: "Full Board" },
-  { name: "Ol Tukai", park: "Amboseli", pricePerNightKsh: 21000, rating: 4.7, ratingCount: 634, tags: ["Kilimanjaro View", "Pool"], gameDrives: true, meals: "Half Board" },
+  {
+    name: "Sarova Mara",
+    park: "Maasai Mara",
+    pricePerNightKsh: 28500,
+    rating: 4.8,
+    ratingCount: 847,
+    tags: ["Migration View", "Full Board"],
+    gameDrives: true,
+    meals: "Full Board",
+  },
+  {
+    name: "Rekero Camp",
+    park: "Maasai Mara",
+    pricePerNightKsh: 45000,
+    rating: 4.9,
+    ratingCount: 512,
+    tags: ["Riverside", "Luxury"],
+    gameDrives: true,
+    meals: "Full Board",
+  },
+  {
+    name: "Ol Tukai",
+    park: "Amboseli",
+    pricePerNightKsh: 21000,
+    rating: 4.7,
+    ratingCount: 634,
+    tags: ["Kilimanjaro View", "Pool"],
+    gameDrives: true,
+    meals: "Half Board",
+  },
 ];
 
 const CART_ITEMS = [
@@ -371,18 +524,32 @@ export default function KshPricingFix() {
       <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
 
       {/* Section header */}
-      <div style={{
-        fontSize: 11, color: T.gold, fontWeight: 700, textTransform: "uppercase",
-        letterSpacing: "0.12em", marginBottom: 6,
-      }}>
+      <div
+        style={{
+          fontSize: 11,
+          color: T.gold,
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: "0.12em",
+          marginBottom: 6,
+        }}
+      >
         PF-01 — KSh Pricing Visibility Fix
       </div>
-      <h1 style={{ fontSize: 22, fontWeight: 900, color: T.cream, marginBottom: 6, fontFamily: "Georgia, serif" }}>
+      <h1
+        style={{
+          fontSize: 22,
+          fontWeight: 900,
+          color: T.cream,
+          marginBottom: 6,
+          fontFamily: "Georgia, serif",
+        }}
+      >
         KSh on Every Surface
       </h1>
       <p style={{ fontSize: 12, color: T.muted, marginBottom: 32, lineHeight: 1.6, maxWidth: 520 }}>
-        All four pricing surfaces fixed: search results, filters, comparison, and cart header.
-        KSh is always primary. No currency conversion required for Kenyan users.
+        All four pricing surfaces fixed: search results, filters, comparison, and cart header. KSh
+        is always primary. No currency conversion required for Kenyan users.
       </p>
 
       {/* Surface 1: Search results */}
@@ -390,7 +557,9 @@ export default function KshPricingFix() {
         <SectionLabel label="Surface 1 — Search Results" />
         <PriceFilter />
         <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 12 }}>
-          {SAMPLE_LODGES.slice(0, 2).map(l => <SearchResultCard key={l.name} lodge={l} />)}
+          {SAMPLE_LODGES.slice(0, 2).map((l) => (
+            <SearchResultCard key={l.name} lodge={l} />
+          ))}
         </div>
       </div>
 
@@ -409,16 +578,38 @@ export default function KshPricingFix() {
       {/* Surface 4: Atomic component showcase */}
       <div style={{ marginBottom: 28 }}>
         <SectionLabel label="Surface 4 — KshTag Component (all sizes)" />
-        <div style={{
-          background: T.surfaceHigh, borderRadius: 10, padding: 20,
-          display: "flex", flexWrap: "wrap", gap: 24, alignItems: "flex-end",
-          border: `1px solid rgba(201,168,76,0.1)`,
-        }}>
-          <div><div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>sm</div><KshTag ksh={5000} size="sm" perNight /></div>
-          <div><div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>md</div><KshTag ksh={28500} size="md" perNight /></div>
-          <div><div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>lg</div><KshTag ksh={45000} size="lg" perNight /></div>
-          <div><div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>xl — checkout</div><KshTag ksh={487500} size="xl" /></div>
-          <div><div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>inline</div><KshTag ksh={28500} size="md" layout="inline" /></div>
+        <div
+          style={{
+            background: T.surfaceHigh,
+            borderRadius: 10,
+            padding: 20,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 24,
+            alignItems: "flex-end",
+            border: `1px solid rgba(201,168,76,0.1)`,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>sm</div>
+            <KshTag ksh={5000} size="sm" perNight />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>md</div>
+            <KshTag ksh={28500} size="md" perNight />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>lg</div>
+            <KshTag ksh={45000} size="lg" perNight />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>xl — checkout</div>
+            <KshTag ksh={487500} size="xl" />
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: T.muted, marginBottom: 6 }}>inline</div>
+            <KshTag ksh={28500} size="md" layout="inline" />
+          </div>
         </div>
       </div>
     </div>
@@ -427,12 +618,18 @@ export default function KshPricingFix() {
 
 function SectionLabel({ label }) {
   return (
-    <div style={{
-      fontSize: 10, color: T.gold, fontWeight: 700,
-      textTransform: "uppercase", letterSpacing: "0.1em",
-      marginBottom: 12, paddingBottom: 8,
-      borderBottom: `1px solid rgba(201,168,76,0.1)`,
-    }}>
+    <div
+      style={{
+        fontSize: 10,
+        color: T.gold,
+        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: "0.1em",
+        marginBottom: 12,
+        paddingBottom: 8,
+        borderBottom: `1px solid rgba(201,168,76,0.1)`,
+      }}
+    >
       {label}
     </div>
   );

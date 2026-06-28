@@ -10,7 +10,10 @@ export const Route = createFileRoute("/partner")({
   head: () => ({
     meta: [
       { title: "Partner Dashboard · SAFARI" },
-      { name: "description", content: "Hotel partner dashboard — manage your listings, bookings, and reviews." },
+      {
+        name: "description",
+        content: "Hotel partner dashboard — manage your listings, bookings, and reviews.",
+      },
     ],
   }),
   component: () => (
@@ -74,13 +77,19 @@ function PartnerDashboard() {
   const reload = async () => {
     if (!user) return;
     const [{ data: h }, { data: b }] = await Promise.all([
-      supabase.from("hotels").select("*").eq("owner_id", user.id).order("created_at", { ascending: false }),
+      supabase
+        .from("hotels")
+        .select("*")
+        .eq("owner_id", user.id)
+        .order("created_at", { ascending: false }),
       supabase
         .from("bookings")
         .select("*")
         .in(
           "hotel_id",
-          (await supabase.from("hotels").select("id").eq("owner_id", user.id)).data?.map((x) => x.id) || []
+          (await supabase.from("hotels").select("id").eq("owner_id", user.id)).data?.map(
+            (x) => x.id,
+          ) || [],
         )
         .order("created_at", { ascending: false }),
     ]);
@@ -130,8 +139,14 @@ function PartnerDashboard() {
       price_min: form.price_min,
       price_max: form.price_max,
       description: form.description,
-      amenities: form.amenities.split(",").map((s) => s.trim()).filter(Boolean),
-      images: form.images.split(",").map((s) => s.trim()).filter(Boolean),
+      amenities: form.amenities
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      images: form.images
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
       is_published: form.is_published,
     };
     if (editing) {
@@ -150,11 +165,16 @@ function PartnerDashboard() {
   };
 
   const updateBooking = async (id: string, status: string) => {
-    await supabase.from("bookings").update({ status: status as any }).eq("id", id);
+    await supabase
+      .from("bookings")
+      .update({ status: status as any })
+      .eq("id", id);
     reload();
   };
 
-  const totalRevenue = bookings.filter((b) => b.status === "confirmed").reduce((s, b) => s + Number(b.total_price), 0);
+  const totalRevenue = bookings
+    .filter((b) => b.status === "confirmed")
+    .reduce((s, b) => s + Number(b.total_price), 0);
 
   return (
     <Shell>
@@ -194,7 +214,9 @@ function PartnerDashboard() {
             <section className="glass rounded-2xl p-6">
               <h2 className="font-display text-xl font-bold mb-4">My listings</h2>
               {hotels.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No listings yet — click "New listing" to get started.</p>
+                <p className="text-sm text-muted-foreground">
+                  No listings yet — click "New listing" to get started.
+                </p>
               ) : (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {hotels.map((h) => (
@@ -268,7 +290,9 @@ function PartnerDashboard() {
                       {bookings.map((b) => (
                         <tr key={b.id} className="border-t border-border/40">
                           <td className="py-2.5 font-medium">{b.hotel_name}</td>
-                          <td className="text-xs">{b.check_in} → {b.check_out}</td>
+                          <td className="text-xs">
+                            {b.check_in} → {b.check_out}
+                          </td>
                           <td>{b.guests}</td>
                           <td className="font-semibold text-[var(--gold)]">
                             KSh {Number(b.total_price).toLocaleString()}
@@ -279,8 +303,8 @@ function PartnerDashboard() {
                                 b.status === "confirmed"
                                   ? "bg-[var(--forest)]/15 text-[var(--forest)]"
                                   : b.status === "cancelled"
-                                  ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
-                                  : "bg-[var(--gold)]/15 text-[var(--gold)]"
+                                    ? "bg-[var(--maasai)]/15 text-[var(--maasai)]"
+                                    : "bg-[var(--gold)]/15 text-[var(--gold)]"
                               }`}
                             >
                               {b.status}
@@ -446,11 +470,21 @@ function PartnerDashboard() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
+function Stat({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string | number;
+  accent?: boolean;
+}) {
   return (
     <div className="rounded-xl border border-border/60 p-4">
       <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className={`font-display text-2xl font-bold mt-1 ${accent ? "text-[var(--gold)]" : ""}`}>{value}</p>
+      <p className={`font-display text-2xl font-bold mt-1 ${accent ? "text-[var(--gold)]" : ""}`}>
+        {value}
+      </p>
     </div>
   );
 }

@@ -49,7 +49,10 @@ export function RoleGuard({ allow, children }: { allow: AppRole[]; children: Rea
             This area is reserved for the{" "}
             <span className="font-semibold">{allow.join(" or ")}</span> role.
             {primaryRole && (
-              <> Redirecting you to your <span className="font-semibold">{primaryRole}</span> home…</>
+              <>
+                {" "}
+                Redirecting you to your <span className="font-semibold">{primaryRole}</span> home…
+              </>
             )}
           </p>
           <Link

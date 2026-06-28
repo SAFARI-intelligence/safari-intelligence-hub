@@ -67,35 +67,35 @@ safari-intelligence-hub/
 
 ### Phase 1 — Web (`apps/web`)
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 19 + TanStack Start |
-| Routing | TanStack React Router |
-| State | TanStack React Query |
-| Styling | Tailwind CSS + Framer Motion |
-| UI Primitives | Radix UI |
-| Database | Supabase (PostgreSQL) |
-| Deployment | Cloudflare Workers |
-| Package Manager | Bun |
+| Layer           | Technology                   |
+| --------------- | ---------------------------- |
+| Framework       | React 19 + TanStack Start    |
+| Routing         | TanStack React Router        |
+| State           | TanStack React Query         |
+| Styling         | Tailwind CSS + Framer Motion |
+| UI Primitives   | Radix UI                     |
+| Database        | Supabase (PostgreSQL)        |
+| Deployment      | Cloudflare Workers           |
+| Package Manager | Bun                          |
 
 ### Phase 2 — API (`apps/api`)
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | NestJS |
-| ORM | Prisma + PostGIS |
-| Cache | Redis |
-| Queue | Background job queue |
-| Payments | Stripe |
-| AI | OpenAI API |
+| Layer     | Technology           |
+| --------- | -------------------- |
+| Framework | NestJS               |
+| ORM       | Prisma + PostGIS     |
+| Cache     | Redis                |
+| Queue     | Background job queue |
+| Payments  | Stripe               |
+| AI        | OpenAI API           |
 
 ### Phase 3 — Mobile (`apps/mobile`)
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Expo React Native |
-| Animation | Reanimated + Moti |
-| Auth | Session management |
+| Layer     | Technology         |
+| --------- | ------------------ |
+| Framework | Expo React Native  |
+| Animation | Reanimated + Moti  |
+| Auth      | Session management |
 
 ---
 
@@ -113,13 +113,13 @@ Savanna Cream  #F5F0E8   — Light backgrounds, cards
 
 ## Revenue Model
 
-| Stream | Mechanism | Phase |
-|--------|-----------|-------|
-| Booking commission | 12–15% per completed booking | 1 |
-| Consumer subscription | KSh 1,200/mo Simba Pro · KSh 3,500/mo Safari Elite | 1 |
-| Operator SaaS | KSh 8,000/mo Operator Pro | 1 |
-| Partner listing fees | Featured placement | 1–2 |
-| Wildlife Story API | B2B data licensing | 4 |
+| Stream                | Mechanism                                          | Phase |
+| --------------------- | -------------------------------------------------- | ----- |
+| Booking commission    | 12–15% per completed booking                       | 1     |
+| Consumer subscription | KSh 1,200/mo Simba Pro · KSh 3,500/mo Safari Elite | 1     |
+| Operator SaaS         | KSh 8,000/mo Operator Pro                          | 1     |
+| Partner listing fees  | Featured placement                                 | 1–2   |
+| Wildlife Story API    | B2B data licensing                                 | 4     |
 
 ---
 
@@ -167,4 +167,4 @@ Never commit `.env` files. All secrets are managed via environment variables onl
 
 ---
 
-*Built in Kenya. For the world.*
+_Built in Kenya. For the world._

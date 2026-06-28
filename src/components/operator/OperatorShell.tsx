@@ -48,7 +48,11 @@ function NavLink({
   collapsed?: boolean;
 }) {
   return (
-    <Link to={to} className={`op-side-link ${active ? "active" : ""}`} title={collapsed ? label : undefined}>
+    <Link
+      to={to}
+      className={`op-side-link ${active ? "active" : ""}`}
+      title={collapsed ? label : undefined}
+    >
       <Icon size={15} strokeWidth={1.6} />
       {!collapsed && <span style={{ flex: 1 }}>{label}</span>}
       {!collapsed && dot && (
@@ -64,7 +68,10 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <div className="op-scope" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div
+      className="op-scope"
+      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+    >
       {/* Topbar */}
       <header
         style={{
@@ -80,7 +87,9 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
       >
         <span className="op-wordmark">SAFARI</span>
         <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.15)" }} />
-        <span style={{ fontSize: 11, color: "#a89980", letterSpacing: "0.04em" }}>Operator Portal</span>
+        <span style={{ fontSize: 11, color: "#a89980", letterSpacing: "0.04em" }}>
+          Operator Portal
+        </span>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
           <span
@@ -89,7 +98,11 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
           >
             <span
               style={{
-                width: 6, height: 6, borderRadius: 999, background: "#5ec77d", marginRight: 6,
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: "#5ec77d",
+                marginRight: 6,
                 boxShadow: "0 0 0 3px rgba(94,199,125,0.18)",
               }}
             />
@@ -100,9 +113,15 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
           </span>
           <span
             style={{
-              width: 28, height: 28, borderRadius: 999, background: "var(--op-gold)",
-              color: "var(--op-night)", display: "grid", placeItems: "center",
-              fontSize: 11, fontWeight: 600,
+              width: 28,
+              height: 28,
+              borderRadius: 999,
+              background: "var(--op-gold)",
+              color: "var(--op-night)",
+              display: "grid",
+              placeItems: "center",
+              fontSize: 11,
+              fontWeight: 600,
             }}
           >
             {operator.initials}
@@ -126,7 +145,9 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
                 dot={(item as { dot?: boolean }).dot}
               />
             ))}
-            <div className="op-side-section op-hide-rail" style={{ marginTop: 8 }}>Account</div>
+            <div className="op-side-section op-hide-rail" style={{ marginTop: 8 }}>
+              Account
+            </div>
             {accountNav.map((item) => (
               <NavLink
                 key={item.to}
@@ -154,7 +175,9 @@ export function OperatorShell({ children }: { children: React.ReactNode }) {
                 Manage
               </Link>
             </div>
-            <div style={{ marginTop: 6, fontSize: 10 }}>Next billing {operator.nextBillingDate}</div>
+            <div style={{ marginTop: 6, fontSize: 10 }}>
+              Next billing {operator.nextBillingDate}
+            </div>
           </div>
         </aside>
 

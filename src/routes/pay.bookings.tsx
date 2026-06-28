@@ -30,7 +30,7 @@ function BookingsPage() {
     const { data } = await supabase
       .from("pay_bookings")
       .select(
-        "id,total_amount,currency,status,guests,created_at,trip:pay_trips(title,start_date,end_date,image),escrow:pay_escrows(status)"
+        "id,total_amount,currency,status,guests,created_at,trip:pay_trips(title,start_date,end_date,image),escrow:pay_escrows(status)",
       )
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
@@ -73,7 +73,9 @@ function BookingsPage() {
           style={{ borderColor: "rgba(26,60,46,0.2)" }}
         >
           <div className="font-semibold text-[#1A3C2E]">No trips booked yet</div>
-          <div className="text-sm text-stone-600 mt-1">Explore Kenya — your next adventure awaits.</div>
+          <div className="text-sm text-stone-600 mt-1">
+            Explore Kenya — your next adventure awaits.
+          </div>
           <Link
             to="/pay/trips"
             className="inline-block mt-4 text-[13px] font-medium px-4 py-2 rounded-lg"
@@ -107,16 +109,21 @@ function BookingsPage() {
                       </h3>
                       <div className="text-[11.5px] text-stone-500 mt-0.5">
                         {b.trip?.start_date && new Date(b.trip.start_date).toLocaleDateString()} –{" "}
-                        {b.trip?.end_date && new Date(b.trip.end_date).toLocaleDateString()} · {b.guests} guest
+                        {b.trip?.end_date && new Date(b.trip.end_date).toLocaleDateString()} ·{" "}
+                        {b.guests} guest
                         {b.guests > 1 ? "s" : ""}
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                      <span className={`text-[10.5px] uppercase tracking-wider px-2 py-0.5 rounded border font-medium ${statusTone(b.status)}`}>
+                      <span
+                        className={`text-[10.5px] uppercase tracking-wider px-2 py-0.5 rounded border font-medium ${statusTone(b.status)}`}
+                      >
                         {b.status}
                       </span>
                       {escrowStatus && (
-                        <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border ${statusTone(escrowStatus)}`}>
+                        <span
+                          className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded border ${statusTone(escrowStatus)}`}
+                        >
                           escrow · {escrowStatus}
                         </span>
                       )}
@@ -125,7 +132,11 @@ function BookingsPage() {
                   <div className="mt-3 flex items-end justify-between">
                     <div
                       className="text-[18px] font-semibold"
-                      style={{ color: "#1A3C2E", fontFamily: "'Cormorant Garamond', serif", fontVariantNumeric: "tabular-nums" }}
+                      style={{
+                        color: "#1A3C2E",
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontVariantNumeric: "tabular-nums",
+                      }}
                     >
                       {formatMoney(Number(b.total_amount), b.currency as any)}
                     </div>

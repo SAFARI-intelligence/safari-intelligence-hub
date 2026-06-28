@@ -70,7 +70,8 @@ function TripsPage() {
               </h3>
               <div className="flex items-center gap-1.5 text-[11.5px] text-stone-500 mt-1">
                 <Calendar className="h-3.5 w-3.5" />
-                {new Date(t.start_date).toLocaleDateString()} – {new Date(t.end_date).toLocaleDateString()}
+                {new Date(t.start_date).toLocaleDateString()} –{" "}
+                {new Date(t.end_date).toLocaleDateString()}
               </div>
               {t.description && (
                 <p className="text-[13px] text-stone-600 mt-2 line-clamp-2">{t.description}</p>
@@ -80,7 +81,11 @@ function TripsPage() {
                   <div className="text-[10.5px] uppercase tracking-wider text-stone-500">From</div>
                   <div
                     className="text-[18px] font-semibold"
-                    style={{ color: "#1A3C2E", fontFamily: "'Cormorant Garamond', serif", fontVariantNumeric: "tabular-nums" }}
+                    style={{
+                      color: "#1A3C2E",
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontVariantNumeric: "tabular-nums",
+                    }}
                   >
                     {formatMoney(Number(t.base_price), t.currency as any)}
                   </div>

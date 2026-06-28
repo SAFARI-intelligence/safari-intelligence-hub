@@ -107,23 +107,45 @@ function Index() {
         {/* STATS */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[
-            { label: "Active sightings", value: totalSightings, suffix: "", icon: Activity, color: "var(--gold)" },
-            { label: "AI confidence", value: avgConfidence, suffix: "%", icon: Sparkles, color: "var(--forest)" },
-            { label: "Parks monitored", value: liveParks, suffix: "", icon: MapPin, color: "var(--maasai)" },
-            { label: "Operators online", value: operatorsOnline, suffix: "", icon: Cloud, color: "var(--charcoal)" },
+            {
+              label: "Active sightings",
+              value: totalSightings,
+              suffix: "",
+              icon: Activity,
+              color: "var(--gold)",
+            },
+            {
+              label: "AI confidence",
+              value: avgConfidence,
+              suffix: "%",
+              icon: Sparkles,
+              color: "var(--forest)",
+            },
+            {
+              label: "Parks monitored",
+              value: liveParks,
+              suffix: "",
+              icon: MapPin,
+              color: "var(--maasai)",
+            },
+            {
+              label: "Operators online",
+              value: operatorsOnline,
+              suffix: "",
+              icon: Cloud,
+              color: "var(--charcoal)",
+            },
           ].map((s) => (
-              <div key={s.label} className="glass rounded-2xl p-4 sm:p-5">
-                <div className="flex items-center justify-between">
-                  <span className="font-label text-xs text-muted-foreground">
-                    {s.label}
-                  </span>
-                  <s.icon className="h-4 w-4" style={{ color: s.color }} />
-                </div>
-                <div className="mt-2 font-display text-3xl sm:text-4xl font-bold">
-                  <CountUp to={s.value} />
-                  <span className="text-lg text-muted-foreground">{s.suffix}</span>
-                </div>
+            <div key={s.label} className="glass rounded-2xl p-4 sm:p-5">
+              <div className="flex items-center justify-between">
+                <span className="font-label text-xs text-muted-foreground">{s.label}</span>
+                <s.icon className="h-4 w-4" style={{ color: s.color }} />
               </div>
+              <div className="mt-2 font-display text-3xl sm:text-4xl font-bold">
+                <CountUp to={s.value} />
+                <span className="text-lg text-muted-foreground">{s.suffix}</span>
+              </div>
+            </div>
           ))}
         </section>
 
@@ -175,33 +197,25 @@ function Index() {
                     <div className="text-[10px] uppercase tracking-wider opacity-80">
                       {park.country}
                     </div>
-                    <h3 className="font-display text-xl font-bold leading-tight">
-                      {park.name}
-                    </h3>
+                    <h3 className="font-display text-xl font-bold leading-tight">{park.name}</h3>
                   </div>
                 </div>
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div>
-                      <div className="text-lg font-bold text-[var(--maasai)]">
-                        {park.sightings}
-                      </div>
+                      <div className="text-lg font-bold text-[var(--maasai)]">{park.sightings}</div>
                       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                         Sightings
                       </div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-[var(--gold)]">
-                        {park.confidence}%
-                      </div>
+                      <div className="text-lg font-bold text-[var(--gold)]">{park.confidence}%</div>
                       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                         AI conf.
                       </div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-[var(--forest)]">
-                        {park.tempC}°
-                      </div>
+                      <div className="text-lg font-bold text-[var(--forest)]">{park.tempC}°</div>
                       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                         {park.weather}
                       </div>

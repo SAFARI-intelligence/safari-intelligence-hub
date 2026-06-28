@@ -54,7 +54,9 @@ function StoriesPage() {
   useEffect(() => {
     supabase
       .from("animal_stories")
-      .select("id, slug, name, swahili_name, title, short_story, hero_narrative, parks, hero_image, image")
+      .select(
+        "id, slug, name, swahili_name, title, short_story, hero_narrative, parks, hero_image, image",
+      )
       .order("name")
       .then(({ data }) => {
         setStories((data as Story[]) || []);
@@ -66,8 +68,12 @@ function StoriesPage() {
     <Shell>
       <div className="mx-auto max-w-6xl space-y-8">
         <header className="glass-strong rounded-3xl p-6 sm:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 pointer-events-none"
-               style={{ backgroundImage: "radial-gradient(circle at 20% 0%, var(--gold) 0, transparent 40%)" }} />
+          <div
+            className="absolute inset-0 opacity-10 pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(circle at 20% 0%, var(--gold) 0, transparent 40%)",
+            }}
+          />
           <div className="relative">
             <div className="flex items-center gap-2 text-xs text-[var(--gold)] font-semibold uppercase tracking-[0.2em]">
               <Sparkles className="h-3.5 w-3.5" /> The Big Five
@@ -117,7 +123,8 @@ function StoriesPage() {
                       {s.short_story}
                     </p>
                     <div className="mt-3 flex items-center gap-2 text-xs text-[var(--gold)] font-semibold">
-                      Read the story <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      Read the story{" "}
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
                 </Link>
